@@ -1,0 +1,142 @@
+<!-- ==========================================
+     FEES MANAGEMENT SECTION
+========================================== -->
+<div class="section-title">
+    <h2>Fees Management</h2>
+</div>
+<section class="dashboard-form" id="feesSection">
+
+
+    <!-- Student Search -->
+    <div class="card">
+        <h3>Search Student</h3>
+
+        <div class="form-row">
+            <input type="text" id="studentRoll" placeholder="Enter Roll Number">
+            <button onclick="fetchStudent()">
+                Search
+            </button>
+        </div>
+    </div>
+
+    <!-- Student Details -->
+    <div class="card">
+        <h3>Student Information</h3>
+
+        <div class="form-grid">
+
+            <div>
+                <label>Student Name</label>
+                <input
+                    type="text"
+                    id="studentName"
+                    readonly>
+            </div>
+
+            <div>
+                <label>Batch</label>
+                <input
+                    type="text"
+                    id="batch"
+                    readonly>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Payment -->
+    <div class="card">
+        <h3>Fees Payment</h3>
+
+        <div class="form-grid">
+
+            <div>
+                <label>Amount</label>
+                <input
+                    type="number"
+                    id="feesAmount"
+                    placeholder="Enter Amount">
+            </div>
+
+            <div>
+                <label>Payment Mode</label>
+                <select id="paymentMode">
+                    <option value="Cash">Cash</option>
+                    <option value="UPI">UPI</option>
+                    <option value="Card">Card</option>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                </select>
+            </div>
+
+        </div>
+
+        <br>
+
+        <button onclick="generateQR()">
+            Save Payment
+        </button>
+
+        <button onclick="sendWhatsApp()">
+            Send WhatsApp
+        </button>
+    </div>
+
+    <!-- QR Section -->
+    <div class="card">
+        <h3>Payment QR</h3>
+
+        <div id="qrcode"
+             style="
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                min-height:180px;
+             ">
+        </div>
+    </div>
+
+    <!-- Payment History -->
+    <div class="card">
+        <h3>Payment History</h3>
+
+        <table id="historyTable" class="data-table">
+
+            <thead>
+                <tr>
+                    <th>Receipt No</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td colspan="4">
+                        Search student to view history
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+    <!-- Chart -->
+    <div class="card">
+        <h3>Fees Analytics</h3>
+
+        <canvas
+            id="chart"
+            height="100">
+        </canvas>
+    </div>
+
+</section>
+
+<!-- Required Libraries -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+ 
+<script src="./js/fees.js"></script>

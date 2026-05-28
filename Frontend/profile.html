@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Complete Profile
+</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/index.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- ================= PRELOADER ================= -->
+<div id="preloader">
+  <div class="loader"></div>
+</div>
+
+<!-- ================= HEADER ================= -->
+<header>
+
+<nav class="navbar">
+
+<!-- LOGO -->
+<div class="logo-container">
+
+<img src="Logo.png"
+alt="Logo"
+class="logo">
+
+<div class="logo-text">
+
+<h2>
+Future Path EduTech Institute
+</h2>
+
+<p>
+<i>
+Shaping Future With Smart Learning.....
+</i>
+</p>
+
+</div>
+
+</div>
+
+<!-- LIVE CLOCK -->
+<div class="live-clock"
+id="liveClock"></div>
+
+<!-- HAMBURGER -->
+<div class="menu-toggle"
+onclick="toggleMenu()">
+
+<i class="fa-solid fa-bars"></i>
+
+</div>
+
+<!-- DROPDOWN -->
+<div id="dropdownMenu"
+class="dropdown-menu">
+
+<div class="menu-group">
+
+<h4>
+NAVIGATION
+</h4>
+
+<a href="index.html">
+
+<i class="fa-solid fa-house"></i>
+
+Home
+
+</a>
+
+<a href="#"
+onclick="goBack()">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Back
+
+</a>
+
+</div>
+
+<div class="menu-group">
+
+<h4>
+ACCOUNT
+</h4>
+
+<a href="login.html">
+
+<i class="fa-solid fa-right-to-bracket"></i>
+
+Login
+
+</a>
+
+</div>
+
+</div>
+
+</nav>
+
+</header>
+
+<!-- ================= MAIN LAYOUT ================= -->
+<div class="admin-layout">
+
+<!-- ================= SIDEBAR ================= -->
+<aside class="sidebar"
+id="sidebar">
+
+<!-- TOGGLE -->
+<div class="sidebar-toggle"
+onclick="toggleSidebar()">
+
+<i class="fa-solid fa-chevron-left"
+id="toggleIcon"></i>
+
+</div>
+
+<h3>
+
+Profile Controls
+
+</h3>
+
+<!-- SEARCH -->
+<input type="text" id="menuSearch" class="menu-search" placeholder="Search Menu...">
+
+<!-- COMPLETE PROFILE -->
+<button class="side-btn active" data-title="Complete Profile">
+
+<i class="fa-solid fa-user" ></i>
+
+Complete Profile
+
+</button>
+
+<!-- RETURN HOME -->
+<button class="side-btn" data-title="Return Home" onclick="window.location.href='index.html'">
+
+<i class="fa-solid fa-house"></i>
+
+Return Home
+
+</button>
+
+<!-- BACK -->
+<button class="side-btn" data-title="Go Back" onclick="goBack()">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Go Back
+
+</button>
+
+</aside>
+
+<!-- ================= WORK AREA ================= -->
+<main class="work-area" style = "background: linear-gradient(135deg, #2563eb, #2d2e2d);">
+
+<section class="dashboard-section" style="background: linear-gradient(135deg, #3139dc, #0c0c0c);">
+
+<div class="section-title">
+
+<h2 style="color: rgb(59, 7, 244);">
+Complete Your Profile
+</h2>
+
+<p style="color: rgb(13, 13, 13); font-size: 16px;">
+Registration requires Admin Approval
+</p>
+
+</div>
+
+<!-- ================= PROFILE FORM ================= -->
+<form class="profile-form advanced-profile-form" id="registerForm" enctype="multipart/form-data" style="background: linear-gradient(135deg, #6eb5d4, #0badde);">
+
+<!-- ================= IMAGE PREVIEW ================= -->
+<div class="profile-upload">
+
+<label for="profilePic">
+
+<div class="upload-circle"
+id="imagePreview">
+
+<i class="fa-solid fa-camera"></i>
+
+</div>
+
+</label>
+
+<!-- FILE INPUT -->
+<input
+type="file"
+id="profilePic"
+accept="image/*"
+hidden>
+
+<!-- CUSTOM BUTTON -->
+<button
+type="button"
+class="upload-btn"
+onclick="document.getElementById('profilePic').click()">
+
+<i class="fa-solid fa-upload" style="color: black;"></i>
+
+Choose Image
+
+</button>
+
+<p style="color: black; margin-top: 10px;">
+Upload Profile Photo
+</p>
+
+</div>
+
+<!-- ================= FULL NAME ================= -->
+<div class="input-group">
+
+<i class="fa-solid fa-user"></i>
+
+<input
+type="text"
+id="name"
+placeholder="Full Name"
+required>
+
+</div>
+
+<!-- ================= MOBILE ================= -->
+<div class="input-group">
+
+<i class="fa-solid fa-phone"></i>
+
+<input
+type="text"
+id="mobile"
+placeholder="Mobile Number"
+required>
+
+</div>
+
+<!-- ================= EMAIL ================= -->
+<div class="input-group">
+
+<i class="fa-solid fa-envelope"></i>
+
+<input
+type="email"
+id="email"
+placeholder="Email Address"
+required>
+
+</div>
+
+<!-- ================= SUBMIT ================= -->
+<button
+type="submit"
+class="login-submit-btn">
+
+<i class="fa-solid fa-floppy-disk"></i>
+
+Submit Registration
+
+</button>
+
+<!-- ================= RESPONSE ================= -->
+<p id="responseMessage"></p>
+
+</form>
+
+<!-- ================= RETURN HOME ================= -->
+<div style="text-align:center; margin-top:25px;">
+
+<a href="index.html">
+
+<button class="secondary-btn">
+
+<i class="fa-solid fa-house"></i>
+
+Return Home
+
+</button>
+
+</a>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+
+<h3>
+Future Path EduTech Institute
+</h3>
+
+<p>
+Academic • Competitive • Technical Education
+</p>
+
+<p>
+Email:
+avinash.nha@gmail.com
+</p>
+
+<p>
+Contact:
++91 9936698578
+</p>
+
+<p>
+© 2026 All Rights Reserved
+</p>
+
+</footer>
+
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+
+/* =========================
+GO BACK
+========================= */
+
+function goBack(){
+
+window.history.back();
+
+}
+
+/* =========================
+TOGGLE MENU
+========================= */
+
+function toggleMenu(){
+
+document
+.getElementById(
+"dropdownMenu"
+)
+.classList.toggle(
+"active"
+);
+
+}
+
+/* =========================
+CLOSE DROPDOWN
+========================= */
+
+document.addEventListener(
+"click",
+function(e){
+
+const menu =
+document.getElementById(
+"dropdownMenu"
+);
+
+const btn =
+document.querySelector(
+".menu-toggle"
+);
+
+if(
+menu &&
+btn &&
+!menu.contains(e.target) &&
+!btn.contains(e.target)
+){
+
+menu.classList.remove(
+"active"
+);
+
+}
+
+});
+
+/* =========================
+IMAGE PREVIEW
+========================= */
+
+document
+.getElementById(
+'profilePic'
+)
+.addEventListener(
+'change',
+function(event){
+
+const file =
+event.target.files[0];
+
+if(file){
+
+const reader =
+new FileReader();
+
+reader.onload =
+function(e){
+
+document
+.getElementById(
+'imagePreview'
+)
+.innerHTML = `
+
+<img
+src="${e.target.result}"
+class="preview-image">
+
+`;
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+});
+
+</script>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="js/sidebar.js"></script>
+
+<script src="js/profile.js"></script>
+
+<script src="js/api.js"></script>
+
+</body>
+</html>

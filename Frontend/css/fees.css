@@ -1,0 +1,292 @@
+/* ======================================
+MAIN WRAPPER & LAYOUT SPACING
+===================================== */
+
+.fees-wrapper {
+  padding: 16px 0 32px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 36px; /* Increased separation gap */
+}
+
+/* ======================================
+FEES MANAGEMENT MAIN CARD
+====================================== */
+
+.fees-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(82, 232, 234, 0.12);
+  border-radius: 18px;
+  padding: 36px; /* More internal breathing room */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  transition: 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 28px; 
+}
+
+.fees-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(70, 199, 228, 0.5);
+}
+
+/* ======================================
+HEADER STYLING
+====================================== */
+
+.fees-header h2 {
+  color: #f8fafc;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  font-size: 26px; /* Increased from 20px */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.fees-header h2::before {
+  content: "";
+  width: 6px;
+  height: 22px;
+  background: linear-gradient(180deg, #48a4e5, #06b6d4);
+  border-radius: 4px;
+}
+
+/* Hides clean text separator lines safely */
+.fees-header p:nth-child(2),
+.fees-header p:nth-child(3) {
+  display: none;
+}
+
+.fees-header p {
+  color: #cbd5e1;
+  font-size: 16px; /* Increased from 14px */
+  margin: 8px 0 0 0;
+}
+
+.fees-card hr {
+  border: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 4px 0;
+}
+
+/* ======================================
+SEARCH BAR INTERFACE
+====================================== */
+
+.search-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.search-row input {
+  flex: 1;
+}
+
+.search-row button {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  margin-right: 0;
+}
+
+/* ======================================
+FORM GRID & ENHANCED INPUT FIELDS
+====================================== */
+
+.fees-card .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.field label {
+  color: #e2e8f0;
+  font-size: 15px; /* Increased from 13px */
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* FIXED: Opaque background for high contrast text visibility */
+.fees-card input,
+.fees-card select {
+  width: 100%;
+  box-sizing: border-box; 
+  padding: 14px 16px; /* Comfortably padded entry fields */
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #131a26; /* Dark slate background fixes readability */
+  color: #ffffff; /* Crisp white user typed characters */
+  outline: none;
+  font-size: 17px; /* Increased from 15px */
+  transition: all 0.2s ease;
+}
+
+/* Modern styling update for dropdown arrow matching text size */
+.fees-card select {
+  cursor: pointer;
+}
+
+.fees-card input:focus,
+.fees-card select:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.25);
+  background: #161f2e; /* Lightened focus state */
+}
+
+/* Custom layout logic for non-modifiable inputs */
+.fees-card input[readonly] {
+  background: #0f151f;
+  border-color: rgba(255, 255, 255, 0.06);
+  color: #94a3b8; /* Muted grey for non-editable texts */
+  cursor: not-allowed;
+}
+
+/* Placeholder visibility fix */
+.fees-card input::placeholder {
+  color: #64748b;
+}
+
+/* ======================================
+BUTTONS
+====================================== */
+
+button {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 12px 20px; /* Scaled button size up */
+  border-radius: 12px;
+  color: white;
+  font-weight: 500;
+  font-size: 15px; /* Increased from 14px */
+  cursor: pointer;
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  margin-bottom: 12px;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Full Width QR Action Button Customizations */
+.fees-card .primary-btn {
+  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+  border: none;
+  color: white;
+  width: 100%; 
+  padding: 16px;
+  font-size: 17px; /* Increased from 15px */
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+.fees-card .primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(124, 58, 237, 0.35);
+  filter: brightness(1.1);
+}
+
+/* ======================================
+QR CODE DISCOVERABILITY PANEL
+====================================== */
+
+#qrcode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: #ffffff; 
+  border-radius: 14px;
+  width: fit-content;
+  margin: 16px auto 0 auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* ======================================
+FEE HISTORY DATA TABLE
+====================================== */
+
+h3 {
+  color: #f8fafc;
+  font-size: 24px; /* Increased from 20px */
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  margin: 44px 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+h3::before {
+  content: "";
+  width: 6px;
+  height: 20px;
+  background: linear-gradient(180deg, #7c3aed, #06b6d4);
+  border-radius: 4px;
+}
+
+#historyTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 28px 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#historyTable th {
+  text-align: left;
+  padding: 16px 18px;
+  font-size: 13px; /* Increased from 12px */
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#historyTable td {
+  padding: 16px 18px;
+  color: #e5e7eb;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 16px; /* Increased from 14px */
+}
+
+#historyTable tr:hover {
+  background: rgba(124, 58, 237, 0.1); 
+}
+
+/* ======================================
+CHART ENGINE CONTAINER
+====================================== */
+
+#chart {
+  max-width: 100%;
+  margin-top: 36px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  box-sizing: border-box;
+}

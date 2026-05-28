@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Dashboard</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/dashboard-Sectionview.css">
+  <link rel="stylesheet" href="css/dashboard-modules.css">  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body onload="initializeDashboard()">
+
+  <!-- ================= PRELOADER ================= -->
+  <div id="preloader">
+    <div class="loader"></div>
+  </div>
+
+  <!-- ================= HEADER ================= -->
+  <header>
+
+    <nav class="navbar">
+
+      <!-- LOGO -->
+      <div class="logo-container">
+
+        <img src="Logo.png" class="logo">
+
+        <div class="logo-text">
+          <h2>Admin Panel</h2>
+
+          <p>
+            <i>System Control</i>
+          </p>
+        </div>
+
+      </div>
+
+      <!-- LIVE CLOCK -->
+      <div class="live-clock" id="liveClock"></div>
+
+      <!-- HAMBURGER -->
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+
+      <!-- DROPDOWN -->
+      <div id="dropdownMenu" class="dropdown-menu">
+
+        <div class="menu-group">
+
+          <h4>ACCOUNT</h4>
+
+          <a href="profile.html">
+            <i class="fa-solid fa-user"></i>
+            Update Profile
+          </a>
+
+          <a href="change-password.html">
+            <i class="fa-solid fa-key"></i>
+            Change Password
+          </a>
+
+          <a href="#" onclick="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+          </a>
+
+        </div>
+
+      </div>
+
+    </nav>
+
+  </header>
+
+  <!-- ================= ADMIN LAYOUT ================= -->
+  <div class="admin-layout">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar" id="sidebar">
+
+      <!-- TOGGLE -->
+      <div class="sidebar-toggle" onclick="toggleSidebar()">
+        <i class="fa-solid fa-chevron-left" id="toggleIcon"></i>
+      </div>
+
+      <h3>Admin Controls</h3>
+
+      <!-- SEARCH -->
+      <input type="text" id="menuSearch" class="menu-search" placeholder="Search Menu...">
+
+      <!-- MANAGEMENT -->
+      <button class="side-btn" data-title="Management" onclick="loadSection('management')">
+        <i class="fa-solid fa-user-tie"></i>
+        Management
+      </button>
+
+      <!-- FACULTY -->
+      <button class="side-btn" data-title="Faculty" onclick="loadSection('faculty')">
+        <i class="fa-solid fa-chalkboard-user"></i>
+        Faculty
+      </button>
+
+      <!-- BATCH -->
+      <button class="side-btn" data-title="Batch" onclick="loadSection('batch')">
+        <i class="fa-solid fa-layer-group"></i>
+        Batch
+      </button>
+
+      <!-- STUDENT -->
+      <button class="side-btn" data-title="Student" onclick="loadSection('student')">
+        <i class="fa-solid fa-user-graduate"></i>
+        Student
+      </button>
+
+      <!-- FEES -->
+      <button class="side-btn" data-title="Fees" onclick="loadSection('fees')">
+        <i class="fa-solid fa-money-bill"></i>
+        Fees Management
+      </button>
+
+      <!-- MATERIALS -->
+      <button class="side-btn" data-title="Materials" onclick="loadSection('materials')">
+        <i class="fa-solid fa-file"></i>
+        Notes / Videos
+      </button>
+
+      <!-- LIVE -->
+      <button class="side-btn" data-title="Live Streaming" onclick="loadSection('live')">
+        <i class="fa-solid fa-video"></i>
+        Live Streaming
+      </button>
+
+      <!-- AI -->
+      <button class="side-btn" data-title="AI Assist" onclick="window.location.href='ai.html'">
+        <i class="fa-solid fa-robot"></i>
+        AI Assist
+      </button>
+
+    </aside>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="work-area" style="background:linear-gradient(135deg,#042265,#a746e7);">
+
+      <div id="dynamicContent">
+        <!-- Dynamic Content -->
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <h3>Future Path EduTech Institute</h3>
+    <p>Academic • Competitive • Technical Education</p>
+    <p>Email: avinash.nha@gmail.com</p>
+    <p>Contact: +91 9936698578</p>
+    <p>© 2026 All Rights Reserved</p>
+  </footer>
+
+  <!-- ================= JAVASCRIPT ================= -->
+  <script src="./js/api.js"></script>
+  <script src="./js/auth.js"></script>
+  <script src="./js/dashboard.js"> </script>
+  <script src="./js/sidebar.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cloudflare.com"></script>
+  <script src="./js/management.js"></script>
+  <script src="./js/faculty.js"></script>
+  <script src="./js/batch.js"></script>
+  <script src="./js/student.js"></script> 
+
+<!-- =============================================== -->
+
+</body>
+</html>

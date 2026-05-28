@@ -1,0 +1,86 @@
+<!-- =========================
+BATCH SECTION
+========================= -->
+
+<div class="section-title">
+    <h2>Batch Control</h2>
+    <p>Manage Academic Batches & Groups</p>
+</div>
+
+<!-- =========================
+ADD BATCH FORM
+========================= -->
+
+<form id="batchForm" class="dashboard-form">
+
+    <div class="form-grid">
+
+        <input type="text" id="batchName" placeholder="Batch Name (e.g. CSE-2026)" required>
+
+        <!-- AUTO GENERATED BATCH CODE -->
+        <input 
+            type="text" 
+            id="batchCode" 
+            placeholder="Batch Code (Auto Generated)" 
+            readonly
+        >
+
+        <select id="batchDepartment" required>
+
+    <option value="">Select Department</option>
+
+    <option value="Academic">Academic</option>
+
+    <option value="Competitive">Competitive</option>
+
+    <option value="Technical">Technical</option>
+
+</select>
+
+        <input type="number" id="batchStrength" placeholder="Total Students">
+
+        <input type="text" id="batchCoordinator" placeholder="Batch Coordinator">
+
+        <input type="date" id="batchStartDate" required>
+
+        <input type="date" id="batchEndDate" required>
+
+        <select id="batchStatus">
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+            <option value="upcoming">Upcoming</option>
+        </select>
+
+    </div>
+
+    <textarea id="batchDescription" placeholder="Batch Description / Notes" rows="4"></textarea>
+
+    <button type="submit" class="action-btn">
+        <i class="fa-solid fa-plus"></i>
+        Add Batch
+    </button>
+
+</form>
+
+<!-- =========================
+SEARCH BAR
+========================= -->
+
+<div class="search-box-wrapper" style="display:flex;gap:10px;background:rgba(255,255,255,0.95);padding:15px;border-radius:12px;margin-bottom:25px;box-shadow:0 8px 24px rgba(0,0,0,0.15);">
+
+    <div style="flex-grow:1;">
+        <input type="text" id="batchSearch" placeholder="Search Batches..." style="width:100%;padding:12px 16px;border:1px solid #e0e0e0;border-radius:8px;">
+    </div>
+
+    <button type="button" class="search-btn" onclick="searchBatch()"
+        style="background:linear-gradient(135deg,#a746e7,#042265);color:white;border:none;padding:0 25px;border-radius:8px;cursor:pointer;">
+        <i class="fa-solid fa-magnifying-glass"></i> Search
+    </button>
+
+</div>
+
+<!-- =========================
+BATCH LIST
+========================= -->
+
+<div id="batchList" class="batch-list">Loading...</div>

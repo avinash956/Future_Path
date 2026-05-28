@@ -1,0 +1,117 @@
+
+/* ==========================================================
+   4. DATA FEED DISPLAY: GRID CARDS ECOSYSTEM
+   ========================================================== */
+.management-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* Overriding the inline styles smoothly from management.js */
+.management-card {
+    display: flex;
+    flex-direction: column; /* Stacked layout looks cleaner for profile cards */
+    background: #ffffff !important;
+    padding: 25px !important;
+    border-radius: 12px !important;
+    border: none !important;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    position: relative;
+    overflow: hidden;
+    color: #333333 !important;
+}
+
+.management-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Header/Top part of user card */
+.management-left {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.management-image {
+    width: 90px !important;
+    height: 90px !important;
+    border-radius: 50% !important;
+    border: 3px solid #e0e0e0 !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+/* Content details structure */
+.management-right {
+    text-align: center;
+}
+
+.management-right h3 {
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    color: #111111 !important;
+    margin: 0 0 12px 0 !important;
+}
+
+.management-right p {
+    font-size: 0.9rem !important;
+    color: #666666 !important;
+    margin: 6px 0 !important;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dashed #f0f0f0;
+    padding-bottom: 4px;
+}
+
+.management-right p b {
+    color: #333333;
+}
+
+/* Description Block override */
+.management-right p:last-of-type {
+    display: block;
+    text-align: left;
+    border: none;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px !important;
+}
+
+/* Action Control Strip */
+.management-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 12px !important;
+}
+
+.management-actions button {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0 !important;
+    font-size: 0.88rem !important;
+    border-radius: 6px !important;
+    transition: all 0.2s ease;
+}
+
+.management-actions .edit-btn {
+    background-color: #7b97ec !important;
+    color: #000000 !important;
+}
+
+.management-actions .edit-btn:hover {
+    background-color: #e2e7f3 !important;
+}
+
+.management-actions .delete-btn {
+    background-color: #fff1f1 !important;
+    color: #dc3545 !important;
+}
+
+.management-actions .delete-btn:hover {
+    background-color: #fde8e8 !important;
+}

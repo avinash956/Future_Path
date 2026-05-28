@@ -1,0 +1,66 @@
+<!-- =========================
+MANAGEMENT SECTION
+========================= -->
+
+<div class="section-title">
+    <h2>Management Control</h2>
+    <p>Manage Admin Staff & Management Team</p>
+</div>
+
+<!-- =========================
+ADD MANAGEMENT FORM
+========================= -->
+
+<form id="managementForm" class="dashboard-form" enctype="multipart/form-data">
+
+    <div class="form-grid">
+
+        <input type="text" id="mgmtName" placeholder="Full Name" required>
+
+        <input type="text" id="mgmtPost" placeholder="Post / Position" required>
+        <input type="text" id="mgmtId" placeholder="Id Number" auto-generated disabled>
+        <input type="email" id="mgmtEmail" placeholder="Email Address" required>
+        <input type="text" id="mgmtPhone" placeholder="Phone Number" required>
+        <input type="text" id="mgmtDepartment" placeholder="Department">
+        <select id="mgmtStatus">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+        </select>
+
+        <input type="file" id="mgmtImage" accept="image/*">
+
+    </div>
+
+    <textarea id="mgmtDescription" placeholder="Description / Responsibility" rows="4"></textarea>
+
+    <button type="submit" class="action-btn">
+        <i class="fa-solid fa-plus"></i>
+        Add Management
+    </button>
+
+</form>
+
+<!-- =========================
+SEARCH BAR
+========================= -->
+
+<div class="search-box-wrapper">
+
+    <div style="flex-grow: 1; position: relative;">
+        <input type="text" id="managementSearch" placeholder="Search Management...">
+    </div>
+
+    <button type="button" class="search-btn" onclick="searchManagement()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        Search
+    </button>
+
+</div>
+
+<!-- =========================
+MANAGEMENT LIST
+========================= -->
+
+<div id="managementList" class="management-list">
+    Loading...
+</div>

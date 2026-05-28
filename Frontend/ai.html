@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>AI Assistant</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/ai.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+
+<body onload="protect('all'); loadChatHistory();">
+
+<!-- ================= PRELOADER ================= -->
+<div id="preloader">
+  <div class="loader"></div>
+</div>
+
+<!-- ================= HEADER ================= -->
+<header>
+
+<nav class="navbar">
+
+<!-- LOGO -->
+<div class="logo-container">
+
+<img src="Logo.png"
+class="logo">
+
+<div class="logo-text">
+
+<h2 style="color: rgb(234, 200, 6);">
+AI Assistant
+</h2>
+
+<p>
+<i>
+Smart Learning Assistant
+</i>
+</p>
+
+</div>
+
+</div>
+
+<!-- LIVE CLOCK -->
+<div class="live-clock"
+id="liveClock"></div>
+
+<!-- HAMBURGER -->
+<div class="menu-toggle"
+onclick="toggleMenu()">
+
+<i class="fa-solid fa-bars"></i>
+
+</div>
+
+<!-- DROPDOWN -->
+<div id="dropdownMenu"
+class="dropdown-menu">
+
+<div class="menu-group">
+
+<h4>
+NAVIGATION
+</h4>
+
+<a href="index.html">
+
+<i class="fa-solid fa-house"></i>
+
+Home
+
+</a>
+
+<a href="#"
+onclick="history.back()">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Back
+
+</a>
+
+</div>
+
+<div class="menu-group">
+
+<h4>
+ACCOUNT
+</h4>
+
+<a href="profile.html">
+
+<i class="fa-solid fa-user"></i>
+
+Profile
+
+</a>
+
+<a href="#"
+onclick="logout()">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+Logout
+
+</a>
+
+</div>
+
+</div>
+
+</nav>
+
+</header>
+
+<!-- ================= MAIN LAYOUT ================= -->
+<div class="admin-layout">
+
+<!-- ================= SIDEBAR ================= -->
+<aside class="sidebar"
+id="sidebar">
+
+<!-- TOGGLE -->
+<div class="sidebar-toggle"
+onclick="toggleSidebar()">
+
+<i class="fa-solid fa-chevron-left"
+id="toggleIcon"></i>
+
+</div>
+
+<h3>
+
+AI Controls
+
+</h3>
+
+<!-- SEARCH -->
+<input type="text"
+id="menuSearch"
+class="menu-search"
+placeholder="Search History...">
+
+<!-- CHAT -->
+<button class="side-btn active"
+data-title="AI Chat">
+
+<i class="fa-solid fa-robot"></i>
+
+AI Chat
+
+</button>
+
+<!-- DOWNLOAD -->
+<button class="side-btn"
+data-title="Download PDF"
+onclick="downloadPDF()">
+
+<i class="fa-solid fa-file-pdf"></i>
+
+Download PDF
+
+</button>
+
+<!-- CLEAR -->
+<button class="side-btn"
+data-title="Clear History"
+onclick="clearHistory()">
+
+<i class="fa-solid fa-trash"></i>
+
+Clear History
+
+</button>
+
+<!-- HISTORY -->
+<div class="history-panel"
+style="
+margin-top:20px;
+background:#243447;
+border-radius:12px;
+padding:15px;
+overflow-y:auto;
+max-height:60vh;
+">
+
+<h3 style="
+color:white;
+margin-bottom:15px;
+font-size:14px;
+">
+
+Chat History
+
+</h3>
+
+<div id="historyList"></div>
+
+</div>
+
+</aside>
+
+<!-- ================= CHAT AREA ================= -->
+<main class="work-area">
+
+<div class="chat-container">
+
+<div class="chat-box"
+id="chatBox"></div>
+
+<div class="input-box">
+
+<input
+type="text"
+id="query"
+placeholder="Ask anything..."
+onkeypress="if(event.key === 'Enter') sendMessage()">
+
+<button id="sendBtn"
+onclick="sendMessage()">
+
+<i class="fa fa-paper-plane"></i>
+
+</button>
+
+<button class="pdf-btn"
+onclick="downloadPDF()">
+
+<i class="fa fa-file-pdf"></i>
+
+</button>
+
+</div>
+
+</div>
+
+</main>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+
+<h3>
+Future Path EduTech Institute
+</h3>
+
+<p>
+Academic • Competitive • Technical Education
+</p>
+
+<p>
+Email:
+avinash.nha@gmail.com
+</p>
+
+<p>
+Contact:
++91 9936698578
+</p>
+
+<p>
+© 2026 All Rights Reserved
+</p>
+
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="js/auth.js"></script>
+
+<script src="js/api.js"></script>
+
+<script src="js/sidebar.js"></script>
+
+<script>
+
+/* =========================
+MENU TOGGLE
+========================= */
+
+function toggleMenu(){
+
+document
+.getElementById(
+"dropdownMenu"
+)
+.classList.toggle(
+"active"
+);
+
+}
+
+/* =========================
+CLOSE DROPDOWN
+========================= */
+
+document.addEventListener(
+"click",
+function(e){
+
+const menu =
+document.getElementById(
+"dropdownMenu"
+);
+
+const btn =
+document.querySelector(
+".menu-toggle"
+);
+
+if(
+menu &&
+btn &&
+!menu.contains(e.target) &&
+!btn.contains(e.target)
+){
+
+menu.classList.remove(
+"active"
+);
+
+}
+
+});
+
+/* =========================
+LOGOUT
+========================= */
+
+function logout(){
+
+localStorage.clear();
+
+window.location.href =
+"login.html";
+
+}
+
+/* =========================
+SAVE HISTORY
+========================= */
+
+function saveHistory(text){
+
+if(!text.trim()) return;
+
+let history =
+JSON.parse(
+localStorage.getItem(
+"aiHistory"
+)
+) || [];
+
+/* REMOVE DUPLICATES */
+if(!history.includes(text)){
+
+history.unshift(text);
+
+localStorage.setItem(
+"aiHistory",
+JSON.stringify(history)
+);
+
+loadChatHistory();
+
+}
+
+}
+
+/* =========================
+LOAD HISTORY
+========================= */
+
+function loadChatHistory(){
+
+let history =
+JSON.parse(
+localStorage.getItem(
+"aiHistory"
+)
+) || [];
+
+const list =
+document.getElementById(
+"historyList"
+);
+
+list.innerHTML = "";
+
+history.forEach(item => {
+
+const div =
+document.createElement(
+"div"
+);
+
+div.className =
+"history-item";
+
+div.innerText =
+item;
+
+div.title =
+item;
+
+div.style.cursor =
+"pointer";
+
+div.style.padding =
+"10px";
+
+div.style.marginBottom =
+"8px";
+
+div.style.background =
+"#1e2d40";
+
+div.style.color =
+"#fff";
+
+div.style.borderRadius =
+"8px";
+
+div.onclick = () => {
+
+const input =
+document.getElementById(
+"query"
+);
+
+input.value =
+item;
+
+input.focus();
+
+};
+
+list.appendChild(div);
+
+});
+
+}
+
+/* =========================
+CLEAR HISTORY
+========================= */
+
+function clearHistory(){
+
+if(
+confirm(
+"Clear complete AI history?"
+)
+){
+
+localStorage.removeItem(
+"aiHistory"
+);
+
+loadChatHistory();
+
+}
+
+}
+
+/* =========================
+DOWNLOAD PDF
+========================= */
+
+function downloadPDF(){
+
+const { jsPDF } =
+window.jspdf;
+
+const doc =
+new jsPDF();
+
+const chatBox =
+document.getElementById(
+"chatBox"
+);
+
+let textArray = [];
+
+chatBox
+.querySelectorAll('.msg')
+.forEach(msg => {
+
+const prefix =
+msg.classList.contains(
+'user'
+)
+? 'User: '
+: 'AI: ';
+
+textArray.push(
+prefix + msg.innerText
+);
+
+});
+
+const fullText =
+textArray.join("\n\n");
+
+const splitText =
+doc.splitTextToSize(
+fullText,
+180
+);
+
+doc.text(
+splitText,
+10,
+10
+);
+
+doc.save(
+"AI_Chat.pdf"
+);
+
+}
+
+</script>
+
+</body>
+</html>

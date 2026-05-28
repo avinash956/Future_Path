@@ -1,0 +1,77 @@
+<!-- =========================
+FACULTY SECTION
+========================= -->
+
+<div class="section-title">
+    <h2>Faculty Control</h2>
+    <p>Manage Teaching Staff & Faculty Members</p>
+</div>
+
+<!-- =========================
+ADD FACULTY FORM
+========================= -->
+
+<form id="facultyForm" class="dashboard-form" enctype="multipart/form-data" action="javascript:void(0)">
+
+    <div class="form-grid">
+
+        <input type="text" id="facultyName" placeholder="Full Name" required>
+        <select id="facultyDepartment" required>
+  <option value="" disabled selected>Select Department</option>
+  <option value="Academic">Academic</option>
+  <option value="Competitive">Competitive</option>
+  <option value="Technical">Technical</option>
+</select>
+
+        <input type="text" id="facultyId" placeholder="Faculty ID" required>
+
+        <input type="email" id="facultyEmail" placeholder="Email Address" required>
+
+        <input type="text" id="facultyPhone" placeholder="Phone Number" required>
+
+        <input type="text" id="facultyDesignation" placeholder="Designation (Tuter/Trainer)" required>
+
+        <input type="number" id="facultyExperience" placeholder="Experience (Years)">
+
+        <select id="facultyStatus">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+        </select>
+
+        <input type="file" id="facultyImage" accept="image/*">
+
+    </div>
+
+    <textarea id="facultyBio" placeholder="Short Bio / Specialization" rows="4"></textarea>
+
+    <button type="button" class="action-btn" onclick="addFaculty(event)">
+    <i class="fa-solid fa-plus"></i>
+    Add Faculty
+</button>
+
+</form>
+
+<!-- =========================
+SEARCH BAR
+========================= -->
+
+<div class="search-box-wrapper">
+
+    <div style="flex-grow:1;">
+        <input type="text" id="facultySearch" placeholder="Search Faculty...">
+    </div>
+
+    <button type="submit" class="search-btn" onclick="searchFaculty()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        Search
+    </button>
+
+</div>
+
+<!-- =========================
+FACULTY LIST
+========================= -->
+
+<div id="facultyList" class="faculty-list">
+    Loading...
+</div>

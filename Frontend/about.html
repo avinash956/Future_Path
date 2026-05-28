@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>About Us</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/index.css">
+
+<!-- FONT AWESOME -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- ================= PRELOADER ================= -->
+<div id="preloader">
+  <div class="loader"></div>
+</div>
+
+<!-- ================= HEADER ================= -->
+<header>
+
+<nav class="navbar">
+
+<div class="logo-container">
+
+<img src="Logo.png" class="logo" alt="Logo">
+
+<div class="logo-text">
+
+<h2>
+Future Path EduTech Institute
+</h2>
+
+<p>
+<i>
+Shaping Future With Smart Learning.....
+</i>
+</p>
+
+</div>
+
+</div>
+
+<!-- LIVE CLOCK -->
+<div class="live-clock" id="liveClock"></div>
+
+<!-- HAMBURGER -->
+<div class="menu-toggle" onclick="toggleMenu()">
+
+<i class="fa-solid fa-bars"></i>
+
+</div>
+
+<!-- DROPDOWN MENU -->
+<div id="dropdownMenu" class="dropdown-menu">
+
+<div class="menu-group">
+
+<h4>
+MAIN
+</h4>
+
+<a href="index.html">
+
+<i class="fa fa-home"></i>
+
+Home
+
+</a>
+
+</div>
+
+<div class="menu-group">
+
+<h4>
+ACCOUNT
+</h4>
+
+<a href="login.html">
+
+<i class="fa fa-right-to-bracket"></i>
+
+Login
+
+</a>
+
+<a href="#"
+onclick="logout()">
+
+<i class="fa fa-sign-out-alt"></i>
+
+Logout
+
+</a>
+
+</div>
+
+</div>
+
+</nav>
+
+</header>
+
+<!-- ================= MAIN LAYOUT ================= -->
+<div class="admin-layout">
+">
+
+<!-- ================= SIDEBAR ================= -->
+<aside class="sidebar" id="sidebar">
+
+<!-- TOGGLE -->
+<div class="sidebar-toggle" onclick="toggleSidebar()">
+
+<i class="fa-solid fa-chevron-left" id="toggleIcon"></i>
+
+</div>
+
+<h3>
+
+Management Controls
+
+</h3>
+
+<!-- SEARCH -->
+<input type="text" id="menuSearch" class="menu-search" placeholder="Search Menu...">
+
+<!-- HOME -->
+<button class="side-btn active" data-title="Institute Home" onclick="showSection('defaultSection')">
+
+<i class="fa-solid fa-building"></i>
+
+Institute Home
+
+</button>
+
+<!-- INFO -->
+<button class="side-btn" data-title="Institute Info" onclick="showSection('infoSection')">
+
+<i class="fa-solid fa-info-circle"></i>
+
+Institute Info
+
+</button>
+
+<!-- ADMIN CONTROLS -->
+<div id="adminControls"
+style="display:none; margin-top:20px; border-top:1px dashed #4f5d73;padding-top:15px;">
+
+<button class="action-btn"
+onclick="addCard()">
+
+➕ Add Section
+
+</button>
+
+<div id="editor"></div>
+
+<button class="action-btn save-btn"
+onclick="saveData()">
+
+💾 Save Modifications
+
+</button>
+
+</div>
+
+</aside>
+
+<!-- ================= WORK AREA ================= -->
+<main class="work-area" id="workArea" style="background:linear-gradient(135deg,#3c0165,#27bccf);">
+
+<!-- DEFAULT SECTION -->
+<div id="defaultSection"
+class="content-section active">
+
+<section style="padding:10px 0;">
+
+<div class="section-title">
+
+<h2>
+About Our Institute
+</h2>
+
+<p>
+Future Path EduTech Institute provides
+Academic, Competitive and Technical Education.
+</p>
+
+</div>
+
+<div class="about-container grid-layout"
+id="aboutContainer">
+
+<!-- DEFAULT CARD -->
+<div class="about-card">
+
+<div class="card-icon-wrapper blue-gradient">
+
+<i class="fa-solid fa-graduation-cap"></i>
+
+</div>
+
+<h3>
+Academic Education
+</h3>
+
+<p>
+Quality education for school and college students.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+<!-- ================= INFO SECTION ================= -->
+<div id="infoSection"
+class="content-section"
+style="display:none;">
+
+<div class="grid-layout">
+
+<!-- FOUNDER -->
+<div class="profile-card animate-up">
+
+<div class="card-image-container">
+
+<!-- FALLBACK ICON -->
+<div class="card-icon-wrapper blue-gradient"
+id="founderFallbackIcon">
+
+<i class="fa-solid fa-user"></i>
+
+</div>
+
+<!-- IMAGE -->
+<img id="founderDisplayImg"
+src=""
+alt="Founder"
+class="profile-avatar-img"
+style="display:none;">
+
+<!-- ADMIN UPLOAD -->
+<div class="admin-upload-overlay"
+id="founderUpload"
+style="display:none;">
+
+<label for="founderFile">
+
+<i class="fa-solid fa-camera"></i>
+
+Change Image
+
+</label>
+
+<input type="file"
+id="founderFile"
+accept="image/*"
+style="display:none;"
+onchange="uploadProfileImage(event,'founderDisplayImg','founderFallbackIcon')">
+
+</div>
+
+</div>
+
+<div class="card-content">
+
+<span class="badge blue-badge">
+
+Founder & CEO
+
+</span>
+
+<h3>
+Avinash Tripathi
+</h3>
+
+<p class="subtitle">
+
+Technical Educator & Developer
+
+</p>
+
+</div>
+
+</div>
+
+<!-- COFOUNDER -->
+<div class="profile-card animate-up">
+
+<div class="card-image-container">
+
+<!-- FALLBACK -->
+<div class="card-icon-wrapper purple-gradient"
+id="cofounderFallbackIcon">
+
+<i class="fa-solid fa-user-tie"></i>
+
+</div>
+
+<!-- IMAGE -->
+<img id="cofounderDisplayImg"
+src=""
+alt="Co-Founder"
+class="profile-avatar-img"
+style="display:none;">
+
+<!-- ADMIN UPLOAD -->
+<div class="admin-upload-overlay"
+id="cofounderUpload"
+style="display:none;">
+
+<label for="cofounderFile">
+
+<i class="fa-solid fa-camera"></i>
+
+Change Image
+
+</label>
+
+<input type="file"
+id="cofounderFile"
+accept="image/*"
+style="display:none;"
+onchange="uploadProfileImage(event,'cofounderDisplayImg','cofounderFallbackIcon')">
+
+</div>
+
+</div>
+
+<div class="card-content">
+
+<span class="badge purple-badge">
+
+Co-Founder & Director
+
+</span>
+
+<h3>
+Kavita Tripathi
+</h3>
+
+<p class="subtitle">
+
+M.A. in Hindi
+
+</p>
+
+</div>
+
+</div>
+
+<!-- CONTACT -->
+<div class="profile-card animate-up">
+
+<div class="card-icon-wrapper gold-gradient">
+
+<i class="fa-solid fa-address-book"></i>
+
+</div>
+
+<div class="card-content">
+
+<span class="badge gold-badge">
+
+Contact Details
+
+</span>
+
+<ul class="contact-list">
+
+<li>
+
+<i class="fa-solid fa-envelope"></i>
+
+avinash.nha@gmail.com
+
+</li>
+
+<li>
+
+<i class="fa-solid fa-phone"></i>
+
++91 9936698578
+
+</li>
+
+<li>
+
+<i class="fa-brands fa-linkedin"></i>
+
+<a href="https://linkedin.com"
+target="_blank">
+
+LinkedIn Profile
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+
+<h3>
+Future Path EduTech Institute
+</h3>
+
+<p>
+Academic • Competitive • Technical Education
+</p>
+
+<p>
+Email:
+avinash.nha@gmail.com
+</p>
+
+<p>
+Contact:
++91 9936698578
+</p>
+
+<p>
+© 2026 All Rights Reserved
+</p>
+
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="js/about_page.js"></script>
+
+<script src="js/auth.js"></script>
+
+<script src="js/api.js"></script>
+
+<script src="js/sidebar.js"></script>
+
+<script>
+
+/* =========================
+MENU TOGGLE
+========================= */
+
+function toggleMenu(){
+
+document
+.getElementById(
+"dropdownMenu"
+)
+.classList.toggle(
+"active"
+);
+
+}
+
+/* =========================
+CLOSE DROPDOWN
+========================= */
+
+document.addEventListener(
+"click",
+function(e){
+
+const menu =
+document.getElementById(
+"dropdownMenu"
+);
+
+const btn =
+document.querySelector(
+".menu-toggle"
+);
+
+if(
+menu &&
+btn &&
+!menu.contains(e.target) &&
+!btn.contains(e.target)
+){
+
+menu.classList.remove(
+"active"
+);
+
+}
+
+});
+
+/* =========================
+LOGOUT
+========================= */
+
+function logout(){
+
+localStorage.clear();
+
+window.location.href =
+"login.html";
+
+}
+
+/* =========================
+ADMIN ACCESS CONTROL
+========================= */
+
+document.addEventListener(
+"DOMContentLoaded",
+function(){
+
+const role =
+localStorage.getItem(
+"role"
+);
+
+const adminControls =
+document.getElementById(
+"adminControls"
+);
+
+const founderUpload =
+document.getElementById(
+"founderUpload"
+);
+
+const cofounderUpload =
+document.getElementById(
+"cofounderUpload"
+);
+
+if(role === "admin"){
+
+if(adminControls){
+
+adminControls.style.display =
+"block";
+
+}
+
+if(founderUpload){
+
+founderUpload.style.display =
+"flex";
+
+}
+
+if(cofounderUpload){
+
+cofounderUpload.style.display =
+"flex";
+
+}
+
+}
+
+});
+
+</script>
+
+</body>
+</html>

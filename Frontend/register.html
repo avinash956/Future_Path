@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Register</title>
+
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/register.css">
+
+<!-- FONT AWESOME -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+<nav class="navbar">
+
+<!-- LOGO -->
+
+<div class="logo-container">
+
+<img src="Logo.png"
+class="logo">
+
+<div class="logo-text">
+
+<h2>
+Future Path EduTech Institute
+</h2>
+
+<p>
+<i>
+Shaping Future With Smart Learning.....
+</i>
+</p>
+
+</div>
+
+</div>
+
+<!-- RIGHT NAV -->
+
+<div class="nav-right">
+
+<!-- LIVE CLOCK -->
+
+<div class="live-clock"
+id="liveClock">
+
+00:00:00
+
+</div>
+
+<!-- BACK BUTTON -->
+
+<a href="login.html"
+class="back-btn">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Back
+
+</a>
+
+</div>
+
+</nav>
+
+</header>
+
+<!-- ================= REGISTER SECTION ================= -->
+
+<section class="register-page">
+
+<div class="register-container">
+
+<div class="register-card">
+
+<div class="register-top">
+
+<i class="fa-solid fa-user-plus register-icon"></i>
+
+<h2>
+Create Account
+</h2>
+
+<p>
+Register for secure access to the portal
+</p>
+
+</div>
+
+<form id="registerForm">
+
+<!-- FULL NAME -->
+
+<div class="input-box">
+
+<i class="fa-solid fa-user"></i>
+
+<input
+type="text"
+id="name"
+placeholder="Enter Full Name"
+required>
+
+</div>
+
+<!-- MOBILE -->
+
+<div class="input-box">
+
+<i class="fa-solid fa-phone"></i>
+
+<input
+type="text"
+id="mobile"
+placeholder="Enter Mobile Number"
+required>
+
+</div>
+
+<!-- EMAIL -->
+
+<div class="input-box">
+
+<i class="fa-solid fa-envelope"></i>
+
+<input
+type="email"
+id="email"
+placeholder="Enter Email ID"
+required>
+
+</div>
+
+<!-- ROLE -->
+
+<div class="input-box">
+
+<i class="fa-solid fa-user-shield"></i>
+
+<select id="role"
+required>
+
+<option value="">
+Select Role
+</option>
+
+<option value="student">
+Student
+</option>
+
+<option value="faculty">
+Faculty
+</option>
+
+<option value="management">
+Management
+</option>
+
+<option value="admin">
+Admin
+</option>
+
+</select>
+
+</div>
+
+<!-- PASSWORD -->
+
+<div class="input-box password-box">
+
+<i class="fa-solid fa-lock"></i>
+
+<input
+type="password"
+id="password"
+placeholder="Create Password"
+required>
+
+<span class="toggle-password"
+onclick="togglePassword()">
+
+<i class="fa-solid fa-eye"></i>
+
+</span>
+
+</div>
+
+<!-- CONFIRM PASSWORD -->
+
+<div class="input-box password-box">
+
+<i class="fa-solid fa-lock"></i>
+
+<input
+type="password"
+id="confirmPassword"
+placeholder="Confirm Password"
+required>
+
+<span class="toggle-password"
+onclick="toggleConfirmPassword()">
+
+<i class="fa-solid fa-eye"></i>
+
+</span>
+
+</div>
+
+<!-- REGISTER BUTTON -->
+
+<button type="submit"
+class="register-btn">
+
+<i class="fa-solid fa-user-plus"></i>
+
+Register Now
+
+</button>
+
+<!-- LOGIN LINK -->
+
+<div class="login-link">
+
+Already Registered ?
+
+<a href="login.html">
+
+Login Here
+
+</a>
+
+</div>
+
+<!-- RESPONSE -->
+
+<p id="registerMessage"></p>
+
+</form>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+<h3>
+Future Path EduTech Institute
+</h3>
+
+<p>
+Academic • Competitive • Technical Education
+</p>
+
+<p>
+Email:
+avinash.nha@gmail.com
+</p>
+
+<p>
+© 2026 All Rights Reserved
+</p>
+
+</footer>
+
+<!-- ================= SCRIPT ================= -->
+
+<script>
+
+/* ================= LIVE CLOCK ================= */
+
+function updateClock(){
+
+const now = new Date();
+
+const options = {
+
+hour:'2-digit',
+minute:'2-digit',
+second:'2-digit'
+
+};
+
+document.getElementById(
+"liveClock"
+).innerHTML =
+
+now.toLocaleTimeString(
+'en-IN',
+options
+);
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+/* ================= PASSWORD TOGGLE ================= */
+
+function togglePassword(){
+
+const passwordInput =
+document.getElementById(
+"password"
+);
+
+const eyeIcon =
+document.querySelectorAll(
+".toggle-password i"
+)[0];
+
+if(passwordInput.type==="password"){
+
+passwordInput.type="text";
+
+eyeIcon.classList.remove(
+"fa-eye"
+);
+
+eyeIcon.classList.add(
+"fa-eye-slash"
+);
+
+}
+else{
+
+passwordInput.type="password";
+
+eyeIcon.classList.remove(
+"fa-eye-slash"
+);
+
+eyeIcon.classList.add(
+"fa-eye"
+);
+
+}
+
+}
+
+/* ================= CONFIRM PASSWORD ================= */
+
+function toggleConfirmPassword(){
+
+const passwordInput =
+document.getElementById(
+"confirmPassword"
+);
+
+const eyeIcon =
+document.querySelectorAll(
+".toggle-password i"
+)[1];
+
+if(passwordInput.type==="password"){
+
+passwordInput.type="text";
+
+eyeIcon.classList.remove(
+"fa-eye"
+);
+
+eyeIcon.classList.add(
+"fa-eye-slash"
+);
+
+}
+else{
+
+passwordInput.type="password";
+
+eyeIcon.classList.remove(
+"fa-eye-slash"
+);
+
+eyeIcon.classList.add(
+"fa-eye"
+);
+
+}
+
+}
+
+/* ================= REGISTER ================= */
+
+document.getElementById(
+"registerForm"
+).addEventListener(
+"submit",
+async function(e){
+
+e.preventDefault();
+
+const password =
+document.getElementById(
+"password"
+).value;
+
+const confirmPassword =
+document.getElementById(
+"confirmPassword"
+).value;
+
+if(password!==confirmPassword){
+
+document.getElementById(
+"registerMessage"
+).innerHTML =
+"Passwords do not match";
+
+return;
+
+}
+
+const userData = {
+
+name:
+document.getElementById(
+"name"
+).value,
+
+mobile:
+document.getElementById(
+"mobile"
+).value,
+
+email:
+document.getElementById(
+"email"
+).value,
+
+role:
+document.getElementById(
+"role"
+).value,
+
+password:
+password
+
+};
+
+const response =
+await fetch(
+"http://localhost:5000/api/register",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify(userData)
+
+}
+
+);
+
+const data =
+await response.json();
+
+document.getElementById(
+"registerMessage"
+).innerHTML =
+data.message;
+
+});
+
+</script>
+<script src="js/sidebar.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/register.js"></script>
+
+</body>
+</html>

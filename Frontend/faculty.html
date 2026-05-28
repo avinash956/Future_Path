@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Faculty Portal</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body onload="protect('faculty')">
+
+<!-- ================= HEADER ================= -->
+<header>
+  <nav class="navbar">
+
+    <!-- LOGO -->
+    <div class="logo-container">
+
+      <img src="Logo.png" class="logo">
+
+      <div class="logo-text">
+        <h2>Faculty Portal</h2>
+        <p><i>Future Path EduTech Institute</i></p>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="nav-right">
+
+      <!-- LIVE CLOCK -->
+      <div class="live-clock" id="liveClock">
+        00:00:00
+      </div>
+
+      <!-- HAMBURGER -->
+      <div class="menu-toggle"
+      onclick="toggleMenu()">
+
+          <i class="fa-solid fa-bars"></i>
+
+      </div>
+
+      <!-- DROPDOWN -->
+      <div id="dropdownMenu"
+      class="dropdown-menu">
+
+          <div class="menu-group">
+
+              <h4>
+                  ACCOUNT
+              </h4>
+
+              <a href="profile.html">
+
+                  <i class="fa-solid fa-user"></i>
+
+                  Update Profile
+
+              </a>
+
+              <a href="change-password.html">
+
+                  <i class="fa-solid fa-key"></i>
+
+                  Change Password
+
+              </a>
+
+              <a href="#"
+              onclick="logout()">
+
+                  <i class="fa-solid fa-right-from-bracket"></i>
+
+                  Logout
+
+              </a>
+
+          </div>
+
+      </div>
+
+    </div>
+
+  </nav>
+</header>
+
+<!-- ================= MAIN LAYOUT ================= -->
+<div class="admin-layout">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- TOGGLE -->
+    <div class="sidebar-toggle" onclick="toggleSidebar()">
+      <i class="fa-solid fa-chevron-left" id="toggleIcon"></i>
+    </div>
+
+    <h3>Faculty Controls</h3>
+
+    <button class="side-btn active"
+    onclick="showSection('dashboardSection')">
+
+      <i class="fa-solid fa-table-columns"></i>
+
+      Dashboard
+
+    </button>
+
+    <button class="side-btn"
+    onclick="showSection('notesSection')">
+
+      <i class="fa-solid fa-file-arrow-up"></i>
+
+      Upload Notes
+
+    </button>
+
+    <button class="side-btn"
+    onclick="showSection('videosSection')">
+
+      <i class="fa-solid fa-video"></i>
+
+      Upload Videos
+
+    </button>
+
+    <button class="side-btn"
+    onclick="showSection('manageSection')">
+
+      <i class="fa-solid fa-pen-to-square"></i>
+
+      Manage Content
+
+    </button>
+
+    <button class="side-btn"
+    onclick="showSection('attendanceSection')">
+
+      <i class="fa-solid fa-user-check"></i>
+
+      Attendance
+
+    </button>
+
+    <button class="side-btn"
+    onclick="showSection('liveSection')">
+
+      <i class="fa-solid fa-chalkboard-user"></i>
+
+      Live Classes
+
+    </button>
+
+    <button class="side-btn"
+    onclick="showSection('reportSection')">
+
+      <i class="fa-solid fa-chart-column"></i>
+
+      Results & Reports
+
+    </button>
+
+  </aside>
+
+  <!-- ================= WORK AREA ================= -->
+  <main class="work-area" style="background:linear-gradient(135deg,#8f25eb,#27bccf);">
+
+    <!-- ================= DASHBOARD ================= -->
+    <section id="dashboardSection"
+    class="content-section active">
+
+      <div class="section-title">
+        <h2>Faculty Dashboard</h2>
+        <p>Manage Academic Content & Student Activities</p>
+      </div>
+
+      <div class="dashboard-grid">
+
+        <!-- Upload Notes -->
+        <div class="dashboard-card">
+
+          <i class="fa-solid fa-file-arrow-up"></i>
+
+          <h3>Upload Notes</h3>
+
+          <p>
+            Upload PDF notes, assignments and study material.
+          </p>
+
+          <button class="primary-btn"
+          onclick="showSection('notesSection')">
+
+            Open
+
+          </button>
+
+        </div>
+
+        <!-- Upload Videos -->
+        <div class="dashboard-card">
+
+          <i class="fa-solid fa-video"></i>
+
+          <h3>Upload Videos</h3>
+
+          <p>
+            Add recorded lectures and educational videos.
+          </p>
+
+          <button class="primary-btn"
+          onclick="showSection('videosSection')">
+
+            Upload
+
+          </button>
+
+        </div>
+
+        <!-- Manage Content -->
+        <div class="dashboard-card">
+
+          <i class="fa-solid fa-pen-to-square"></i>
+
+          <h3>Manage Content</h3>
+
+          <p>
+            Edit uploaded files, courses and announcements.
+          </p>
+
+          <button class="primary-btn"
+          onclick="showSection('manageSection')">
+
+            Manage
+
+          </button>
+
+        </div>
+
+        <!-- Student Attendance -->
+        <div class="dashboard-card">
+
+          <i class="fa-solid fa-user-check"></i>
+
+          <h3>Attendance</h3>
+
+          <p>
+            Track and manage student attendance records.
+          </p>
+
+          <button class="primary-btn"
+          onclick="showSection('attendanceSection')">
+
+            View
+
+          </button>
+
+        </div>
+
+        <!-- Online Classes -->
+        <div class="dashboard-card">
+
+          <i class="fa-solid fa-chalkboard-user"></i>
+
+          <h3>Live Classes</h3>
+
+          <p>
+            Schedule and manage online teaching sessions.
+          </p>
+
+          <button class="primary-btn"
+          onclick="showSection('liveSection')">
+
+            Start
+
+          </button>
+
+        </div>
+
+        <!-- Results -->
+        <div class="dashboard-card">
+
+          <i class="fa-solid fa-chart-column"></i>
+
+          <h3>Results & Reports</h3>
+
+          <p>
+            Analyze student performance and academic reports.
+          </p>
+
+          <button class="primary-btn"
+          onclick="showSection('reportSection')">
+
+            Open
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ================= NOTES ================= -->
+    <section id="notesSection"
+    class="content-section"
+    style="display:none;">
+
+      <div class="section-title">
+        <h2>Upload Notes</h2>
+      </div>
+
+      <div class="dashboard-card">
+
+        <i class="fa-solid fa-file-pdf"></i>
+
+        <h3>PDF / Assignments Upload</h3>
+
+        <p>
+          Upload educational notes and assignments.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- ================= VIDEOS ================= -->
+    <section id="videosSection"
+    class="content-section"
+    style="display:none;">
+
+      <div class="section-title">
+        <h2>Upload Videos</h2>
+      </div>
+
+      <div class="dashboard-card">
+
+        <i class="fa-solid fa-video"></i>
+
+        <h3>Lecture Video Upload</h3>
+
+        <p>
+          Upload lecture recordings and tutorials.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- ================= MANAGE ================= -->
+    <section id="manageSection"
+    class="content-section"
+    style="display:none;">
+
+      <div class="section-title">
+        <h2>Manage Content</h2>
+      </div>
+
+      <div class="dashboard-card">
+
+        <i class="fa-solid fa-folder-open"></i>
+
+        <h3>Content Management</h3>
+
+        <p>
+          Edit or delete uploaded content.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- ================= ATTENDANCE ================= -->
+    <section id="attendanceSection"
+    class="content-section"
+    style="display:none;">
+
+      <div class="section-title">
+        <h2>Attendance</h2>
+      </div>
+
+      <div class="dashboard-card">
+
+        <i class="fa-solid fa-user-check"></i>
+
+        <h3>Attendance Records</h3>
+
+        <p>
+          Maintain student attendance reports.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- ================= LIVE ================= -->
+    <section id="liveSection"
+    class="content-section"
+    style="display:none;">
+
+      <div class="section-title">
+        <h2>Live Classes</h2>
+      </div>
+
+      <div class="dashboard-card">
+
+        <i class="fa-solid fa-broadcast-tower"></i>
+
+        <h3>Start Live Session</h3>
+
+        <p>
+          Conduct online classes and webinars.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- ================= REPORT ================= -->
+    <section id="reportSection"
+    class="content-section"
+    style="display:none;">
+
+      <div class="section-title">
+        <h2>Results & Reports</h2>
+      </div>
+
+      <div class="dashboard-card">
+
+        <i class="fa-solid fa-chart-line"></i>
+
+        <h3>Student Performance</h3>
+
+        <p>
+          Analyze academic progress and reports.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+
+<h3>Future Path EduTech Institute</h3>
+<p>Academic • Competitive • Technical Education</p>
+<p>Email: avinash.nha@gmail.com</p>
+<p>Contact: +91 9936698578</p>
+<p>© 2026 All Rights Reserved</p>
+
+</footer>
+
+<!-- ================= JS ================= -->
+<script>
+
+/* ================= MENU ================= */
+
+function toggleMenu() {
+
+  document
+  .getElementById("dropdownMenu")
+  .classList
+  .toggle("active");
+
+}
+
+document.addEventListener("click", function(e){
+
+  let menu =
+  document.getElementById("dropdownMenu");
+
+  let btn =
+  document.querySelector(".menu-toggle");
+
+  if (
+    !menu.contains(e.target)
+    &&
+    !btn.contains(e.target)
+  ) {
+
+    menu.classList.remove("active");
+
+  }
+
+});
+
+/* ================= LIVE CLOCK ================= */
+
+function updateClock(){
+
+  const now = new Date();
+
+  const options = {
+    hour:'2-digit',
+    minute:'2-digit',
+    second:'2-digit'
+  };
+
+  document.getElementById(
+    "liveClock"
+  ).innerHTML =
+  now.toLocaleTimeString(
+    'en-IN',
+    options
+  );
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+</script>
+
+<script src="js/auth.js"></script>
+<script src="js/sidebar.js"></script>
+
+</body>
+</html>

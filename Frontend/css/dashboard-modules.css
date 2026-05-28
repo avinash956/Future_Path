@@ -1,0 +1,957 @@
+/* ==========================================================
+   1. WORK AREA & MAIN GRID LAYOUT
+   ========================================================== */
+.work-area {
+    padding: 30px !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#dynamicContent {
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================
+   2. TYPOGRAPHY & HEADER ARCHITECTURE
+   ========================================================== */
+.section-title {
+    margin-bottom: 25px;
+    color: #0a0a0a;
+}
+
+.section-title h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 5px 0;
+    letter-spacing: -0.5px;
+}
+
+.section-title p {
+    font-size: 1rem;
+    opacity: 0.8;
+    margin: 0;
+}
+
+/* ==========================================================
+   3. THE DASHBOARD COMPONENT CARD SYSTEM (Forms & Controls)
+   ========================================================== */
+.dashboard-form, .search-box {
+    background: rgba(143, 200, 235, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Form Input Layout Grid */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Uniform Input Styling */
+.dashboard-form input[type="text"],
+.dashboard-form input[type="email"],
+.dashboard-form select,
+.dashboard-form textarea,
+.search-box input[type="text"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #050505;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background-color: #fdfdfd;
+    color: #333333;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.dashboard-form input:focus,
+.dashboard-form select:focus,
+.dashboard-form textarea:focus,
+.search-box input:focus {
+    outline: none;
+    border-color: #a746e7;
+    box-shadow: 0 0 0 3px rgba(167, 70, 231, 0.15);
+    background-color: #ffffff;
+}
+
+/* Textarea & Special File Inputs */
+.dashboard-form textarea {
+    resize: vertical;
+    margin-bottom: 20px;
+}
+
+.dashboard-form input[type="file"] {
+    padding: 8px 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Action Buttons */
+.action-btn {
+    background: linear-gradient(135deg, #a746e7, #042265);
+    color: #040404;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(167, 70, 231, 0.3);
+}
+
+.action-btn:hover {
+    background: linear-gradient(135deg, #d4bd10, #2013de);
+    transform: translateY(-10px);
+    box-shadow: 0 6px 18px rgba(167, 70, 231, 0.4);
+    filter: brightness(3);
+}
+.search-box-wrapper {
+    display: flex;
+    gap: 10px;
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.search-box-wrapper input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.search-btn {
+    background: linear-gradient(135deg, #a746e7, #042265);
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* =========================
+CARD UI
+========================= */
+
+.management-card {
+    background: rgb(232, 228, 228);
+    padding: 15px;
+    border-radius: 14px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* =========================
+AVATAR (FIXED)
+========================= */
+
+.avatar-wrapper {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.avatar-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-fallback {
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #a746e7, #042265);
+    color: white;
+    font-size: 20px;
+}
+
+/* =========================
+BUTTON
+========================= */
+
+.management-card button {
+    margin-top: 8px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    background: red;
+    color: white;
+    cursor: pointer;
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .management-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .search-box-wrapper {
+        flex-direction: column;
+    }
+}
+.student-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+.faculty-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+/* =========================================
+FACULTY CARD
+========================================= */
+
+.faculty-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.faculty-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    transition: 0.3s ease;
+}
+
+.faculty-card:hover {
+    transform: translateY(-5px);
+}
+
+.faculty-image-wrapper {
+    flex-shrink: 0;
+}
+
+.faculty-image {
+    width: 110px;
+    height: 110px;
+    border-radius: 14px;
+    object-fit: cover;
+    border: 3px solid #4b7bec;
+}
+
+.faculty-info {
+    flex: 1;
+}
+
+.faculty-info h3 {
+    margin-bottom: 10px;
+    color: #222;
+}
+
+.faculty-info p {
+    margin: 6px 0;
+    color: #444;
+    font-size: 14px;
+}
+
+.faculty-info i {
+    color: #4b7bec;
+    margin-right: 8px;
+}
+
+.faculty-actions {
+    margin-top: 15px;
+}
+
+.delete-btn {
+    background: crimson;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.delete-btn:hover {
+    background: darkred;
+}
+
+/* =========================
+COMMON LIST CONTAINERS
+========================= */
+
+.batch-list,
+.student-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    padding: 10px;
+}
+
+/* =========================
+BATCH CARD
+========================= */
+
+.batch-card {
+    background: linear-gradient(135deg, #ffffff, #f7f9ff);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    transition: 0.25s ease;
+    border-left: 5px solid #4a6cf7;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.batch-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+.batch-card h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #1f2d3d;
+}
+
+.batch-card p {
+    margin: 6px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+/* =========================
+STUDENT CARD
+========================= */
+
+.student-card {
+    background: linear-gradient(135deg, #ffffff, #f4f7ff);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    transition: 0.25s ease;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    border-left: 5px solid #a746e7;
+}
+
+.student-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================
+STUDENT IMAGE
+========================= */
+
+.student-card img {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+}
+
+/* =========================
+TEXT INSIDE STUDENT CARD
+========================= */
+
+.student-card h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #1f2d3d;
+}
+
+.student-card p {
+    margin: 4px 0;
+    font-size: 13px;
+    color: #555;
+}
+
+/* =========================
+DELETE BUTTON (COMMON)
+========================= */
+
+.batch-card button,
+.student-card button {
+    margin-top: 10px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    background: #ff4d4d;
+    color: white;
+    transition: 0.2s;
+}
+
+.batch-card button:hover,
+.student-card button:hover {
+    background: #d93636;
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+    .student-card {
+        flex-direction: column;
+        text-align: center;
+        border: black 2px solid; 
+    }
+
+    .student-card img {
+        width: 90px;
+        height: 90px;
+    }
+}
+.batch-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #10b981, #3b82f6);
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    border: black 2px solid;
+    border-radius: 20px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.student-card {
+    transition: 0.3s ease;
+    border: black 2px solid;
+}
+
+.student-card:hover {
+    transform: translateY(-5px);
+}
+
+/* =========================
+BATCH CARD BADGE
+========================= */
+
+.batch-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 8px 0;
+    background: linear-gradient(135deg, #10b981, #3b82f6);
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 20px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+/* =========================
+ACTION BUTTONS
+========================= */
+
+.batch-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+}
+
+/* DELETE BUTTON */
+.delete-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+}
+
+/* TOGGLE BUTTON */
+.toggle-btn {
+    background: #f59e0b;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.toggle-btn:hover {
+    background: #d97706;
+}
+
+/* =========================
+CARD HOVER EFFECT
+========================= */
+
+.batch-card {
+    transition: 0.3s ease;
+}
+
+.batch-card:hover {
+    transform: translateY(-5px);
+}
+.deactivate-btn {
+    background: #ff9800;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.activate-btn {
+    background: #4caf50;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+/* ------------------------------------------
+FACULTY ID CARD download button
+-------------------------------------------*/
+.download-btn{
+
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:10px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.download-btn:hover{
+
+    background:#1d4ed8;
+    transform:translateY(-2px);
+}
+
+/* ----------------------------------------------
+          FESS MANAGEMENT SYSTEM
+ -----------------------------------------------  */
+ /* ==========================================
+FEES SECTION - MODERN FUTURISTIC UI
+========================================== */
+
+#feesSection{
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+}
+
+/* ==========================================
+CARDS
+========================================== */
+
+#feesSection .card{
+
+    position:relative;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(8,15,35,0.95),
+        rgba(20,35,70,0.95)
+    );
+
+    border-radius:20px;
+
+    padding:25px;
+
+    overflow:hidden;
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.25),
+        0 0 25px rgba(167,70,231,0.15);
+
+    transition:0.4s ease;
+}
+
+/* Animated Glow Border */
+
+#feesSection .card::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    padding:2px;
+
+    border-radius:20px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #a746e7,
+        #00e5ff,
+        #3cff00,
+        #a746e7
+    );
+
+    background-size:300% 300%;
+
+    animation:borderFlow 6s linear infinite;
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+
+    -webkit-mask-composite:xor;
+
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0) border-box;
+
+    mask-composite: exclude;
+
+    /* FIX */
+    pointer-events:none;
+    z-index:0;
+}
+
+@keyframes borderFlow{
+
+    0%{
+        background-position:0% 50%;
+    }
+
+    100%{
+        background-position:300% 50%;
+    }
+}
+
+#feesSection .card:hover{
+
+    transform:
+    translateY(-8px)
+    scale(1.01);
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,0.35),
+        0 0 35px rgba(0,229,255,0.3);
+}
+
+/* ==========================================
+HEADINGS
+========================================== */
+
+#feesSection .card h3{
+
+    color:#ffffff;
+
+    font-size:1.3rem;
+
+    margin-bottom:20px;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+}
+
+#feesSection label{
+
+    color:#d6d6d6;
+
+    font-weight:600;
+
+    margin-bottom:8px;
+
+    display:block;
+}
+
+/* ==========================================
+INPUTS
+========================================== */
+
+#feesSection input,
+#feesSection select{
+
+    width:100%;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    border:1px solid rgba(255,255,255,0.15);
+
+    background:
+    rgba(255,255,255,0.08);
+
+    color:white;
+
+    backdrop-filter:blur(10px);
+
+    transition:0.3s;
+}
+
+#feesSection input::placeholder{
+
+    color:#bdbdbd;
+}
+
+#feesSection input:focus,
+#feesSection select:focus{
+
+    outline:none;
+
+    border-color:#00e5ff;
+
+    box-shadow:
+        0 0 15px rgba(0,229,255,0.5);
+}
+
+/* ==========================================
+BUTTONS
+========================================== */
+
+#feesSection button{
+
+    border:none;
+
+    padding:14px 22px;
+
+    border-radius:12px;
+
+    color:white;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    background:
+    linear-gradient(
+        135deg,
+        #a746e7,
+        #0077ff
+    );
+
+    transition:0.3s;
+
+    margin-right:10px;
+
+    box-shadow:
+        0 6px 20px rgba(167,70,231,0.35);
+}
+
+#feesSection button:hover{
+
+    transform:
+    translateY(-3px);
+
+    box-shadow:
+        0 0 25px rgba(0,229,255,0.6);
+
+    background:
+    linear-gradient(
+        135deg,
+        #00e5ff,
+        #a746e7
+    );
+}
+
+/* ==========================================
+SEARCH BAR
+========================================== */
+
+.form-row{
+
+    display:flex;
+
+    gap:15px;
+}
+
+/* ==========================================
+QR AREA
+========================================== */
+
+#qrcode{
+
+    min-height:220px;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(255,255,255,0.08),
+        rgba(255,255,255,0.02)
+    );
+
+    border-radius:20px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border:1px solid rgba(255,255,255,0.1);
+}
+
+/* ==========================================
+TABLE
+========================================== */
+
+.data-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    overflow:hidden;
+
+    border-radius:15px;
+}
+
+.data-table thead{
+
+    background:
+    linear-gradient(
+        135deg,
+        #a746e7,
+        #0077ff
+    );
+}
+
+.data-table th{
+
+    color:white;
+
+    padding:15px;
+}
+
+.data-table td{
+
+    padding:15px;
+
+    color:#ffffff;
+
+    border-bottom:
+    1px solid rgba(255,255,255,0.08);
+}
+
+.data-table tbody tr{
+
+    transition:0.3s;
+}
+
+.data-table tbody tr:hover{
+
+    background:
+    rgba(0,229,255,0.08);
+}
+
+/* ==========================================
+CHART AREA
+========================================== */
+
+#chart{
+
+    background:
+    rgba(255,255,255,0.04);
+
+    border-radius:15px;
+
+    padding:15px;
+}
+
+/* ==========================================
+TITLE
+========================================== */
+
+.section-title h2{
+
+    font-size:2rem;
+
+    background:
+    linear-gradient(
+        90deg,
+        #a746e7,
+        #00e5ff
+    );
+
+    -webkit-background-clip:text;
+    background-clip: text;
+    -webkit-text-fill-color:transparent;
+
+    animation:titleGlow 3s infinite alternate;
+}
+
+@keyframes titleGlow{
+
+    from{
+        filter:drop-shadow(0 0 5px #a746e7);
+    }
+
+    to{
+        filter:drop-shadow(0 0 15px #00e5ff);
+    }
+}
+
+/* ==========================================
+MOBILE
+========================================== */
+
+@media(max-width:768px){
+
+    .form-row{
+        flex-direction:column;
+    }
+
+    #feesSection button{
+        width:100%;
+        margin-top:10px;
+    }
+
+    .data-table{
+        font-size:12px;
+    }
+}

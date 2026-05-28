@@ -1,0 +1,96 @@
+ /* ===== LAYOUT ===== */
+    .ai-layout {
+      display: flex;
+      margin-top: 50px;
+      min-height: 80vh;
+    }
+
+    .history-panel {
+      width: 280px;
+      background: #1e2d40;
+      color: white;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .chat-container {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-box {
+      height: 500px;
+      overflow-y: auto;
+      background: #8c75e0;
+      border-radius: 10px;
+      padding: 15px;
+      border: 1px solid #ddd;
+    }
+
+    .msg {
+      padding: 10px 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      max-width: 70%;
+      white-space: pre-line;
+      word-wrap: break-word; /* Prevents long code lines from breaking layout */
+    }
+
+    .user {
+      background: #febd69;
+      margin-left: auto;
+      text-align: right;
+      color: #333;
+    }
+
+    .bot {
+      background: #f1f1f1;
+      margin-right: auto;
+      color: #333;
+    }
+
+    .input-box {
+      display: flex;
+      margin-top: 15px;
+      gap: 10px;
+    }
+
+    .input-box input {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .input-box button {
+      padding: 12px 20px;
+      background: #1e2d40;
+      color: rgb(0, 0, 0);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pdf-btn {
+      background: #d9534f !important;
+    }
+
+    .history-item {
+      padding: 8px;
+      margin: 5px 0;
+      background: #2c3e50;
+      border-radius: 6px;
+      cursor: pointer;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .history-item:hover {
+      background: #34495e;
+    }

@@ -1,0 +1,726 @@
+/* ==========================================================================
+   1. HAMBURGER & DROPDOWN HEADER MENU
+   ========================================================================== */
+
+.menu-toggle {
+  color: #ffffff;
+  font-size: 26px;
+  cursor: pointer;
+  transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-toggle:hover {
+  color: #febd69;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  width: 280px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(30, 45, 64, 0.15);
+  overflow: hidden;
+  display: none;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  animation: dropdownFade 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-menu.active {
+  display: block;
+}
+
+.menu-group {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.menu-group:last-child {
+  border-bottom: none;
+}
+
+.menu-group h4 {
+  color: #8a99ad;
+  margin: 0 0 10px 0;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.menu-group a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #2c3e50;
+  padding: 10px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.menu-group a:hover {
+  background: #f4f6f9;
+  color: #3498db;
+}
+
+.menu-group a i {
+  color: #3498db;
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+/* ==========================================================================
+   2. MAIN SITE STRUCTURE & CONTAINER LAYOUTS
+   ========================================================================== */
+
+/* ==========================================================================
+   2. MAIN SITE STRUCTURE & CONTAINER LAYOUTS
+   ========================================================================== */
+
+.admin-layout {
+  display: flex;
+  margin-top: 85px; /* Adjust this to match your EXACT header height (e.g., 85px or 90px) */
+  padding-top: 0 !important; /* Removes any accidental space below header */
+  min-height: calc(100vh - 85px); /* Matches the margin-top calculation */
+  position: relative;
+  align-items: stretch;
+  background-color: #f4f6f9;
+}
+header, .navbar {
+  margin: 0 !important;
+  padding: 0;
+}
+.work-area {
+  flex-grow: 1;
+  padding: 40px;
+  background-color: #f4f6f9;
+  transition: padding 0.3s ease;
+  overflow-y: auto;
+}
+
+/* Responsive Structural Layout Grid for Info and Dynamic Cards */
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 30px;
+  padding: 20px 0;
+  max-width: 1400px;
+}
+
+/* ==========================================================================
+   3. SIDEBAR COMPONENT & CONTROL CONTROLLERS
+   ========================================================================== */
+
+.sidebar {
+  margin-top: 0px;
+  width: 280px;
+  background-color: #1e2d40;
+  color: #ffffff;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+  position: relative;
+  padding: 30px 20px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.03);
+}
+
+.sidebar h3 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #6c7a89;
+  margin: 0 0 20px 10px;
+  font-weight: 700;
+}
+
+.sidebar.collapsed {
+  width: 0px;
+  padding: 30px 0px !important;
+  overflow: hidden;
+  border-right: none;
+}
+
+/* Centered Toggle Circular Arrow Layout Indicator */
+.sidebar-toggle {
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #3498db;
+  color: #ffffff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 110;
+  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+  transition: background 0.2s, transform 0.2s;
+  border: 2px solid #ffffff;
+  font-size: 12px;
+}
+
+.sidebar-toggle:hover {
+  background: #2980b9;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* ==========================================================================
+   4. NAVIGATION BUTTONS & ADMIN OPERATIONS PANEL
+   ========================================================================== */
+
+.side-btn {
+  width: 100%;
+  padding: 12px 16px;
+  margin: 6px 0;
+  background: transparent;
+  border: none;
+  color: #9cb1c9;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.side-btn i {
+  font-size: 16px;
+  width: 20px;
+  transition: transform 0.2s;
+}
+
+.side-btn:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.side-btn.active {
+  color: #ffffff;
+  background-color: #3498db;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+}
+
+.side-btn.active i {
+  transform: scale(1.1);
+}
+
+/* Action Control Panels Layout (Add Section / Save Configurations) */
+.action-btn {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.save-btn {
+  background: #2ecc71;
+  border: none;
+  margin-top: 15px;
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
+}
+
+.save-btn:hover {
+  background: #27ae60;
+  box-shadow: 0 6px 16px rgba(46, 204, 113, 0.3);
+}
+
+/* ==========================================================================
+   5. PROFILE CARDS & DATA REPRESENTATION LABELS
+   ========================================================================== */
+
+.profile-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(165, 180, 200, 0.08);
+  border: 1px solid rgba(165, 180, 200, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(30, 45, 64, 0.12);
+}
+
+/* Top Block Fallback Gradient Header Elements */
+.card-icon-wrapper {
+  padding: 40px;
+  text-align: center;
+  font-size: 46px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blue-gradient   { background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); }
+.purple-gradient { background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); }
+.gold-gradient   { background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%); }
+
+/* Avatar Display Container Engine Styles */
+.card-image-container {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background: #eaedf2;
+  overflow: hidden;
+}
+
+.profile-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Camera Overlay Adjustments Triggered On Hover States */
+.admin-upload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(30, 45, 64, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 5;
+}
+
+.card-image-container:hover .admin-upload-overlay {
+  opacity: 1;
+}
+
+.admin-upload-overlay label {
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  background: #3498db;
+  padding: 10px 20px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.admin-upload-overlay label:hover {
+  background: #2980b9;
+  transform: scale(1.05);
+}
+
+.admin-upload-overlay input[type="file"] {
+  display: none !important;
+}
+
+/* Info Details Card Main Body Content Elements */
+.card-content {
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-content h3 {
+  margin: 12px 0 6px 0;
+  font-size: 20px;
+  color: #1e2d40;
+  font-weight: 700;
+}
+
+.subtitle {
+  color: #7f8c8d;
+  font-size: 14px;
+  margin: 0 0 10px 0;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Structured Layout Badges */
+.badge {
+  align-self: flex-start;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.blue-badge   { background: #e8f4fd; color: #3498db; }
+.purple-badge { background: #f5eef8; color: #9b59b6; }
+.gold-badge   { background: #fef9e7; color: #f39c12; }
+
+/* Institutional Profile Details Lists Layouts */
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13.5px;
+  color: #4c5a6a;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.contact-list li i {
+  color: #3498db;
+  font-size: 14px;
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.contact-list a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.contact-list a:hover {
+  color: #2980b9;
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   6. ANIMATIONS METRICS KEYFRAMES
+   ========================================================================== */
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.dashboard-card,
+.about-card,
+.profile-card{
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-card::before,
+.about-card::before,
+.profile-card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.15),
+    transparent
+  );
+  transition:0.8s;
+}
+
+.dashboard-card:hover::before,
+.about-card:hover::before,
+.profile-card:hover::before{
+  left:100%;
+}
+/* =========================================
+   ADVANCED PREMIUM UI
+========================================= */
+
+.content-section{
+  display:none;
+  animation:fadeSection 0.35s ease;
+}
+
+.content-section.active{
+  display:block;
+}
+
+/* =========================================
+   SEARCH BAR
+========================================= */
+
+.menu-search{
+  width:100%;
+  padding:12px 15px;
+  border:none;
+  border-radius:10px;
+  margin-bottom:20px;
+  background:#2b3d52;
+  color:#fff;
+  outline:none;
+  font-size:14px;
+}
+
+.menu-search::placeholder{
+  color:#c8d1db;
+}
+
+/* =========================================
+   LIVE CLOCK
+========================================= */
+
+.live-clock{
+  color:#fff;
+  font-size:14px;
+  font-weight:600;
+  margin-left:auto;
+  margin-right:20px;
+}
+
+/* =========================================
+   SIDEBAR TOOLTIP
+========================================= */
+
+.sidebar.collapsed .side-btn{
+  position:relative;
+}
+
+.sidebar.collapsed .side-btn:hover::after{
+
+  content:attr(data-title);
+
+  position:absolute;
+
+  left:70px;
+
+  background:#1e2d40;
+
+  color:#fff;
+
+  padding:8px 14px;
+
+  border-radius:8px;
+
+  white-space:nowrap;
+
+  font-size:13px;
+
+  z-index:9999;
+
+  box-shadow:0 6px 18px rgba(0,0,0,0.2);
+}
+
+/* =========================================
+   PREMIUM CARD EFFECT
+========================================= */
+
+.dashboard-card,
+.profile-card,
+.about-card{
+
+  backdrop-filter:blur(14px);
+
+  -webkit-backdrop-filter:blur(14px);
+
+  position:relative;
+
+  overflow:hidden;
+
+  animation:cardEntry 0.45s ease;
+}
+
+.dashboard-card::before,
+.profile-card::before,
+.about-card::before{
+
+  content:"";
+
+  position:absolute;
+
+  top:0;
+
+  left:-100%;
+
+  width:100%;
+
+  height:100%;
+
+  background:linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.18),
+    transparent
+  );
+
+  transition:0.8s;
+}
+
+.dashboard-card:hover::before,
+.profile-card:hover::before,
+.about-card:hover::before{
+
+  left:100%;
+}
+
+/* =========================================
+   ACTIVE BUTTON
+========================================= */
+
+.side-btn.active{
+  transform:translateX(6px);
+}
+
+/* =========================================
+   PRELOADER
+========================================= */
+
+#preloader{
+
+  position:fixed;
+
+  top:0;
+
+  left:0;
+
+  width:100%;
+
+  height:100%;
+
+  background:#f4f6f9;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  z-index:999999;
+
+  transition:0.4s;
+}
+
+.loader{
+
+  width:55px;
+
+  height:55px;
+
+  border:5px solid #dfe6ee;
+
+  border-top:5px solid #3498db;
+
+  border-radius:50%;
+
+  animation:spin 1s linear infinite;
+}
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes spin{
+
+  100%{
+    transform:rotate(360deg);
+  }
+}
+
+@keyframes fadeSection{
+
+  from{
+    opacity:0;
+    transform:translateY(12px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes cardEntry{
+
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* =========================================
+   DARK MODE
+========================================= */
+
+@media(prefers-color-scheme:dark){
+
+  body{
+    background:#111827;
+  }
+
+  .dashboard-card,
+  .profile-card,
+  .about-card{
+
+    background:#1f2937;
+
+    color:#fff;
+  }
+
+  .section-title h2,
+  .card-content h3,
+  .about-card h3{
+    color:#fff;
+  }
+
+  .about-card p,
+  .subtitle{
+    color:#d1d5db;
+  }
+}

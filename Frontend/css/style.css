@@ -1,0 +1,619 @@
+/* =========================
+   GLOBAL CSS
+========================= */
+
+/* =====================================================
+GLOBAL
+===================================================== */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#f8fafc;
+overflow-x:hidden;
+color:#0f172a;
+}
+
+/* =====================================================
+HEADER
+===================================================== */
+
+header{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+z-index:1000;
+background:rgba(15,23,42,0.95);
+backdrop-filter:blur(12px);
+box-shadow:0 4px 20px rgba(0,0,0,0.15);
+}
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px 6%;
+}
+
+.logo-container{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+.logo{
+width:60px;
+height:60px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid #f59e0b;
+}
+
+.logo-text h2{
+font-size:26px;
+font-weight:700;
+color:white;
+}
+
+.logo-text p{
+font-size:13px;
+color:gold;
+}
+/* Hover Animation */
+
+.login-choice{
+display:flex;
+justify-content:center;
+gap:30px;
+margin-bottom:20px;
+font-weight:600;
+}
+
+.login-choice label{
+display:flex;
+align-items:center;
+gap:8px;
+cursor:pointer;
+padding:10px 18px;
+border-radius:12px;
+background:#eef4ff;
+transition:0.3s;
+}
+
+.login-choice label:hover{
+background:#dbeafe;
+}
+
+/* =====================================================
+RIGHT NAV
+===================================================== */
+
+.nav-right{
+display:flex;
+align-items:center;
+gap:18px;
+position:relative;
+}
+
+/* CLOCK */
+
+.live-clock{
+background:rgba(255,255,255,0.12);
+padding:10px 18px;
+border-radius:12px;
+font-size:15px;
+font-weight:600;
+color:#f8fafc;
+border:1px solid rgba(255,255,255,0.15);
+min-width:130px;
+text-align:center;
+}
+
+/* MENU */
+
+.menu-toggle{
+width:48px;
+height:48px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:12px;
+background:#2563eb;
+color:white;
+font-size:22px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.menu-toggle:hover{
+transform:scale(1.08);
+background:#1d4ed8;
+}
+
+/* =====================================================
+DROPDOWN
+===================================================== */
+
+.dropdown-menu{
+position:absolute;
+top:65px;
+right:0;
+width:260px;
+background:white;
+border-radius:18px;
+padding:20px;
+display:none;
+box-shadow:0 10px 40px rgba(0,0,0,0.15);
+animation:fadeIn 0.3s ease;
+}
+
+.dropdown-menu.active{
+display:block;
+}
+
+.menu-group h4{
+margin-bottom:12px;
+color:#2563eb;
+font-size:14px;
+font-weight:700;
+}
+
+.menu-group a{
+display:flex;
+align-items:center;
+gap:10px;
+padding:12px;
+margin-bottom:8px;
+text-decoration:none;
+border-radius:12px;
+font-size:15px;
+font-weight:500;
+color:#334155;
+transition:0.3s;
+}
+
+.menu-group a:hover{
+background:#eff6ff;
+color:#2563eb;
+transform:translateX(4px);
+}
+
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.hero{
+  height:90vh;
+  background:
+  linear-gradient(rgba(0,0,0,0.5),
+  rgba(0,0,0,0.5)),
+  url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f');
+  background-size:cover;
+  background-position:center;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:20px;
+}
+
+.hero-content{
+  max-width:750px;
+  background:rgba(0,0,0,0.55);
+  padding:40px;
+  border-radius:15px;
+  backdrop-filter:blur(5px);
+}
+
+.hero-content h1{
+  font-size:46px;
+  color:white;
+  line-height:1.3;
+}
+
+.hero-content span{ color:#febd69; }
+
+.hero-content p{
+  color:#f1f1f1;
+  margin:18px 0;
+  font-size:18px;
+}
+
+.hero-buttons{
+  display:flex;
+  gap:15px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.primary-btn,
+.secondary-btn,
+.login-submit-btn{
+  padding:12px 24px;
+  border:none;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+  font-size:15px;
+}
+
+.primary-btn,
+.login-submit-btn{
+  background:#febd69;
+  color:#111;
+}
+
+.primary-btn:hover,
+.login-submit-btn:hover{
+  background:#f3a847;
+  transform:translateY(-2px);
+}
+
+.secondary-btn{
+  background:#232f3e;
+  color:white;
+}
+
+.secondary-btn:hover{
+  background:#37475a;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+section{
+  padding:70px 50px;
+}
+
+.section-title{
+  text-align:center;
+  margin-bottom:40px;
+}
+
+.section-title h2{
+  font-size:34px;
+  margin-bottom:10px;
+  color:#1e2d40;
+}
+
+.section-title p{
+  color:#666;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.about-container,
+.course-container,
+.feature-grid,
+.dashboard-grid,
+.contact-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.about-card,
+.course-card,
+.feature-box,
+.dashboard-card,
+.contact-card{
+  background:white;
+  padding:30px;
+  border-radius:15px;
+  text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,0.08);
+  transition:0.3s;
+}
+
+.about-card:hover,
+.course-card:hover,
+.feature-box:hover,
+.dashboard-card:hover,
+.contact-card:hover{
+  transform:translateY(-8px);
+}
+
+.about-card i,
+.course-card i,
+.feature-box i,
+.dashboard-card i,
+.contact-card i{
+  font-size:38px;
+  color:#febd69;
+  margin-bottom:18px;
+}
+
+/* =========================
+   CONTACT BUTTONS
+========================= */
+
+.contact-btn{
+  display:inline-block;
+  padding:10px 18px;
+  background:#febd69;
+  color:#111;
+  border-radius:8px;
+  font-weight:600;
+  text-decoration:none;
+  transition:0.3s;
+}
+
+.contact-btn:hover{ background:#f3a847; }
+
+.whatsapp-btn{
+  background:#25d366;
+  color:white;
+}
+
+.whatsapp-btn:hover{ background:#1ebe5d; }
+
+/* =========================
+   FORMS
+========================= */
+
+.login-form,
+.profile-form,
+.advanced-profile-form{
+  max-width:500px;
+  margin:auto;
+  background:white;
+  padding:35px;
+  border-radius:15px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.1);
+}
+
+/* =========================
+   INPUT GROUP
+========================= */
+
+.input-group{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.input-group i{
+  font-size:18px;
+  color:#febd69;
+  min-width:22px;
+  text-align:center;
+}
+
+.input-group input,
+.input-group select,
+.login-form input,
+.login-form select,
+.profile-form input{
+  flex:1;
+  width:100%;
+  height:52px;
+  padding:0 14px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  outline:none;
+  font-size:15px;
+  background:white;
+}
+
+/* =========================
+   SELECT FIX
+========================= */
+
+.login-form select,
+.input-group select{
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:calc(100% - 15px) center;
+  background-size:18px;
+  padding-right:50px;
+  cursor:pointer;
+}
+
+/* =========================
+   INPUT FOCUS
+========================= */
+
+.login-form input:focus,
+.login-form select:focus,
+.profile-form input:focus,
+.input-group input:focus,
+.input-group select:focus{
+  border-color:#febd69;
+  box-shadow:0 0 5px rgba(254,189,105,0.5);
+}
+
+/* =========================
+   PASSWORD TOGGLE
+========================= */
+
+.password-box{
+  position:relative;
+}
+
+.toggle-password{
+  position:absolute;
+  right:15px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  color:#777;
+}
+
+/* =========================
+   PROFILE UPLOAD (MERGED FIXED)
+========================= */
+
+.profile-upload{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.upload-circle{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  background:#e5e7eb;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:auto;
+  border:3px dashed #febd69;
+  cursor:pointer;
+  transition:0.3s;
+  overflow:hidden;
+}
+
+.upload-circle:hover{
+  background:#fff7ec;
+}
+
+.upload-circle i{
+  font-size:35px;
+  color:#febd69;
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard-section{
+  padding-top:140px;
+  min-height:100vh;
+  background:#f4f6f9;
+}
+
+
+/* =========================
+   ANIMATION (ONLY ONE)
+========================= */
+@keyframes fadeUp{
+
+from{
+opacity:0;
+transform:translateY(40px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(10px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+@media(max-width:768px){
+
+.hero h1{
+font-size:42px;
+}
+
+.hero p{
+font-size:18px;
+}
+
+.section-title h2{
+font-size:32px;
+}
+
+.live-clock{
+display:none;
+}
+
+}
+/* =========================
+   UPLOAD BUTTONS
+========================= */
+
+.upload-btn{
+  margin-top:15px;
+  padding:10px 18px;
+  border:none;
+  border-radius:10px;
+  background:#059669;
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.upload-btn:hover{
+  background:#047857;
+}
+
+.preview-image{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+}
+.back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #ffffff;
+      background: #febd69;
+      color: #111111;
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease-block;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+/* =====================================================
+              FOOTER
+===================================================== */
+
+footer{
+background:#0f172a;
+padding:40px 20px;
+text-align:center;
+color:white;
+}
+
+footer h3{
+font-size:28px;
+margin-bottom:15px;
+}
+
+footer p{
+margin-bottom:8px;
+color:#f8e007;
+}

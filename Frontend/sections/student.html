@@ -1,0 +1,74 @@
+<!-- =========================
+STUDENT SECTION
+========================= -->
+
+<div class="section-title">
+    <h2>Student Control</h2>
+    <p>Manage Student Records & Enrollment</p>
+</div>
+
+<!-- =========================
+ADD STUDENT FORM
+========================= -->
+
+<form id="studentForm" class="dashboard-form" enctype="multipart/form-data">
+
+    <div class="form-grid">
+
+        <input type="text" id="studentName" placeholder="Full Name" required>
+         <select id="studentBatch" required>
+    <option value="">Select Batch</option>
+    </select>
+
+        <input type="text" id="studentRoll" placeholder="Roll Number" required>
+
+        <input type="email" id="studentEmail" placeholder="Email Address" required>
+
+        <input type="text" id="studentPhone" placeholder="Phone Number" required>
+
+        <input type="text" id="studentYear" placeholder="Year / Semester" required>
+
+        <input type="date" id="studentDOB">
+
+        <select id="studentStatus">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+        </select>
+
+        <input type="file" id="studentImage" accept="image/*">
+
+    </div>
+
+    <textarea id="studentAddress" placeholder="Address" rows="4"></textarea>
+
+    <button type="submit" class="action-btn">
+        <i class="fa-solid fa-plus"></i>
+        Add Student
+    </button>
+
+</form>
+
+<!-- =========================
+SEARCH BAR
+========================= -->
+
+<div class="search-box-wrapper">
+
+    <div style="flex-grow:1;">
+        <input type="text" id="studentSearch" placeholder="Search Students...">
+    </div>
+
+    <button type="button" class="search-btn" onclick="searchStudent()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        Search
+    </button>
+
+</div>
+
+<!-- =========================
+STUDENT LIST
+========================= -->
+
+<div id="studentList" class="student-list">
+    Loading...
+</div>
