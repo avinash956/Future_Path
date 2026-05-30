@@ -19,6 +19,7 @@ from routes.student_routes import student_bp
 from routes.faculty_routes import faculty_bp
 from routes.batch_routes import batch_bp
 from routes.fees_routes import fees_bp
+from routes.fees_advanced_routes import fees_adv_bp
 
 # ======================
 # APP INIT
@@ -118,8 +119,15 @@ app.register_blueprint(media_bp, url_prefix="/api/media")
 app.register_blueprint(management_bp, url_prefix="/api/management")
 app.register_blueprint(batch_bp, url_prefix="/api/batch")
 app.register_blueprint(fees_bp, url_prefix="/api/fees")
+app.register_blueprint(fees_adv_bp)
 
 
+# ======================
+#  AI chatbot
+# ======================
+from routes.ai_chatbot_routes import ai_bp
+
+app.register_blueprint(ai_bp, url_prefix="/api")
 # ======================
 # HOME ROUTE
 # ======================
@@ -157,7 +165,12 @@ def handle_error(e):
         "error": str(e),
         "type": type(e).__name__
     }), 500
+print("\n===== REGISTERED ROUTES =====")
 
+for rule in app.url_map.iter_rules():
+    print(rule)
+
+print("=============================\n")
 
 # ======================
 # UPLOADS

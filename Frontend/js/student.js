@@ -1,16 +1,19 @@
 /* =========================================
-STUDENT MODULE FINAL FIXED VERSION
+STUDENT MODULE PRO VERSION (FINAL FIXED)
 ========================================= */
 
-console.log("✅ student.js FILE LOADED");
+console.log("✅ student.js LOADED");
+
+// Global state
+let studentCache = [];
 
 /* =========================================
-INITIALIZE
+INITIALIZE MODULE
 ========================================= */
 
 function initializeStudent() {
 
-    console.log("🚀 Initializing Student Module");
+    console.log("🚀 Student Module Initializing...");
 
     const form = document.getElementById("studentForm");
 
@@ -19,49 +22,19 @@ function initializeStudent() {
         return;
     }
 
-    form.addEventListener("submit", async function (e) {
-        e.preventDefault();
-        await addStudent(e);
-    });
+    form.addEventListener("submit", addStudent);
 
-    const batchSelect = document.getElementById("studentBatch");
-    if (batchSelect) {
-        batchSelect.addEventListener("change", generateRollNumber);
-    }
+    // Search live
+    document.getElementById("studentSearch")?.addEventListener("input", loadStudent);
+
+    // Batch change triggers roll + reload
+    document.getElementById("studentBatch")?.addEventListener("change", () => {
+        generateRollNumber();
+        loadStudent();
+    });
 
     loadBatchOptions();
     loadStudent();
-}
-
-/* =========================================
-LOAD BATCH OPTIONS
-========================================= */
-
-async function loadBatchOptions() {
-
-    const batchSelect = document.getElementById("studentBatch");
-    if (!batchSelect) return;
-
-    try {
-
-        const res = await authFetch(`${window.BASE_URL}/batch/get-batch`);
-        const data = await res.json();
-
-        const batches = data.data || [];
-
-        batchSelect.innerHTML = `<option value="">Select Batch</option>`;
-
-        batches.forEach(batch => {
-            batchSelect.innerHTML += `
-                <option value="${batch.code}">
-                    ${batch.name} (${batch.code})
-                </option>
-            `;
-        });
-
-    } catch (err) {
-        console.error("❌ Batch load error:", err);
-    }
 }
 
 /* =========================================
@@ -112,69 +85,38 @@ async function generateRollNumber() {
 }
 
 /* =========================================
-ADD STUDENT (IMAGE SAFE)
+LOAD BATCH OPTIONS
 ========================================= */
 
-async function addStudent(e) {
+async function loadBatchOptions() {
 
-    e.preventDefault();
-
-    const formElement = document.getElementById("studentForm");
-
-    if (formElement.dataset.submitting === "true") return;
-    formElement.dataset.submitting = "true";
-
-    const formData = new FormData();
-
-    const fields = [
-        "studentName",
-        "studentRoll",
-        "studentEmail",
-        "studentPhone",
-        "studentBatch",
-        "studentYear",
-        "studentDOB",
-        "studentStatus",
-        "studentAddress"
-    ];
-
-    const keys = ["name","roll","email","phone","batch","year","dob","status","address"];
-
-    fields.forEach((id, i) => {
-        const el = document.getElementById(id);
-        if (el) formData.append(keys[i], el.value.trim());
-    });
-
-    const imageInput = document.getElementById("studentImage");
-
-    if (imageInput && imageInput.files.length > 0) {
-        formData.append("image", imageInput.files[0]);
-    }
+    const batchSelect = document.getElementById("studentBatch");
+    if (!batchSelect) return;
 
     try {
 
-        const res = await authFetch(`${window.BASE_URL}/student/add-student`, {
-            method: "POST",
-            body: formData
-        });
-
+        const res = await authFetch(`${window.BASE_URL}/batch/get-batch`);
         const data = await res.json();
 
-        if (data.success) {
-            alert("✅ Student Added");
-            formElement.reset();
-            loadStudent();
-        }
+        const batches = data.data || [];
+
+        batchSelect.innerHTML = `<option value="">Select Batch</option>`;
+
+        batches.forEach(batch => {
+            batchSelect.innerHTML += `
+                <option value="${batch.code}">
+                    ${batch.name} (${batch.code})
+                </option>
+            `;
+        });
 
     } catch (err) {
-        console.error("❌ Add student error:", err);
+        console.error("❌ Batch load error:", err);
     }
-
-    formElement.dataset.submitting = "false";
 }
 
 /* =========================================
-LOAD STUDENTS (IMAGE FIXED)
+LOAD STUDENTS (SEARCH + FILTER)
 ========================================= */
 
 async function loadStudent() {
@@ -184,53 +126,58 @@ async function loadStudent() {
 
     container.innerHTML = "Loading...";
 
+    const batch = document.getElementById("studentBatch")?.value;
+    const search = document.getElementById("studentSearch")?.value;
+
     try {
 
-        const res = await authFetch(`${window.BASE_URL}/student/get-student`);
+        let url = `${window.BASE_URL}/student/get-students?`;
+
+        if (batch) url += `batch=${batch}&`;
+        if (search) url += `search=${search}`;
+
+        const res = await authFetch(url);
         const data = await res.json();
 
-        const items = data.students || [];
+        studentCache = data.students || [];
 
-        if (!items.length) {
+        if (!studentCache.length) {
             container.innerHTML = "No students found";
             return;
         }
 
         container.innerHTML = `
-            <div class="faculty-grid">
-                ${items.map(item => {
+            <div class="student-grid">
+                ${studentCache.map(item => `
+                    <div class="student-card">
 
-                    const imgSrc = item.image || "";
-
-                    return `
-                    <div class="faculty-card">
-
-                        <div class="faculty-image-wrapper">
-                            <img src="${imgSrc}"
-                                 class="faculty-image"
-                                 crossorigin="anonymous"
-                                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiPjwvc3ZnPg=='">
+                        <div class="student-image-wrapper">
+                            <img src="${item.image}" class="student-image">
                         </div>
 
-                        <div class="faculty-info">
+                        <div class="student-info">
 
-                            <h3>${item.name || "No Name"}</h3>
-                            <p><strong>Roll:</strong> ${item.roll}</p>
-                            <p><strong>Email:</strong> ${item.email}</p>
-                            <p><strong>Phone:</strong> ${item.phone}</p>
-                            <p><strong>Batch:</strong> ${item.batch}</p>
-                            <p><strong>Address:</strong> ${item.address}</p>
+                            <h3>${item.name}</h3>
+                            <p><b>Roll:</b> ${item.roll}</p>
+                            <p><b>Email:</b> ${item.email}</p>
+                            <p><b>Phone:</b> ${item.phone}</p>
+                            <p><b>Batch:</b> ${item.batch}</p>
 
-                            <div class="faculty-actions">
+                            <div class="student-actions">
 
-                                <button class="delete-btn"
+                                <button style="background:#e11d48;color:white;padding:6px 10px;border:none;border-radius:5px;"
                                     onclick="deleteStudent('${item._id}')">
                                     Delete
                                 </button>
 
-                                <button class="download-btn"
+                                <button style="background:#2563eb;color:white;padding:6px 10px;border:none;border-radius:5px;"
+                                    onclick="openEditStudent('${item._id}')">
+                                    Edit
+                                </button>
+
+                                <button style="background:#10b981;color:white;padding:6px 10px;border:none;border-radius:5px;"
                                     onclick="downloadStudentCard('${item._id}')">
-                                    Download ID
+                                    ID Card
                                 </button>
 
                             </div>
@@ -238,8 +185,7 @@ async function loadStudent() {
                         </div>
 
                     </div>
-                `;
-                }).join("")}
+                `).join("")}
             </div>
         `;
 
@@ -249,10 +195,109 @@ async function loadStudent() {
 }
 
 /* =========================================
-DELETE
+ADD / UPDATE STUDENT
+========================================= */
+
+async function addStudent(e) {
+
+    e.preventDefault();
+
+    const form = document.getElementById("studentForm");
+
+    if (form.dataset.loading === "true") return;
+    form.dataset.loading = "true";
+
+    const formData = new FormData();
+
+    const map = {
+        studentName: "name",
+        studentRoll: "roll",
+        studentEmail: "email",
+        studentPhone: "phone",
+        studentBatch: "batch",
+        studentYear: "year",
+        studentDOB: "dob",
+        studentStatus: "status",
+        studentAddress: "address"
+    };
+
+    Object.keys(map).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) formData.append(map[id], el.value);
+    });
+
+    const img = document.getElementById("studentImage");
+    if (img?.files.length) {
+        formData.append("image", img.files[0]);
+    }
+
+    const editId = form.dataset.editId;
+
+    let url = `${window.BASE_URL}/student/add-student`;
+    let method = "POST";
+
+    if (editId) {
+        url = `${window.BASE_URL}/student/update-student/${editId}`;
+        method = "PUT";
+    }
+
+    try {
+
+        const res = await authFetch(url, {
+            method,
+            body: formData
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+
+            alert(editId ? "Student Updated" : "Student Added");
+
+            form.reset();
+            delete form.dataset.editId;
+
+            generateRollNumber();
+            loadStudent();
+        }
+
+    } catch (err) {
+        console.error("❌ Add/Update error:", err);
+    }
+
+    form.dataset.loading = "false";
+}
+
+/* =========================================
+EDIT STUDENT
+========================================= */
+
+function openEditStudent(id) {
+
+    const student = studentCache.find(s => s._id === id);
+
+    if (!student) return;
+
+    document.getElementById("studentName").value = student.name;
+    document.getElementById("studentRoll").value = student.roll;
+    document.getElementById("studentEmail").value = student.email;
+    document.getElementById("studentPhone").value = student.phone;
+    document.getElementById("studentBatch").value = student.batch;
+    document.getElementById("studentYear").value = student.year;
+    document.getElementById("studentDOB").value = student.dob;
+    document.getElementById("studentStatus").value = student.status;
+    document.getElementById("studentAddress").value = student.address;
+
+    document.getElementById("studentForm").dataset.editId = id;
+}
+
+/* =========================================
+DELETE STUDENT
 ========================================= */
 
 async function deleteStudent(id) {
+
+    if (!confirm("Delete this student?")) return;
 
     try {
 
@@ -446,7 +491,6 @@ async function downloadStudentCard(id) {
         };
 
         await html2pdf().set(opt).from(card).save();
-
         /* =========================
         STEP 5: CLEANUP
         ========================= */
@@ -456,4 +500,26 @@ async function downloadStudentCard(id) {
         console.error("❌ PDF generation failed:", err);
         alert("PDF download failed. Check console.");
     }
+}
+/* =========================================
+EXCEL EXPORT
+========================================= */
+
+async function downloadExcel() {
+
+    const rows = studentCache.map((s, i) => ({
+        "S.No": i + 1,
+        "Name": s.name,
+        "Roll": s.roll,
+        "Email": s.email,
+        "Phone": s.phone,
+        "Batch": s.batch,
+        "Year": s.year
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Students");
+
+    XLSX.writeFile(wb, "students.xlsx");
 }

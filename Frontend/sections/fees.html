@@ -1,25 +1,31 @@
 <!-- ==========================================
      FEES MANAGEMENT SECTION
 ========================================== -->
+
 <div class="section-title">
     <h2>Fees Management</h2>
 </div>
+
 <section class="dashboard-form" id="feesSection">
 
-
-    <!-- Student Search -->
+    <!-- ==========================================
+         STUDENT SEARCH
+    ========================================== -->
     <div class="card">
         <h3>Search Student</h3>
 
         <div class="form-row">
             <input type="text" id="studentRoll" placeholder="Enter Roll Number">
-            <button onclick="fetchStudent()">
+
+            <button onclick="fetchStudent()" id="searchBtn">
                 Search
             </button>
         </div>
     </div>
 
-    <!-- Student Details -->
+    <!-- ==========================================
+         STUDENT DETAILS
+    ========================================== -->
     <div class="card">
         <h3>Student Information</h3>
 
@@ -27,24 +33,20 @@
 
             <div>
                 <label>Student Name</label>
-                <input
-                    type="text"
-                    id="studentName"
-                    readonly>
+                <input type="text" id="studentName" readonly>
             </div>
 
             <div>
                 <label>Batch</label>
-                <input
-                    type="text"
-                    id="batch"
-                    readonly>
+                <input type="text" id="studentBatchDisplay" readonly>
             </div>
 
         </div>
     </div>
 
-    <!-- Payment -->
+    <!-- ==========================================
+         PAYMENT SECTION
+    ========================================== -->
     <div class="card">
         <h3>Fees Payment</h3>
 
@@ -52,15 +54,12 @@
 
             <div>
                 <label>Amount</label>
-                <input
-                    type="number"
-                    id="feesAmount"
-                    placeholder="Enter Amount">
+                <input type="number" id="feesAmount" placeholder="Enter Amount">
             </div>
 
             <div>
                 <label>Payment Mode</label>
-                <select id="paymentMode">
+                <select id="paymentMode" style ="background-color: #03143a;">
                     <option value="Cash">Cash</option>
                     <option value="UPI">UPI</option>
                     <option value="Card">Card</option>
@@ -72,30 +71,106 @@
 
         <br>
 
-        <button onclick="generateQR()">
-            Save Payment
-        </button>
+<div class="fees-btn-row">
 
-        <button onclick="sendWhatsApp()">
-            Send WhatsApp
-        </button>
-    </div>
+    <button type="button" onclick="generateQR()">
+        Generate QR
+    </button>
 
-    <!-- QR Section -->
+    <button type="button"
+            class="primary-btn"
+            onclick="completePayment()">
+        Done Payment
+    </button>
+
+    <select id="exportType" style="background-color: #021233; color: white; border: none; padding: 10px; border-radius: 6px;">
+
+    <option value="student">
+        Current Student
+    </option>
+
+    <option value="batch">
+        Batch Wise
+    </option>
+
+    <option value="all" selected>
+        Total Collection
+    </option>
+
+</select>
+
+<button type="button"
+        onclick="exportFeesExcel()">
+    Export Excel
+</button>
+<!-- =========================================
+RECEIPT SECTION
+========================================= -->
+
+<div id="receiptArea" class="receipt-container">
+
+    <h2>FEE RECEIPT</h2>
+
+    <table>
+
+        <tr>
+            <td><strong>Receipt No</strong></td>
+            <td id="receiptNo">-</td>
+        </tr>
+
+        <tr>
+            <td><strong>Student Name</strong></td>
+            <td id="receiptName">-</td>
+        </tr>
+
+        <tr>
+            <td><strong>Roll Number</strong></td>
+            <td id="receiptRoll">-</td>
+        </tr>
+
+        <tr>
+            <td><strong>Amount Paid</strong></td>
+            <td id="receiptAmount">-</td>
+        </tr>
+
+        <tr>
+            <td><strong>Payment Mode</strong></td>
+            <td id="receiptMode">-</td>
+        </tr>
+
+        <tr>
+            <td><strong>Date</strong></td>
+            <td id="receiptDate">-</td>
+        </tr>
+
+    </table>
+
+    <br>
+
+    <button type="button"
+            onclick="printReceipt()">
+
+        Print Receipt
+
+    </button>
+
+</div>
+
+</div>
+
+    <!-- ==========================================
+         QR SECTION
+    ========================================== -->
     <div class="card">
         <h3>Payment QR</h3>
 
-        <div id="qrcode"
-             style="
-                display:flex;
-                justify-content:center;
-                align-items:center;
-                min-height:180px;
-             ">
+        <div id="qrcode" style=" display:flex; justify-content:center;align-items:center;min-height:180px;">
         </div>
     </div>
 
-    <!-- Payment History -->
+    <!-- ==========================================
+         PAYMENT HISTORY
+    ========================================== -->
     <div class="card">
         <h3>Payment History</h3>
 
@@ -121,22 +196,79 @@
         </table>
     </div>
 
-    <!-- Chart -->
+    <!-- ==========================================
+         FEES ANALYTICS
+    ========================================== -->
     <div class="card">
         <h3>Fees Analytics</h3>
 
-        <canvas
-            id="chart"
-            height="100">
-        </canvas>
+        <canvas id="chart" style="max-height:300px;"></canvas>
     </div>
 
 </section>
+<!-- ==========================================
+PRO FEES ACTION PANEL
+========================================== -->
+<div class="card" id="feesProPanel">
 
-<!-- Required Libraries -->
+    <h3>Quick Actions</h3>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
- 
-<script src="./js/fees.js"></script>
+        <button type="button" onclick="fetchStudent()"
+            style="background:#2563eb;color:#fff;padding:10px 14px;border:none;border-radius:6px;">
+            🔍 Load Student (Pro)
+        </button>
+
+        <button type="button" onclick="refreshHistoryAfterPay()"
+            style="background:#16a34a;color:#fff;padding:10px 14px;border:none;border-radius:6px;">
+            🔄 Refresh Data
+        </button>
+
+        <button type="button" onclick="exportFeesExcel()"
+            style="background:#f59e0b;color:#000;padding:10px 14px;border:none;border-radius:6px;">
+            📊 Export Excel
+        </button>
+
+    </div>
+
+</div>
+<!-- ----------------------Fees Dashboard --------------------- -->
+ <!-- --------------------------------------------------------- -->
+  <div class="card">
+
+    <h2>Fee Dashboard</h2>
+
+    <div class="fees-stats">
+
+        <div class="stat-card">
+            <div class="stat-title">Total Collected</div>
+            <div class="stat-value collected" id="totalCollected">0</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Total Due</div>
+            <div class="stat-value due" id="totalDue">0</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Total Students</div>
+            <div class="stat-value students" id="totalStudents">0</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Refresh</div>
+            <button class="refresh-btn" onclick="refreshFeeDashboard()">
+                Refresh
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+

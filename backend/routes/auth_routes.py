@@ -27,7 +27,6 @@ auth_bp = Blueprint("auth", __name__)
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-
 # =========================================
 # AUTO PASSWORD GENERATOR
 # =========================================

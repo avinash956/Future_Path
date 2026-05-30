@@ -1,0 +1,22 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+# Google Credentials
+backend/service_account.json
+credentials.json
+token.json
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Build
+dist/
+build/

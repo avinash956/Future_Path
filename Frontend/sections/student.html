@@ -16,9 +16,10 @@ ADD STUDENT FORM
     <div class="form-grid">
 
         <input type="text" id="studentName" placeholder="Full Name" required>
-         <select id="studentBatch" required>
-    <option value="">Select Batch</option>
-    </select>
+
+        <select id="studentBatch" required>
+            <option value="">Select Batch</option>
+        </select>
 
         <input type="text" id="studentRoll" placeholder="Roll Number" required>
 
@@ -49,18 +50,36 @@ ADD STUDENT FORM
 </form>
 
 <!-- =========================
-SEARCH BAR
+SEARCH + FILTER BAR (PRO UPGRADE)
 ========================= -->
 
 <div class="search-box-wrapper">
 
     <div style="flex-grow:1;">
-        <input type="text" id="studentSearch" placeholder="Search Students...">
+        <input type="text" id="studentSearch" placeholder="Search Students (name / roll / batch)">
     </div>
 
-    <button type="button" class="search-btn" onclick="searchStudent()">
+    <button type="button"
+            class="search-btn"
+            onclick="if(typeof searchStudent==='function') searchStudent()">
         <i class="fa-solid fa-magnifying-glass"></i>
         Search
+    </button>
+
+</div>
+
+<!-- =========================
+PRO ACTION BUTTONS
+========================= -->
+
+<div style="margin:10px 0; display:flex; gap:10px; flex-wrap:wrap;">
+
+    <button type="button" onclick="loadStudentPro()">
+        Load Students (Pro)
+    </button>
+
+    <button type="button" onclick="exportStudentsExcel()">
+        Export Students Excel
     </button>
 
 </div>
@@ -72,3 +91,37 @@ STUDENT LIST
 <div id="studentList" class="student-list">
     Loading...
 </div>
+
+<!-- =========================
+OPTIONAL: STUDENT PROFILE MODAL (READY FOR FUTURE USE)
+========================= -->
+
+<div id="studentModal"
+     style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+     background:rgba(0,0,0,0.6); justify-content:center; align-items:center;">
+
+    <div style="background:white; padding:20px; width:300px; border-radius:10px;">
+
+        <h3>Student Profile</h3>
+
+        <div id="modalContent"></div>
+
+        <button onclick="document.getElementById('studentModal').style.display='none'">
+            Close
+        </button>
+
+    </div>
+
+</div>
+
+<!-- =========================
+SCRIPTS
+========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<!-- PRO MODULE -->
+<script src="js/student_pro.js"></script>
+
+<!-- FALLBACK (if needed) -->
+<script src="js/student.js"></script>

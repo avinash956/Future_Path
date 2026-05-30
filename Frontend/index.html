@@ -165,6 +165,38 @@ class="course-image">
 
 </section>
 
+<!-----------AI Chatbot --------------->
+<!-- -------------------------------- -->
+
+ <div id="chat-box" style="display:none;">
+    <div id="messages" style="height:200px;overflow:auto;"></div>
+    
+
+    <input id="msg" placeholder="Ask me..." style="width:100%;" />
+    <input id="roll" placeholder="Roll No" style="width:100%;margin-top:5px;" />
+
+    <button onclick="sendMsg()" style="width:100%;margin-top:5px;">Send</button>
+</div>
+<!-- FLOATING CHAT BUTTON -->
+<div id="chat-bubble" onclick="openChat()">💬</div>
+
+<!-- CHAT WINDOW -->
+<div id="chat-box" class="hidden">
+    <div class="chat-header">
+    🤖 Coaching AI Assistant
+    <span onclick="closeChat()" style="cursor:pointer;">✖</span>
+</div>
+
+    <div id="chat-messages"></div>
+
+    <div id="typing" class="typing hidden">AI is typing...</div>
+
+    <div class="chat-input">
+        <input id="user-msg" placeholder="Ask something..." />
+        <button onclick="sendMessage()">➤</button>
+    </div>
+</div>
+
 <!-- ================= 3. ANNOUNCEMENT ================= -->
 
 <section class="announcement-section">
@@ -310,6 +342,7 @@ Chat Now
 <script src="js/index.js"></script>
 <script src="js/sidebar.js"></script>
 <script src="js/api.js"></script>
+<script src="js/aichatbot.js"></script>
 
 </body>
 </html>

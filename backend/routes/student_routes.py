@@ -15,16 +15,15 @@ from routes.notifications import (
 student_bp = Blueprint("student_bp", __name__)
 
 # =========================================
-# UPLOAD PATH CONFIG (IMPORTANT FIX)
+# UPLOAD CONFIG
 # =========================================
 BASE_DIR = os.getcwd()
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
-
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 # =========================================
-# SERVE UPLOADED IMAGES
+# SERVE IMAGES
 # =========================================
 @student_bp.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -32,15 +31,23 @@ def uploaded_file(filename):
 
 
 # =========================================
-# ADD STUDENT (IMAGE FIXED)
+# UTILITY: CLEAN ROLL FORMAT
+# =========================================
+def clean_roll(roll):
+    if not roll:
+        return ""
+    return roll.strip().upper().replace(" ", "")
+
+
+# =========================================
+# ADD STUDENT (PRO SAFE VERSION)
 # =========================================
 @student_bp.route("/add-student", methods=["POST"])
 def add_student():
 
     try:
-
         name = request.form.get("name")
-        roll = request.form.get("roll")
+        roll = clean_roll(request.form.get("roll"))
         email = request.form.get("email")
         phone = request.form.get("phone")
         batch = request.form.get("batch")
@@ -49,26 +56,46 @@ def add_student():
         status = request.form.get("status")
         address = request.form.get("address")
 
-        image = request.files.get("image")
+        print("➕ ADD STUDENT REQUEST:", roll)
 
+        # =========================
+        # VALIDATION
+        # =========================
+        if not name or not roll:
+            return jsonify({
+                "success": False,
+                "message": "Name and Roll required"
+            }), 400
+
+        # =========================
+        # DUPLICATE ROLL CHECK (IMPORTANT FIX)
+        # =========================
+        existing = mongo.db.students.find_one({"roll": roll})
+        if existing:
+            return jsonify({
+                "success": False,
+                "message": "Roll already exists"
+            }), 409
+
+        # =========================
+        # IMAGE SAVE
+        # =========================
+        image = request.files.get("image")
         safe_filename = ""
 
-        # =========================================
-        # IMAGE SAVE FIX (SAFE + UNIQUE)
-        # =========================================
         if image:
             ext = os.path.splitext(image.filename)[1]
             safe_filename = f"{int(time.time())}_{roll}{ext}"
             image.save(os.path.join(UPLOAD_FOLDER, safe_filename))
 
-        # =========================================
+        # =========================
         # PASSWORD GENERATION
-        # =========================================
+        # =========================
         password = generate_password(name, phone)
 
-        # =========================================
-        # STORE STUDENT DATA
-        # =========================================
+        # =========================
+        # STUDENT OBJECT
+        # =========================
         data = {
             "name": name,
             "roll": roll,
@@ -79,15 +106,19 @@ def add_student():
             "dob": dob,
             "status": status,
             "address": address,
-            "image": safe_filename,   # store filename ONLY
-            "password": password
+            "image": safe_filename,
+            "password": password,
+            "created_at": time.time(),
+            "history": []
         }
 
         mongo.db.students.insert_one(data)
 
-        # =========================================
-        # OPTIONAL NOTIFICATIONS
-        # =========================================
+        print("✅ STUDENT ADDED:", roll)
+
+        # =========================
+        # NOTIFICATIONS (SAFE TRY)
+        # =========================
         try:
             if email:
                 send_email(email, password)
@@ -103,10 +134,12 @@ def add_student():
         return jsonify({
             "success": True,
             "message": "Student added successfully",
+            "roll": roll,
             "password": password
         })
 
     except Exception as e:
+        print("❌ ADD ERROR:", e)
         return jsonify({
             "success": False,
             "message": str(e)
@@ -114,7 +147,7 @@ def add_student():
 
 
 # =========================================
-# GET STUDENTS (IMPORTANT IMAGE FIX FOR ID CARD)
+# GET ALL STUDENTS (LEGACY SAFE)
 # =========================================
 @student_bp.route("/get-student", methods=["GET"])
 def get_student():
@@ -123,17 +156,52 @@ def get_student():
 
     for i in data:
         i["_id"] = str(i["_id"])
-
-        # =========================================
-        # FIX: CONVERT IMAGE TO FULL URL
-        # (REQUIRED FOR ID CARD + PDF DOWNLOAD)
-        # =========================================
-        if i.get("image"):
-            i["image"] = f"{request.host_url}uploads/{i['image']}"
-        else:
-            i["image"] = ""
+        i["image"] = (
+            f"{request.host_url}uploads/{i['image']}"
+            if i.get("image") else ""
+        )
 
     return jsonify({"students": data})
+
+
+# =========================================
+# GET STUDENTS (FILTER + SEARCH OPTIMIZED)
+# =========================================
+@student_bp.route("/get-students", methods=["GET"])
+def get_students():
+
+    batch = request.args.get("batch")
+    search = request.args.get("search")
+
+    query = {}
+
+    if batch:
+        query["batch"] = batch
+
+    if search:
+        query["$or"] = [
+            {"name": {"$regex": search, "$options": "i"}},
+            {"roll": {"$regex": search, "$options": "i"}},
+            {"email": {"$regex": search, "$options": "i"}},
+            {"phone": {"$regex": search, "$options": "i"}},
+        ]
+
+    print("🔍 QUERY:", query)
+
+    data = list(mongo.db.students.find(query))
+
+    for i in data:
+        i["_id"] = str(i["_id"])
+        i["image"] = (
+            f"{request.host_url}uploads/{i['image']}"
+            if i.get("image") else ""
+        )
+
+    return jsonify({
+        "success": True,
+        "count": len(data),
+        "students": data
+    })
 
 
 # =========================================
@@ -143,10 +211,67 @@ def get_student():
 def delete_student(id):
 
     try:
+        print("🗑 DELETE:", id)
+
         mongo.db.students.delete_one({"_id": ObjectId(id)})
+
         return jsonify({"success": True})
 
     except Exception as e:
+        print("❌ DELETE ERROR:", e)
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 500
+
+
+# =========================================
+# UPDATE STUDENT (SAFE + FLEXIBLE)
+# =========================================
+@student_bp.route("/update-student/<id>", methods=["PUT"])
+def update_student(id):
+
+    try:
+        print("✏️ UPDATE:", id)
+
+        data = request.form.to_dict()
+        update_data = {}
+
+        allowed_fields = [
+            "name", "roll", "email", "phone",
+            "batch", "year", "dob", "status", "address"
+        ]
+
+        for field in allowed_fields:
+            if field in data and data[field] is not None:
+                update_data[field] = data[field]
+
+        # IMAGE UPDATE
+        image = request.files.get("image")
+
+        if image:
+            ext = os.path.splitext(image.filename)[1]
+            filename = f"{int(time.time())}_{id}{ext}"
+            image.save(os.path.join(UPLOAD_FOLDER, filename))
+            update_data["image"] = filename
+
+        if not update_data:
+            return jsonify({
+                "success": False,
+                "message": "Nothing to update"
+            }), 400
+
+        mongo.db.students.update_one(
+            {"_id": ObjectId(id)},
+            {"$set": update_data}
+        )
+
+        print("✅ UPDATED SUCCESS")
+
+        return jsonify({"success": True})
+
+    except Exception as e:
+        print("❌ UPDATE ERROR:", e)
         return jsonify({
             "success": False,
             "message": str(e)
