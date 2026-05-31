@@ -1170,40 +1170,39 @@ async function downloadFacultyCard(faculty) {
         await new Promise(requestAnimationFrame);
 
         /* =========================
-        STEP 4: PDF GENERATION
+        STEP 4: PDF GENERATION (Using jsPDF & html2canvas)
         ========================= */
 
-        const opt = {
+        // Capture the card element using your specific html2canvas settings
+        const canvas = await html2canvas(card, {
+            scale: 3,
+            useCORS: true,
+            backgroundColor: "#ffffff",
+            scrollX: 0,
+            scrollY: 0
+        });
 
-            margin: 0,
+        // Convert canvas data to a JPEG image asset matching your original settings
+        const imgData = canvas.toDataURL('image/jpeg', 1.0);
 
-            filename: `${faculty.name}_ID_Card.pdf`,
+        // Initialize jsPDF using the global UMD module namespace
+        const { jsPDF } = window.jspdf;
+        
+        // Define dimensions based on your opt.jsPDF array: [width, height] in pixels
+        const cardWidth = 350;
+        const cardHeight = 220;
 
-            image: {
-                type: "jpeg",
-                quality: 1
-            },
+        const pdf = new jsPDF({
+            orientation: "landscape",
+            unit: "px",
+            format: [cardWidth, cardHeight]
+        });
 
-            html2canvas: {
-                scale: 3,
-                useCORS: true,
-                backgroundColor: "#ffffff",
-                scrollX: 0,
-                scrollY: 0
-            },
-
-            jsPDF: {
-                unit: "px",
-                format: [350, 220],
-                orientation: "landscape"
-            }
-
-        };
-
-        await html2pdf()
-            .set(opt)
-            .from(card)
-            .save();
+        // Draw the image exactly spanning the custom dimensions of the canvas area
+        pdf.addImage(imgData, 'JPEG', 0, 0, cardWidth, cardHeight);
+        
+        // Finalize and prompt the client browser window to download
+        pdf.save(`${faculty.name}_ID_Card.pdf`);
 
         /* =========================
         STEP 5: CLEANUP

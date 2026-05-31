@@ -412,6 +412,10 @@ function createStudentCardHTML(student) {
     `;
 }
 
+/* =========================================
+DOWNLOAD STUDENT CARD
+========================================= */
+
 async function downloadStudentCard(id) {
     try {
 
@@ -467,34 +471,45 @@ async function downloadStudentCard(id) {
         await new Promise(requestAnimationFrame);
 
         /* =========================
-        STEP 4: PDF GENERATION (STABLE SETTINGS)
+        STEP 4: PDF GENERATION (Using jsPDF & html2canvas)
         ========================= */
-        const opt = {
-            margin: 0,
-            filename: `${student.name}_ID_Card.pdf`,
-            image: {
-                type: "jpeg",
-                quality: 1
-            },
-            html2canvas: {
-                scale: 3,
-                useCORS: true,
-                backgroundColor: "#ffffff",
-                scrollX: 0,
-                scrollY: 0
-            },
-            jsPDF: {
-                unit: "px",
-                format: [350, 220],     // ✅ MUCH MORE RELIABLE THAN CUSTOM SIZE
-                orientation: "landscape"
-            }
-        };
+        // Capture element with your stable canvas parameters
+        const canvas = await html2canvas(card, {
+            scale: 3,
+            useCORS: true,
+            backgroundColor: "#ffffff",
+            scrollX: 0,
+            scrollY: 0
+        });
 
-        await html2pdf().set(opt).from(card).save();
+        // Convert the rendered canvas to a high-quality JPEG asset string
+        const imgData = canvas.toDataURL('image/jpeg', 1.0);
+
+        // Fetch jsPDF from global namespace
+        const { jsPDF } = window.jspdf;
+
+        // Use the exact custom dimensions [350, 220] from your configuration
+        const cardWidth = 350;
+        const cardHeight = 220;
+
+        const pdf = new jsPDF({
+            orientation: "landscape",
+            unit: "px",
+            format: [cardWidth, cardHeight]
+        });
+
+        // Layer the image directly across the canvas container dimensions
+        pdf.addImage(imgData, 'JPEG', 0, 0, cardWidth, cardHeight);
+        
+        // Trigger the file browser download option
+        pdf.save(`${student.name}_ID_Card.pdf`);
+
         /* =========================
         STEP 5: CLEANUP
         ========================= */
         document.body.removeChild(container);
+
+        console.log("✅ Student ID Card Downloaded");
 
     } catch (err) {
         console.error("❌ PDF generation failed:", err);

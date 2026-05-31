@@ -242,10 +242,7 @@ async function completePayment() {
 3. HISTORY TABLE
 ========================================= */
 function updateHistoryTable(historyArray) {
-
     console.log("📦 updateHistoryTable CALLED");
-    console.log("📦 HISTORY ARRAY:", historyArray);
-
     const tbody = document.querySelector('#historyTable tbody');
 
     if (!tbody) {
@@ -253,26 +250,14 @@ function updateHistoryTable(historyArray) {
         return;
     }
 
-    // Clear old rows
     tbody.innerHTML = "";
 
-    // Empty history check
     if (!historyArray || historyArray.length === 0) {
-
-        console.warn("⚠️ No payment history found");
-
-        tbody.innerHTML = `
-        <tr>
-            <td colspan="4">No records found</td>
-        </tr>
-        `;
-
+        tbody.innerHTML = `<tr><td colspan="5">No records found</td></tr>`;
         return;
     }
 
-    // Add rows
     historyArray.forEach((item, index) => {
-
         console.log(`📄 Payment Row ${index + 1}:`, item);
 
         tbody.innerHTML += `
@@ -281,6 +266,11 @@ function updateHistoryTable(historyArray) {
             <td>₹${item.amount || 0}</td>
             <td>${item.status || "N/A"}</td>
             <td>${item.date || "N/A"}</td>
+            <td>
+                <button onclick='downloadReceipt(${JSON.stringify(item).replace(/"/g, "&quot;")})'>
+                    Download
+                </button>
+            </td>
         </tr>
         `;
     });
@@ -288,6 +278,23 @@ function updateHistoryTable(historyArray) {
     console.log("✅ History table updated successfully");
 }
 
+/* =========================================
+DOWNLOAD RECEIPT
+========================================= */
+function downloadReceipt(paymentData) {
+    console.log("🧾 downloadReceipt CALLED", paymentData);
+
+    // Populate receipt fields dynamically
+    document.getElementById("receiptNo").innerText = paymentData.receiptNo || "N/A";
+    document.getElementById("receiptName").innerText = currentStudent?.name || "N/A";
+    document.getElementById("receiptRoll").innerText = currentStudent?.studentId || "N/A";
+    document.getElementById("receiptAmount").innerText = "₹" + (paymentData.amount || 0);
+    document.getElementById("receiptMode").innerText = paymentData.mode || "N/A";
+    document.getElementById("receiptDate").innerText = paymentData.date || "N/A";
+
+    // Trigger your existing PDF generator
+    printReceipt();
+}
 
 /* =========================================
 4. CHART
@@ -666,8 +673,7 @@ if (btn) {
 // Global access
 window.generateReceipt = generateReceipt;
 window.printReceipt = printReceipt;
-
-
+window.downloadReceipt = downloadReceipt;
 /* =========================================
 GLOBAL FUNCTIONS
 ========================================= */

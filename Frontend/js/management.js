@@ -1003,43 +1003,42 @@ async function downloadManagementCard(management) {
         await new Promise(requestAnimationFrame);
 
         /* =========================
-        STEP 4: PDF GENERATION
+        STEP 4: PDF GENERATION (Using jsPDF & html2canvas)
         ========================= */
 
-        const opt = {
+        // Capture the card element using your specific html2canvas configurations
+        const canvas = await html2canvas(card, {
+            scale: 3,
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            backgroundColor: "#8c76e8", // Keeps your specific background tone
+            scrollX: 0,
+            scrollY: 0
+        });
 
-            margin: 0,
+        // Convert data into a high-quality JPEG asset string
+        const imgData = canvas.toDataURL('image/jpeg', 1.0);
 
-            filename:
-                `${management.name || "Management"}_ID_Card.pdf`,
+        // Fetch jsPDF from global namespace
+        const { jsPDF } = window.jspdf;
 
-            image: {
-                type: "jpeg",
-                quality: 1
-            },
+        // Bound custom sizing parameters matching your array requirements
+        const cardWidth = 350;
+        const cardHeight = 220;
 
-            html2canvas: {
-                scale: 3,
-                useCORS: true,
-                allowTaint: true,
-                logging: false,
-                backgroundColor: "#8c76e8",
-                scrollX: 0,
-                scrollY: 0
-            },
+        const pdf = new jsPDF({
+            orientation: "landscape",
+            unit: "px",
+            format: [cardWidth, cardHeight]
+        });
 
-            jsPDF: {
-                unit: "px",
-                format: [350, 220],
-                orientation: "landscape"
-            }
+        // Stamp image cleanly over page container bounds
+        pdf.addImage(imgData, 'JPEG', 0, 0, cardWidth, cardHeight);
 
-        };
-
-        await html2pdf()
-            .set(opt)
-            .from(card)
-            .save();
+        // Save layout output file matching clean name requirements
+        const filename = `${management.name || "Management"}_ID_Card.pdf`;
+        pdf.save(filename);
 
         /* =========================
         STEP 5: CLEANUP

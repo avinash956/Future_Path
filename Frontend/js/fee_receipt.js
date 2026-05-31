@@ -130,6 +130,23 @@ function printReceipt() {
         }
     }, 1000);
 }
+/* =========================================
+DOWNLOAD RECEIPT FROM HISTORY
+========================================= */
+function downloadReceipt(paymentData) {
+    console.log("🧾 downloadReceipt CALLED", paymentData);
+
+    // Populate receipt fields dynamically
+    document.getElementById("receiptNo").innerText = paymentData.receiptNo || "N/A";
+    document.getElementById("receiptName").innerText = currentStudent?.name || "N/A";
+    document.getElementById("receiptRoll").innerText = currentStudent?.studentId || "N/A";
+    document.getElementById("receiptAmount").innerText = "₹" + (paymentData.amount || 0);
+    document.getElementById("receiptMode").innerText = paymentData.mode || "N/A";
+    document.getElementById("receiptDate").innerText = paymentData.date || "N/A";
+
+    // Trigger the overlay + PDF generator
+    printReceipt();
+}
 
 // --- Helpers ---
 function getText(id) {

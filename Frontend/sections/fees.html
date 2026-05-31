@@ -153,6 +153,23 @@ RECEIPT SECTION
     <button type="button" onclick="exportFeesExcel()">Export Excel</button>
 </div>
 </div>
+<!-- ==========================================
+PRO FEES ACTION PANEL
+========================================== -->
+<div class="card" id="feesProPanel">
+
+    <h3>Quick Actions</h3>
+
+    <div style="display:flex; gap:20px; flex-wrap:wrap;">
+
+        <button type="button" onclick="refreshHistoryAfterPay()"
+            style="background:#16a34a;color:#fff;padding:15px 14px;border:2px solid #fff;border-radius:6px;">
+            🔄 Refresh Data
+        </button>
+
+    </div>
+
+</div>
 
 <!-- ==========================================
          PAYMENT HISTORY
@@ -168,6 +185,7 @@ RECEIPT SECTION
                     <th>Amount</th>
                     <th>Status</th>
                     <th>Date</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
@@ -190,35 +208,6 @@ RECEIPT SECTION
 
         <canvas id="chart" style="max-height:300px;"></canvas>
     </div>
-
-<!-- ==========================================
-PRO FEES ACTION PANEL
-========================================== -->
-<div class="card" id="feesProPanel">
-
-    <h3>Quick Actions</h3>
-
-    <div style="display:flex; gap:20px; flex-wrap:wrap;">
-
-        <button type="button" onclick="fetchStudent()"
-            style="background:#2563eb;color:#fff;padding:15px 14px;border:2px solid #fff;border-radius:6px;">
-            🔍 Load Student (Pro)
-        </button>
-
-        <button type="button" onclick="refreshHistoryAfterPay()"
-            style="background:#16a34a;color:#fff;padding:15px 14px;border:2px solid #fff;border-radius:6px;">
-            🔄 Refresh Data
-        </button>
-
-        <button type="button" onclick="exportFeesExcel()"
-            style="background:#f59e0b;color:#000;padding:15px 14px;border:2px solid #fff;border-radius:6px;">
-            📊 Export Excel
-        </button>
-
-    </div>
-
-</div>
-
 
 <!-- ==========================================================
                   Fees Dashboard
