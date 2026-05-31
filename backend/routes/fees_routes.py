@@ -207,62 +207,6 @@ def pay_fees():
 
         print("📜 Payment added to student history")
 
-        # # =========================================================
-        # # 📊 GOOGLE SHEET INTEGRATION
-        # # =========================================================
-
-        # batch_name = student.get("batch")
-
-        # sheet_row = [
-        #     clean_roll,
-        #     student.get("name"),
-        #     amount,
-        #     record["date"],
-        #     receipt_no,
-        #     mode
-        # ]
-        # try:
-        #     save_fee_record(batch_name, sheet_row)
-        #     print("📊 Saved to Google Sheet batch:", batch_name)
-        # except Exception as e:
-        #     print("🔥 ERROR SAVING TO GOOGLE SHEET:", str(e))
-
-        # # =========================================================
-        # # 📄 CREATE LOCAL RECEIPT FILE
-        # # =========================================================
-
-        # upload_folder = "uploads"
-        # os.makedirs(upload_folder, exist_ok=True)
-
-        # receipt_file_path = os.path.join(upload_folder, f"{receipt_no}.txt")
-
-        # with open(receipt_file_path, "w") as f:
-        #     f.write(str(record))
-
-        # print("📄 Local receipt file created")
-
-        # # =========================================================
-        # # ☁️ GOOGLE DRIVE UPLOAD
-        # # =========================================================
-        # drive_link = ""
-        # file_id = ""
-        
-        # try:
-        #     file_id, drive_link = upload_to_drive(
-        #         file_path=receipt_file_path,
-        #         file_name=f"{clean_roll}_{receipt_no}.txt",
-        #         folder_id="1kvGSa1FFcPrOMHjuk9RbIS3Hp5BZ47p1"  # FuturePath_fees_record folder ID
-        #     )
-
-        #     print("☁️ Uploaded to Drive:", drive_link)
-
-        #     # add drive link into record
-        #     record["driveLink"] = drive_link
-        #     record["fileId"] = file_id
-        # except Exception as e:
-        #     print("🔥 ERROR UPLOADING TO GOOGLE DRIVE:", str(e))
-        #     record["driveLink"] = ""
-        #     record["fileId"] = ""
         # =========================================================
         # RESPONSE
         # =========================================================
@@ -610,32 +554,6 @@ def export_fees():
 
         }), 500
     
-# # =========================================================
-# # 6. UPLOAD EXCEL TO GOOGLE DRIVE
-# # =========================================================
-# @fees_bp.route("/upload-receipt", methods=["POST"])
-# def upload_receipt():
 
-#     file = request.files.get("file")
-#     student_id = request.form.get("student_id")
 
-#     if not file:
-#         return jsonify({"success": False, "message": "No file"}), 400
 
-#     upload_folder = "uploads"
-#     os.makedirs(upload_folder, exist_ok=True)
-
-#     file_path = os.path.join(upload_folder, file.filename)
-#     file.save(file_path)
-
-#     file_id, link = upload_to_drive(
-#         file_path,
-#         f"{student_id}_{file.filename}",
-#         folder_id=None  # optional Drive folder ID
-#     )
-
-#     return jsonify({
-#         "success": True,
-#         "file_id": file_id,
-#         "drive_link": link
-#     })

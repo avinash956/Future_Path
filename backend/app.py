@@ -19,7 +19,7 @@ from routes.student_routes import student_bp
 from routes.faculty_routes import faculty_bp
 from routes.batch_routes import batch_bp
 from routes.fees_routes import fees_bp
-from routes.fees_advanced_routes import fees_adv_bp
+
 
 # ======================
 # APP INIT
@@ -119,8 +119,6 @@ app.register_blueprint(media_bp, url_prefix="/api/media")
 app.register_blueprint(management_bp, url_prefix="/api/management")
 app.register_blueprint(batch_bp, url_prefix="/api/batch")
 app.register_blueprint(fees_bp, url_prefix="/api/fees")
-app.register_blueprint(fees_adv_bp)
-
 
 # ======================
 #  AI chatbot
