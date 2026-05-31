@@ -72,18 +72,68 @@
         <br>
 
 <div class="fees-btn-row">
+ <!-- ==========================================
+         QR SECTION
+=============================================== -->
+<div class="card">
+        <h3>Payment QR</h3>
 
-    <button type="button" onclick="generateQR()">
-        Generate QR
-    </button>
-
-    <button type="button"
-            class="primary-btn"
-            onclick="completePayment()">
+        <div id="qrcode" style=" display:flex; justify-content:center;align-items:center;min-height:180px;">
+        </div>
+    
+        <div style="padding: 15px;">
+        <button type="button" onclick="generateQR()"style="padding: 15px;">Generate QR</button></div>
+</div>
+   
+ <div style="padding: 15px;">
+    <button type="button" class="primary-btn" onclick="completePayment()">
         Done Payment
     </button>
+ </div>
+</div>
+</div>
 
-    <select id="exportType" style="background-color: #021233; color: white; border: none; padding: 10px; border-radius: 6px;">
+<!-- =========================================
+RECEIPT SECTION
+========================================= -->
+<div class="card">
+    <h2>FEE RECEIPT</h2>
+<div id="receiptArea" class="receipt-container" style="padding: 15px;">
+
+    <table border="1" style="width:100%; border-collapse: collapse; text-align: center;">
+
+        <tr>
+            <th style="color:goldenrod"><strong>Receipt No</strong></th>
+            <th style="color:goldenrod"><strong>Student Name</strong></th>
+            <th style="color:goldenrod"><strong>Roll Number</strong></th>
+             <th style="color:goldenrod"><strong>Amount Paid</strong></th>
+             <th style="color:goldenrod"><strong>Payment Mode</strong></th>
+             <th style="color:goldenrod"><strong>Date</strong></th>
+            
+        </tr>
+
+        <tr>
+            <td id="receiptNo">-</td>
+            <td id="receiptName">-</td>
+            <td id="receiptRoll">-</td>
+            <td id="receiptAmount">-</td>
+            <td id="receiptMode">-</td>
+             <td id="receiptDate">-</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <button type="button" onclick="printReceipt()">Print Receipt</button>
+</div>
+</div>
+
+<!-- ===========================================
+            Export Data in Excel
+ =============================================== -->
+<div class="card">
+    <h3>Export Data</h3>
+    <select id="exportType" style="background-color: #021233; color: white; border: 2px solid #eae0e0; padding: 10px; border-radius: 6px;">
 
     <option value="student">
         Current Student
@@ -99,82 +149,18 @@
 
 </select>
 
-<button type="button"
-        onclick="exportFeesExcel()">
-    Export Excel
-</button>
-<!-- =========================================
-RECEIPT SECTION
-========================================= -->
-
-<div id="receiptArea" class="receipt-container">
-
-    <h2>FEE RECEIPT</h2>
-
-    <table>
-
-        <tr>
-            <td><strong>Receipt No</strong></td>
-            <td id="receiptNo">-</td>
-        </tr>
-
-        <tr>
-            <td><strong>Student Name</strong></td>
-            <td id="receiptName">-</td>
-        </tr>
-
-        <tr>
-            <td><strong>Roll Number</strong></td>
-            <td id="receiptRoll">-</td>
-        </tr>
-
-        <tr>
-            <td><strong>Amount Paid</strong></td>
-            <td id="receiptAmount">-</td>
-        </tr>
-
-        <tr>
-            <td><strong>Payment Mode</strong></td>
-            <td id="receiptMode">-</td>
-        </tr>
-
-        <tr>
-            <td><strong>Date</strong></td>
-            <td id="receiptDate">-</td>
-        </tr>
-
-    </table>
-
-    <br>
-
-    <button type="button"
-            onclick="printReceipt()">
-
-        Print Receipt
-
-    </button>
-
+<div style="padding: 15px;">
+    <button type="button" onclick="exportFeesExcel()">Export Excel</button>
+</div>
 </div>
 
-</div>
-
-    <!-- ==========================================
-         QR SECTION
-    ========================================== -->
-    <div class="card">
-        <h3>Payment QR</h3>
-
-        <div id="qrcode" style=" display:flex; justify-content:center;align-items:center;min-height:180px;">
-        </div>
-    </div>
-
-    <!-- ==========================================
+<!-- ==========================================
          PAYMENT HISTORY
-    ========================================== -->
-    <div class="card">
+============================================== -->
+<div class="card">
         <h3>Payment History</h3>
 
-        <table id="historyTable" class="data-table">
+        <table id="historyTable" class="data-table" style="width: 100%;">
 
             <thead>
                 <tr>
@@ -198,14 +184,13 @@ RECEIPT SECTION
 
     <!-- ==========================================
          FEES ANALYTICS
-    ========================================== -->
-    <div class="card">
+    ============================================== -->
+    <div class="card" style="border: 2px solid #e1e1e6; padding: 20px;">
         <h3>Fees Analytics</h3>
 
         <canvas id="chart" style="max-height:300px;"></canvas>
     </div>
 
-</section>
 <!-- ==========================================
 PRO FEES ACTION PANEL
 ========================================== -->
@@ -213,31 +198,34 @@ PRO FEES ACTION PANEL
 
     <h3>Quick Actions</h3>
 
-    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <div style="display:flex; gap:20px; flex-wrap:wrap;">
 
         <button type="button" onclick="fetchStudent()"
-            style="background:#2563eb;color:#fff;padding:10px 14px;border:none;border-radius:6px;">
+            style="background:#2563eb;color:#fff;padding:15px 14px;border:2px solid #fff;border-radius:6px;">
             🔍 Load Student (Pro)
         </button>
 
         <button type="button" onclick="refreshHistoryAfterPay()"
-            style="background:#16a34a;color:#fff;padding:10px 14px;border:none;border-radius:6px;">
+            style="background:#16a34a;color:#fff;padding:15px 14px;border:2px solid #fff;border-radius:6px;">
             🔄 Refresh Data
         </button>
 
         <button type="button" onclick="exportFeesExcel()"
-            style="background:#f59e0b;color:#000;padding:10px 14px;border:none;border-radius:6px;">
+            style="background:#f59e0b;color:#000;padding:15px 14px;border:2px solid #fff;border-radius:6px;">
             📊 Export Excel
         </button>
 
     </div>
 
 </div>
-<!-- ----------------------Fees Dashboard --------------------- -->
- <!-- --------------------------------------------------------- -->
-  <div class="card">
 
-    <h2>Fee Dashboard</h2>
+
+<!-- ==========================================================
+                  Fees Dashboard
+ ============================================================== -->
+  <div class="card" style="border: 2px solid #ccc; padding: 20px;">
+
+    <h2 style="padding: 20px;">Fee Dashboard</h2>
 
     <div class="fees-stats">
 
@@ -267,7 +255,7 @@ PRO FEES ACTION PANEL
 
 </div>
 
-
+</section>
 
 
 

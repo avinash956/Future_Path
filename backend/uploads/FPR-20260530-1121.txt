@@ -1,1 +1,0 @@
-{'receiptNo': 'FPR-20260530-1121', 'amount': 1212.0, 'mode': 'Cash', 'status': 'Paid', 'date': '2026-05-30 11:45:45'}
