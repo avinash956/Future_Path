@@ -68,7 +68,7 @@ class Config:
     # ======================
     # JWT SETTINGS
     # ======================
-    JWT_ACCESS_TOKEN_EXPIRES = 86400
+    JWT_ACCESS_TOKEN_EXPIRES = False
 
     # ======================
     # FLAGS

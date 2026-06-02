@@ -2,10 +2,7 @@ from flask import Blueprint, request, jsonify
 
 from extensions import mongo
 
-about_bp = Blueprint(
-    "about",
-    __name__
-)
+about_bp = Blueprint("about",__name__)
 
 # ======================================
 # GET ABOUT DATA
@@ -14,9 +11,7 @@ about_bp = Blueprint(
 @about_bp.route("/", methods=["GET"])
 def get_about():
 
-    data = list(
-        mongo.db.about.find()
-    )
+    data = list(mongo.db.about.find())
 
     for item in data:
 

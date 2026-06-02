@@ -105,7 +105,7 @@ function generateQR() {
     }
 
     const upiUrl =
-        `upi://pay?pa=merchant@ybl&pn=School&am=${amount}&cu=INR`;
+        `upi://pay?pa=tripathi.avinash2909@ybl&pn=FuturePath&am=${amount}&cu=INR`;
 
     console.log("UPI URL:", upiUrl);
 

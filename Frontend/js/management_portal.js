@@ -1,5 +1,5 @@
 // ======================================
-// DASHBOARD SECURITY + SYSTEM CONTROL
+// MANAGEMENT SECURITY + SYSTEM CONTROL
 // ======================================
 
 window.BASE_URL = window.BASE_URL || "http://127.0.0.1:5000";
@@ -7,9 +7,28 @@ window.BASE_URL = window.BASE_URL || "http://127.0.0.1:5000";
 const token = localStorage.getItem("token");
 const role = localStorage.getItem("role");
 const name = localStorage.getItem("name");
-
 const currentPage = window.location.pathname.toLowerCase();
 
+// ==============================================================
+// GLOBAL AUTH FETCH to connect portal page to sections pages
+// ===============================================================
+
+window.authFetch = async function(url, options = {}) {
+
+    const token = localStorage.getItem("token");
+
+    const headers = {
+        ...(options.headers || {}),
+        Authorization: `Bearer ${token}`
+    };
+
+    return fetch(url, {
+        ...options,
+        headers
+    });
+};
+// ==============================================================
+// ==============================================================
 console.log("🔐 Token:", token);
 console.log("👤 Role:", role);
 
@@ -36,24 +55,11 @@ if (!isValidToken(token)) {
 // ROLE BASED SECURITY (SAFE FIX)
 // ======================================
 
-if (currentPage.includes("dashboard.html")) {
-  if (role !== "admin") {
-    safeRedirect("Admin Access Required");
+if (currentPage.includes("management_portal.html")) {
+  if (role !== "management" && role !== "admin") {
+    safeRedirect("Management Access Required");
   }
 }
-
-if (currentPage.includes("faculty.html")) {
-  if (role !== "faculty" && role !== "admin") {
-    safeRedirect("Faculty Access Required");
-  }
-}
-
-if (currentPage.includes("student.html")) {
-  if (role !== "student" && role !== "admin") {
-    safeRedirect("Student Access Required");
-  }
-}
-
 
 // ======================================
 // PROTECT FUNCTION (UNCHANGED STYLE)
@@ -65,7 +71,7 @@ function protect(requiredRole) {
     return;
   }
 
-  if (role !== requiredRole && role !== "admin") {
+  if (role !== requiredRole && role !== "management" && role !== "admin") {
     safeRedirect("Access Denied");
   }
 }
@@ -82,18 +88,18 @@ function logout() {
 
 
 // ======================================
-// DASHBOARD STATS (FIXED SAFE CALL)
+// MANAGEMENT STATS (FIXED SAFE CALL)
 // ======================================
 
-async function loadDashboardStats() {
+async function loadManagementDashboard() {
 
   try {
 
-    console.log("📡 Loading dashboard stats...");
+    console.log("📡 Loading management stats...");
 
     if (!isValidToken(token)) return;
 
-    const res = await fetch(`${window.BASE_URL}/dashboard/stats`, {
+    const res = await fetch(`${window.BASE_URL}/management_portal/stats`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`
@@ -115,7 +121,7 @@ async function loadDashboardStats() {
     }
 
     if (!res.ok) {
-      console.error("❌ Dashboard Error:", data.message || data);
+      console.error("❌ Management Dashboard Error:", data.message || data);
       return;
     }
 
@@ -130,7 +136,7 @@ async function loadDashboardStats() {
 
   } catch (err) {
 
-    console.error("❌ Dashboard API failed:", err);
+    console.error("❌ Management Dashboard API failed:", err);
 
   }
 }
@@ -140,8 +146,8 @@ async function loadDashboardStats() {
 // AUTO LOAD DASHBOARD
 // ======================================
 
-if (currentPage.includes("dashboard.html")) {
-  window.addEventListener("DOMContentLoaded", loadDashboardStats);
+if (currentPage.includes("management_portal.html")) {
+  window.addEventListener("DOMContentLoaded", loadManagementDashboard);
 }
 
 
@@ -232,7 +238,6 @@ function toggleMenu() {
 
 }
 
-
 // ======================================
 // CLOSE MENU OUTSIDE CLICK
 // ======================================
@@ -290,53 +295,10 @@ async function loadSection(section) {
   activeBtn?.classList.add("active");
 
   // ======================================
-  // MANAGEMENT SECTION
-  // ======================================
-
-  if (section === 'management') {
-
-    try {
-
-      console.log("📂 Loading management section...");
-
-      const response = await fetch('sections/management.html');
-
-      if (!response.ok) {
-        throw new Error("Missing management.html");
-      }
-
-      const html = await response.text();
-
-      container.innerHTML = html;
-
-      console.log("✅ management.html loaded");
-
-          setTimeout(() => {
-              if (typeof window.initializeManagement === 'function') {
-                  console.log("🚀 initializeManagement found, executing...");
-                  window.initializeManagement();
-              } else {
-                  console.error("❌ initializeManagement STILL not found");
-                  console.log("👉 Available window functions:", Object.keys(window));
-              }
-          }, 50);
-
-          } catch (err) {
-            console.error("❌ Section Load Error:", err);
-
-      container.innerHTML = `
-        <div style="color:red;padding:20px;">
-          Failed to load section
-        </div>
-      `;
-    }
-  }
-
-  // ======================================
   // FACULTY / STUDENT / BATCH
   // ======================================
 
-  else if (['faculty', 'student', 'batch'].includes(section)) {
+  if (['faculty', 'student', 'batch'].includes(section)) {
 
     try {
 

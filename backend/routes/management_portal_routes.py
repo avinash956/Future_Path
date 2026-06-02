@@ -3,23 +3,17 @@ from extensions import mongo
 from middleware.auth_middleware import token_required
 from bson.objectid import ObjectId
 
-dashboard_bp = Blueprint("dashboard", __name__)
+management_portal_bp = Blueprint("management_portal", __name__)
 
 
 # =========================================
 # DASHBOARD STATS (FIXED FOR NEW SYSTEM)
 # =========================================
-@dashboard_bp.route("/stats", methods=["GET"])
+@management_portal_bp.route("/stats", methods=["GET"])
 @token_required
 def dashboard_stats():
 
     try:
-
-        # USERS COLLECTION (if still used)
-        total_users = mongo.db.users.count_documents({})
-
-        total_admin = mongo.db.users.count_documents({"role": "admin"})
-
         # STUDENT SYSTEM (NEW FIX)
         total_students = mongo.db.students.count_documents({})
 
@@ -42,8 +36,6 @@ def dashboard_stats():
         return jsonify({
             "students": total_students,
             "faculty": total_faculty,
-            "admins": total_admin,
-            "users": total_users,
             "batches": total_batches,
             "active_students": active_students,
             "active_faculty": active_faculty
@@ -54,9 +46,9 @@ def dashboard_stats():
 
 
 # =========================================
-# ADD COURSE (UNCHANGED - OPTIONAL)
+# ADD COURSE 
 # =========================================
-@dashboard_bp.route("/add-course", methods=["POST"])
+@management_portal_bp.route("/add-course", methods=["POST"])
 @token_required
 def add_course():
 
@@ -74,7 +66,7 @@ def add_course():
 # =========================================
 # GET COURSES
 # =========================================
-@dashboard_bp.route("/courses", methods=["GET"])
+@management_portal_bp.route("/courses", methods=["GET"])
 @token_required
 def get_courses():
 
@@ -94,7 +86,7 @@ def get_courses():
 # =========================================
 # DELETE COURSE
 # =========================================
-@dashboard_bp.route("/delete-course/<id>", methods=["DELETE"])
+@management_portal_bp.route("/delete-course/<id>", methods=["DELETE"])
 @token_required
 def delete_course(id):
 
@@ -109,7 +101,7 @@ def delete_course(id):
 # =========================================
 # BATCH LIST (FIXED)
 # =========================================
-@dashboard_bp.route("/batches", methods=["GET"])
+@management_portal_bp.route("/batches", methods=["GET"])
 @token_required
 def get_batches():
 
@@ -131,7 +123,7 @@ def get_batches():
 # =========================================
 # DELETE BATCH (SAFE)
 # =========================================
-@dashboard_bp.route("/delete-batch/<id>", methods=["DELETE"])
+@management_portal_bp.route("/delete-batch/<id>", methods=["DELETE"])
 @token_required
 def delete_batch(id):
 
@@ -150,7 +142,7 @@ def delete_batch(id):
 # =========================================
 # NOTES (UNCHANGED)
 # =========================================
-@dashboard_bp.route("/notes", methods=["GET"])
+@management_portal_bp.route("/notes", methods=["GET"])
 @token_required
 def get_notes():
 
@@ -170,7 +162,7 @@ def get_notes():
 # =========================================
 # AI STATS (FIXED SAFE)
 # =========================================
-@dashboard_bp.route("/admin/ai-stats", methods=["GET"])
+@management_portal_bp.route("/admin/ai-stats", methods=["GET"])
 @token_required
 def get_ai_stats():
 
@@ -194,7 +186,7 @@ def get_ai_stats():
 # =========================================
 # CLEAR AI HISTORY
 # =========================================
-@dashboard_bp.route("/admin/clear-ai-history", methods=["DELETE"])
+@management_portal_bp.route("/admin/clear-ai-history", methods=["DELETE"])
 @token_required
 def clear_ai_history():
 

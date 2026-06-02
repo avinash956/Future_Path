@@ -2,13 +2,13 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Admin Dashboard</title>
+<title>Management Panel</title>
 
-  <link rel="stylesheet" href="css/style.css">
+<<link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/sidebar.css">
   <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="css/dashboard-Sectionview.css">
@@ -16,75 +16,73 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<body onload="initializeDashboard()">
+</head>
 
-  <!-- ================= PRELOADER ================= -->
-  <div id="preloader">
-    <div class="loader"></div>
-  </div>
+<body onload="loadManagementDashboard()">
 
-  <!-- ================= HEADER ================= -->
-  <header>
+<!-- ================= PRELOADER ================= -->
+<div id="preloader">
+  <div class="loader"></div>
+</div>
 
-    <nav class="navbar">
+<!-- ================= HEADER ================= -->
+<header>
 
-      <!-- LOGO -->
-      <div class="logo-container">
+<nav class="navbar">
 
-        <img src="Logo.png" class="logo">
+<div class="logo-container">
 
-        <div class="logo-text">
-          <h2>Admin Panel</h2>
+<img src="Logo.png" class="logo">
 
-          <p>
-            <i>System Control</i>
-          </p>
-        </div>
+<div class="logo-text">
+<h2>Management Panel</h2>
+<p><i>Institute Management System</i></p>
+</div>
 
-      </div>
+</div>
 
-      <!-- LIVE CLOCK -->
-      <div class="live-clock" id="liveClock"></div>
+<!-- LIVE CLOCK -->
+<div class="live-clock" id="liveClock"></div>
 
-      <!-- HAMBURGER -->
-      <div class="menu-toggle" onclick="toggleMenu()">
-        <i class="fa-solid fa-bars"></i>
-      </div>
+<!-- HAMBURGER -->
+<div class="menu-toggle" onclick="toggleMenu()">
+<i class="fa-solid fa-bars"></i>
+</div>
 
-      <!-- DROPDOWN -->
-      <div id="dropdownMenu" class="dropdown-menu">
+<!-- DROPDOWN -->
+<div id="dropdownMenu" class="dropdown-menu">
 
-        <div class="menu-group">
+<div class="menu-group">
 
-          <h4>ACCOUNT</h4>
+<h4>ACCOUNT</h4>
 
-          <a href="profile.html">
-            <i class="fa-solid fa-user"></i>
-            Update Profile
-          </a>
+<a href="complete-profile.html">
+<i class="fa-solid fa-user"></i>
+Update Profile
+</a>
 
-          <a href="change-password.html">
-            <i class="fa-solid fa-key"></i>
-            Change Password
-          </a>
+<a href="change-password.html">
+<i class="fa-solid fa-key"></i>
+Change Password
+</a>
 
-          <a href="#" onclick="logout()">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            Logout
-          </a>
+<a href="#" onclick="logout()">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</a>
 
-        </div>
+</div>
 
-      </div>
+</div>
 
-    </nav>
+</nav>
 
-  </header>
+</header>
 
-  <!-- ================= ADMIN LAYOUT ================= -->
-  <div class="admin-layout">
+<!-- ================= MAIN LAYOUT ================= -->
+<div class="admin-layout" style="background:linear-gradient(135deg,#8f25eb,#27bccf);">
 
-    <!-- ================= SIDEBAR ================= -->
+<!-- ================= SIDEBAR ================= -->
     <aside class="sidebar" id="sidebar">
 
       <!-- TOGGLE -->
@@ -92,16 +90,10 @@
         <i class="fa-solid fa-chevron-left" id="toggleIcon"></i>
       </div>
 
-      <h3>Admin Controls</h3>
+      <h3>Management Controls Segment</h3>
 
       <!-- SEARCH -->
       <input type="text" id="menuSearch" class="menu-search" placeholder="Search Menu...">
-
-      <!-- MANAGEMENT -->
-      <button class="side-btn" data-title="Management" onclick="loadSection('management')">
-        <i class="fa-solid fa-user-tie"></i>
-        Management
-      </button>
 
       <!-- FACULTY -->
       <button class="side-btn" data-title="Faculty" onclick="loadSection('faculty')">
@@ -192,8 +184,7 @@
 
 <!-- ================= UI FILES ================= -->
 <script src="./js/sidebar.js"></script>
-<script src="./js/management.js"></script>
-<script src="./js/dashboard.js"></script>
+<script src="./js/management_portal.js"></script>
 <script src="./js/faculty.js"></script>
 <script src="./js/batch.js"></script>
 <script src="./js/student.js"></script>

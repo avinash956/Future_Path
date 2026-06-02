@@ -160,11 +160,11 @@ document.addEventListener("DOMContentLoaded", function () {
           if (targetRole === "admin") {
             window.location.href = "dashboard.html";
           } else if (targetRole === "management") {
-            window.location.href = "management.html";
+            window.location.href = "management_portal.html";
           } else if (targetRole === "faculty") {
-            window.location.href = "faculty.html";
+            window.location.href = "faculty_portal.html";
           } else {
-            window.location.href = "student.html";
+            window.location.href = "student_portal.html";
           }
         }, 800);
 

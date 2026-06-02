@@ -1,3 +1,5 @@
+console.log("✅ management.js LOADED");
+window.initializeManagement = initializeManagement;
 /* =========================
 CONFIG SAFETY CHECK
 ========================= */
@@ -8,7 +10,7 @@ if (!window.BASE_URL) {
 
     console.warn("⚠️ BASE_URL is not defined. Using fallback.");
 
-    window.BASE_URL = "http://127.0.0.1:5000/api";
+    window.BASE_URL = "http://127.0.0.1:5000";
 }
 
 /* =========================
@@ -23,26 +25,26 @@ const SERVER_URL =
 AUTH FETCH WRAPPER
 ========================= */
 
-function authFetch(url, options = {}) {
+async function authFetch(url, options = {}) {
 
     const token = localStorage.getItem("token");
 
-    return fetch(url, {
+    const headers = {
+        ...options.headers,
+        Authorization: token ? `Bearer ${token}` : ""
+    };
 
+    // only set JSON if NOT FormData
+    if (!(options.body instanceof FormData)) {
+        headers["Content-Type"] = "application/json";
+    }
+
+    const res = await fetch(url, {
         ...options,
-
-        headers: {
-
-            ...(options.body instanceof FormData
-                ? {}
-                : { "Content-Type": "application/json" }
-            ),
-
-            "Authorization": `Bearer ${token}`,
-
-            ...options.headers
-        }
+        headers
     });
+
+    return res;
 }
 
 

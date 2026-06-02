@@ -23,15 +23,27 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 # =========================================
-# SERVE IMAGES
+# SERVE UPLOADED IMAGES (FIXED)
 # =========================================
 @student_bp.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename)
+
+    response = send_from_directory(
+        UPLOAD_FOLDER,
+        filename
+    )
+
+    # REMOVE THIS LINE
+    # response.headers["Access-Control-Allow-Origin"] = "*"
+
+    response.headers["Cache-Control"] = \
+        "no-cache, no-store, must-revalidate"
+
+    return response
 
 
 # =========================================
-# UTILITY: CLEAN ROLL FORMAT
+# UTILITY
 # =========================================
 def clean_roll(roll):
     if not roll:
@@ -40,7 +52,7 @@ def clean_roll(roll):
 
 
 # =========================================
-# ADD STUDENT (PRO SAFE VERSION)
+# ADD STUDENT
 # =========================================
 @student_bp.route("/add-student", methods=["POST"])
 def add_student():
@@ -50,63 +62,43 @@ def add_student():
         roll = clean_roll(request.form.get("roll"))
         email = request.form.get("email")
         phone = request.form.get("phone")
+
         batch = request.form.get("batch")
         year = request.form.get("year")
         dob = request.form.get("dob")
         status = request.form.get("status")
         address = request.form.get("address")
 
-        print("➕ ADD STUDENT REQUEST:", roll)
+        print("➕ ADD STUDENT:", roll)
 
-        # =========================
-        # VALIDATION
-        # =========================
         if not name or not roll:
-            return jsonify({
-                "success": False,
-                "message": "Name and Roll required"
-            }), 400
+            return jsonify({"success": False, "message": "Name and Roll required"}), 400
 
-        # =========================
-        # DUPLICATE ROLL CHECK (IMPORTANT FIX)
-        # =========================
         existing = mongo.db.students.find_one({"roll": roll})
         if existing:
-            return jsonify({
-                "success": False,
-                "message": "Roll already exists"
-            }), 409
+            return jsonify({"success": False, "message": "Roll already exists"}), 409
 
-        # =========================
-        # IMAGE SAVE
-        # =========================
         image = request.files.get("image")
-        safe_filename = ""
+        filename = ""
 
         if image:
             ext = os.path.splitext(image.filename)[1]
-            safe_filename = f"{int(time.time())}_{roll}{ext}"
-            image.save(os.path.join(UPLOAD_FOLDER, safe_filename))
+            filename = f"{int(time.time())}_{roll}{ext}"
+            image.save(os.path.join(UPLOAD_FOLDER, filename))
 
-        # =========================
-        # PASSWORD GENERATION
-        # =========================
         password = generate_password(name, phone)
 
-        # =========================
-        # STUDENT OBJECT
-        # =========================
         data = {
             "name": name,
             "roll": roll,
             "email": email,
             "phone": phone,
-            "batch": batch,
+            "batch": batch,   # KEEP STRING (IMPORTANT FIX FOR YOUR CURRENT SYSTEM)
             "year": year,
             "dob": dob,
             "status": status,
             "address": address,
-            "image": safe_filename,
+            "image": filename,
             "password": password,
             "created_at": time.time(),
             "history": []
@@ -116,9 +108,6 @@ def add_student():
 
         print("✅ STUDENT ADDED:", roll)
 
-        # =========================
-        # NOTIFICATIONS (SAFE TRY)
-        # =========================
         try:
             if email:
                 send_email(email, password)
@@ -140,14 +129,11 @@ def add_student():
 
     except Exception as e:
         print("❌ ADD ERROR:", e)
-        return jsonify({
-            "success": False,
-            "message": str(e)
-        }), 500
+        return jsonify({"success": False, "message": str(e)}), 500
 
 
 # =========================================
-# GET ALL STUDENTS (LEGACY SAFE)
+# GET ALL STUDENTS (FIXED IMAGE URL)
 # =========================================
 @student_bp.route("/get-student", methods=["GET"])
 def get_student():
@@ -156,8 +142,10 @@ def get_student():
 
     for i in data:
         i["_id"] = str(i["_id"])
+
+        # FIXED IMAGE URL
         i["image"] = (
-            f"{request.host_url}uploads/{i['image']}"
+            f"{request.host_url}api/student/uploads/{i['image']}"
             if i.get("image") else ""
         )
 
@@ -165,7 +153,7 @@ def get_student():
 
 
 # =========================================
-# GET STUDENTS (FILTER + SEARCH OPTIMIZED)
+# GET FILTERED STUDENTS (FIXED)
 # =========================================
 @student_bp.route("/get-students", methods=["GET"])
 def get_students():
@@ -176,7 +164,7 @@ def get_students():
     query = {}
 
     if batch:
-        query["batch"] = batch
+        query["batch"] = batch   # FIXED (no ObjectId usage)
 
     if search:
         query["$or"] = [
@@ -186,14 +174,13 @@ def get_students():
             {"phone": {"$regex": search, "$options": "i"}},
         ]
 
-    print("🔍 QUERY:", query)
-
     data = list(mongo.db.students.find(query))
 
     for i in data:
         i["_id"] = str(i["_id"])
+
         i["image"] = (
-            f"{request.host_url}uploads/{i['image']}"
+            f"{request.host_url}api/student/uploads/{i['image']}"
             if i.get("image") else ""
         )
 
@@ -211,42 +198,32 @@ def get_students():
 def delete_student(id):
 
     try:
-        print("🗑 DELETE:", id)
-
         mongo.db.students.delete_one({"_id": ObjectId(id)})
-
         return jsonify({"success": True})
 
     except Exception as e:
-        print("❌ DELETE ERROR:", e)
-        return jsonify({
-            "success": False,
-            "message": str(e)
-        }), 500
+        return jsonify({"success": False, "message": str(e)}), 500
 
 
 # =========================================
-# UPDATE STUDENT (SAFE + FLEXIBLE)
+# UPDATE STUDENT
 # =========================================
 @student_bp.route("/update-student/<id>", methods=["PUT"])
 def update_student(id):
 
     try:
-        print("✏️ UPDATE:", id)
-
         data = request.form.to_dict()
         update_data = {}
 
         allowed_fields = [
             "name", "roll", "email", "phone",
-            "batch", "year", "dob", "status", "address"
+            "year", "dob", "status", "address", "batch"
         ]
 
         for field in allowed_fields:
-            if field in data and data[field] is not None:
+            if field in data:
                 update_data[field] = data[field]
 
-        # IMAGE UPDATE
         image = request.files.get("image")
 
         if image:
@@ -255,24 +232,34 @@ def update_student(id):
             image.save(os.path.join(UPLOAD_FOLDER, filename))
             update_data["image"] = filename
 
-        if not update_data:
-            return jsonify({
-                "success": False,
-                "message": "Nothing to update"
-            }), 400
-
         mongo.db.students.update_one(
             {"_id": ObjectId(id)},
             {"$set": update_data}
         )
 
-        print("✅ UPDATED SUCCESS")
-
         return jsonify({"success": True})
 
     except Exception as e:
-        print("❌ UPDATE ERROR:", e)
-        return jsonify({
-            "success": False,
-            "message": str(e)
-        }), 500
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+# =========================================
+# PORTAL DASHBOARD
+# =========================================
+@student_bp.route("/portal/dashboard/<student_id>", methods=["GET"])
+def student_portal(student_id):
+
+    student = mongo.db.students.find_one({"_id": ObjectId(student_id)})
+
+    if not student:
+        return jsonify({"success": False, "msg": "Student not found"}), 404
+
+    student["_id"] = str(student["_id"])
+
+    if student.get("image"):
+        student["image"] = f"{request.host_url}api/student/uploads/{student['image']}"
+
+    return jsonify({
+        "success": True,
+        "student": student
+    })

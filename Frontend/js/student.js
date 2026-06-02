@@ -101,8 +101,8 @@ async function loadBatchOptions() {
         const batches = data.data || [];
 
         batchSelect.innerHTML = `<option value="">Select Batch</option>`;
-
-        batches.forEach(batch => {
+        const activeBatches = batches.filter(batch => batch.isActive === true);
+        activeBatches.forEach(batch => {
             batchSelect.innerHTML += `
                 <option value="${batch.code}">
                     ${batch.name} (${batch.code})
@@ -164,12 +164,12 @@ async function loadStudent() {
                             <p><b>Batch:</b> ${item.batch}</p>
 
                             <div class="student-actions">
-
+                            ${window.USER_ROLE === "admin" ? `
                                 <button style="background:#e11d48;color:white;padding:6px 10px;border:none;border-radius:5px;"
                                     onclick="deleteStudent('${item._id}')">
                                     Delete
                                 </button>
-
+                            ` : ""}
                                 <button style="background:#2563eb;color:white;padding:6px 10px;border:none;border-radius:5px;"
                                     onclick="openEditStudent('${item._id}')">
                                     Edit
@@ -278,17 +278,28 @@ function openEditStudent(id) {
 
     if (!student) return;
 
-    document.getElementById("studentName").value = student.name;
-    document.getElementById("studentRoll").value = student.roll;
-    document.getElementById("studentEmail").value = student.email;
-    document.getElementById("studentPhone").value = student.phone;
-    document.getElementById("studentBatch").value = student.batch;
-    document.getElementById("studentYear").value = student.year;
-    document.getElementById("studentDOB").value = student.dob;
-    document.getElementById("studentStatus").value = student.status;
-    document.getElementById("studentAddress").value = student.address;
+    // Wait for batch options to exist before setting value
+    const batchSelect = document.getElementById("studentBatch");
+
+    document.getElementById("studentName").value = student.name || "";
+    document.getElementById("studentRoll").value = student.roll || "";
+    document.getElementById("studentEmail").value = student.email || "";
+    document.getElementById("studentPhone").value = student.phone || "";
+    document.getElementById("studentYear").value = student.year || "";
+    document.getElementById("studentDOB").value = student.dob || "";
+    document.getElementById("studentStatus").value = student.status || "";
+    document.getElementById("studentAddress").value = student.address || "";
+
+    // 🔥 FIX: batch set safely after DOM update
+    setTimeout(() => {
+        if (batchSelect) {
+            batchSelect.value = student.batch || "";
+        }
+    }, 100);
 
     document.getElementById("studentForm").dataset.editId = id;
+
+    console.log("✏️ Editing student:", student);
 }
 
 /* =========================================

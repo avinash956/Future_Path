@@ -174,126 +174,224 @@ def register():
 @auth_bp.route("/login", methods=["POST"])
 def login():
     try:
-        # Place this temporary inspection block right under 'try:' in auth_routes.py
-        print("\n--- 🔍 DATABASE CONFIGURATION INSPECTION ---")
-        try:
-            # 1. Print the connected database name
-            current_db_name = mongo.db.name
-            print(f"Connected Database Name: '{current_db_name}'")
-            
-            # 2. Print all available collections in this database
-            collections = mongo.db.list_collection_names()
-            print(f"Available Collections in this DB: {collections}")
-            
-            # 3. Check if the target collection actually contains records
-            if "users" in collections:
-                total_docs = mongo.db.users.count_documents({})
-                print(f"Collection 'users' status: FOUND (Contains {total_docs} documents)")
-            else:
-                print("Collection 'users' status: ❌ NOT FOUND! Your collection might be named differently.")
-        except Exception as db_err:
-            print(f"Could not inspect database: {str(db_err)}")
-        print("--------------------------------------------\n")
-        data = request.get_json()
+
         print("\n==================== LOGIN DEBUG START ====================")
-        print("1. RECEIVED PAYLOAD:", data)
 
-        # Extract and clean inputs
-        login_type = data.get("loginType")
+        # =========================================
+        # REQUEST DATA
+        # =========================================
+        data = request.get_json()
+
+        login_type = str(data.get("loginType", "")).strip().lower()
         login_input = str(data.get("loginInput", "")).strip()
-        password = data.get("password")
-        
-        # Normalize incoming role to lowercase and strip hidden spaces
-        role = str(data.get("role", "")).lower().strip()
+        password = str(data.get("password", "")).strip()
+        role = str(data.get("role", "")).strip().lower()
 
-        print(f"2. CLEANED INPUTS -> Type: '{login_type}', Input: '{login_input}', Parsed Role: '{role}'")
+        print(f"Login Type : {login_type}")
+        print(f"Login Input: {login_input}")
+        print(f"Role       : {role}")
 
+        # =========================================
+        # SELECT COLLECTION BASED ON ROLE
+        # =========================================
+        if role == "admin":
+            collection = mongo.db.users
+
+        elif role == "student":
+            collection = mongo.db.students
+
+        elif role == "faculty":
+            collection = mongo.db.faculty
+
+        elif role == "management":
+            collection = mongo.db.management
+
+        else:
+            return jsonify({
+                "success": False,
+                "message": "Invalid Role Selected"
+            }), 400
+
+        print(f"Using Collection: {collection.name}")
+
+        # =========================================
+        # FIND USER
+        # =========================================
         user = None
 
-        # Execute database queries
+        # Login by Email
         if login_type == "email":
-            print(f"3. EXECUING DB QUERY: Searching for email '{login_input}' (Case-Insensitive & Trimmed)")
-            
-            # Using $expr allows us to trim the database field before comparing it
-            user = mongo.db.users.find_one({
+
+            user = collection.find_one({
                 "$expr": {
                     "$eq": [
-                        { "$trim": { "input": { "$toLower": "$email" } } },
+                        {"$toLower": "$email"},
                         login_input.lower()
                     ]
                 }
             })
 
+        # Login by Mobile / Phone
         elif login_type == "mobile":
-            print(f"3. EXECUTING DB QUERY: Searching for mobile '{login_input}'")
-            try:
-                mobile_int = int(login_input)
-                user = mongo.db.users.find_one({"$or": [{"mobile": login_input}, {"mobile": mobile_int}]})
-            except ValueError:
-                user = mongo.db.users.find_one({"mobile": login_input})
 
-        # Checkpoint 1: User Existence
+            user = collection.find_one({
+                "$or": [
+                    {"mobile": login_input},
+                    {"phone": login_input}
+                ]
+            })
+
+        else:
+            return jsonify({
+                "success": False,
+                "message": "Invalid Login Type"
+            }), 400
+
+        # =========================================
+        # USER NOT FOUND
+        # =========================================
         if not user:
-            print(f"❌ FAIL: No user document found in MongoDB for {login_type} = '{login_input}'")
-            print("==================== LOGIN DEBUG END ====================\n")
-            return jsonify({"success": False, "message": "Invalid Email or Mobile"}), 401
 
-        print(f"4. DB MATCH FOUND: User ID {user.get('_id')} loaded successfully.")
-        print(f"   -> DB Email: '{user.get('email')}'")
-        print(f"   -> DB Role:  '{user.get('role')}'")
-        print(f"   -> DB Approved Status: {user.get('approved')}")
-
-        # Checkpoint 2: Role Validation
-        if user.get("role") != role:
-            print(f"❌ FAIL: Role Mismatch! Frontend sent '{role}', but Database expects '{user.get('role')}'")
-            print("==================== LOGIN DEBUG END ====================\n")
-            return jsonify({"success": False, "message": "Invalid Role Selected"}), 401
-
-        # Checkpoint 3: Admin Approval (UPDATED: Admins automatically bypass this check)
-        if user.get("role") != "admin" and not user.get("approved"):
-            print("❌ FAIL: User status 'approved' is False or missing in DB.")   
-            print("==================== LOGIN DEBUG END ====================\n")
-            return jsonify({"success": False, "message": "Account Pending Admin Approval"}), 403
-
-        # Checkpoint 4: Password Verification
-        print("5. VERIFYING PASSWORD HASH...")
-        if bcrypt.check_password_hash(user["password"], password):
-            print("✅ SUCCESS: Password matches hash.")
-            
-            mongo.db.users.update_one(
-                {"_id": user["_id"]},
-                {"$set": {"last_login": datetime.now(timezone.utc)}}
-            )
-
-            token = create_access_token(identity=str(user["_id"]))
-            print("🎉 LOGIN SUCCESSFUL. Token generated.")
-            print("==================== LOGIN DEBUG END ====================\n")
+            print("❌ User not found")
 
             return jsonify({
-                "success": True,
-                "message": "Login Successful",
-                "token": token,
-                "user": {
-                    "_id": str(user["_id"]),
-                    "name": user.get("name"),
-                    "email": user.get("email"),
-                    "mobile": user.get("mobile"),
-                    "role": user.get("role"),
-                    "profile_pic": user.get("profile_pic", ""),
-                    "approved": user.get("approved", True) # Force true in response payload for admin
-                }
-            }), 200
+                "success": False,
+                "message": "Invalid Email or Mobile"
+            }), 401
 
-        print("❌ FAIL: Password mismatch.")
+        print(f"✅ User Found: {user.get('name')}")
+
+        # =========================================
+        # ROLE VALIDATION
+        # =========================================
+        db_role = str(user.get("role", role)).lower()
+
+        if db_role != role:
+
+            print(
+                f"❌ Role mismatch. "
+                f"DB={db_role}, REQUEST={role}"
+            )
+
+            return jsonify({
+                "success": False,
+                "message": "Invalid Role Selected"
+            }), 401
+
+        # =========================================
+        # APPROVAL CHECK
+        # =========================================
+        if role != "admin":
+
+            if "approved" in user and not user.get("approved"):
+
+                return jsonify({
+                    "success": False,
+                    "message": "Account Pending Admin Approval"
+                }), 403
+
+        # =========================================
+        # PASSWORD VERIFICATION
+        # =========================================
+        stored_password = str(user.get("password", ""))
+        print("Stored Password:", repr(stored_password))
+        print("Entered Password:", repr(password))
+        password_ok = False
+
+        try:
+
+            # BCRYPT HASHED PASSWORD
+            if (
+                stored_password.startswith("$2a$")
+                or stored_password.startswith("$2b$")
+                or stored_password.startswith("$2y$")
+            ):
+
+                password_ok = bcrypt.check_password_hash(
+                    stored_password,
+                    password
+                )
+
+            # PLAIN TEXT PASSWORD
+            else:
+
+                password_ok = (stored_password == password)
+
+        except Exception as err:
+
+            print("Password Check Error:", err)
+
+        if not password_ok:
+
+            print("❌ Invalid password")
+
+            return jsonify({
+                "success": False,
+                "message": "Invalid Password"
+            }), 401
+
+        print("✅ Password Verified")
+
+        # =========================================
+        # UPDATE LAST LOGIN
+        # =========================================
+        try:
+
+            collection.update_one(
+                {"_id": user["_id"]},
+                {
+                    "$set": {
+                        "last_login": datetime.now(timezone.utc)
+                    }
+                }
+            )
+
+        except Exception as err:
+
+            print("Last Login Update Failed:", err)
+
+        # =========================================
+        # GENERATE JWT TOKEN
+        # =========================================
+        token = create_access_token(
+            identity=str(user["_id"])
+        )
+
+        print("🎉 Login Successful")
         print("==================== LOGIN DEBUG END ====================\n")
-        return jsonify({"success": False, "message": "Invalid Password"}), 401
+
+        # =========================================
+        # RESPONSE
+        # =========================================
+        return jsonify({
+            "success": True,
+            "message": "Login Successful",
+            "token": token,
+            "user": {
+                "_id": str(user["_id"]),
+                "name": user.get("name", ""),
+                "email": user.get("email", ""),
+                "mobile": user.get(
+                    "mobile",
+                    user.get("phone", "")
+                ),
+                "role": role,
+                "profile_pic": user.get(
+                    "profile_pic",
+                    user.get("image", "")
+                ),
+                "approved": user.get("approved", True)
+            }
+        }), 200
 
     except Exception as e:
-        print(f"💥 CRITICAL EXCEPTION: {str(e)}")
-        print("==================== LOGIN DEBUG END ====================\n")
-        return jsonify({"success": False, "message": str(e)}), 500
 
+        print(f"💥 Login Exception: {str(e)}")
 
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 500
 # =========================================
 # CHANGE PASSWORD (FIXED)
 # =========================================
