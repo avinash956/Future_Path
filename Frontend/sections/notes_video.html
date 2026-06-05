@@ -1,0 +1,73 @@
+<div class="notes-container">
+
+    <div class="notes-header">
+        <div>
+            <div class="notes-title">Notes & Videos</div>
+            <div class="notes-subtitle">Upload and manage study materials</div>
+        </div>
+    </div>
+
+    <div class="upload-panel">
+
+        <!-- Upload form only visible if role allows -->
+        <form class="notes-form" id="materialForm">
+
+            <input type="text" name="title" placeholder="Title" required>
+
+            <select name="type" required>
+                <option value="">Select Type</option>
+                <option value="note">PDF</option>
+                <option value="video">Video</option>
+            </select>
+
+
+            <select id="batchSelect" name="batch" required>
+                <option value="">Select Batch</option>
+            </select>
+
+            <textarea name="description" placeholder="Description"></textarea>
+
+            <input type="file" name="file">
+
+            <input type="text" name="videoUrl" placeholder="Video URL">
+
+            <button type="submit" class="upload-btn">
+                Save Material
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div class="module-container">
+
+    <!-- FILTER BAR -->
+    <div class="top-bar">
+        <select id="batchFilter" onchange="filterMaterials()">
+            <option value="">All Batches</option>
+        </select>
+
+        <input type="text" id="searchBox" placeholder="Search materials..."
+            oninput="filterMaterials()" />
+    </div>
+
+    <!-- DRAG DROP UPLOAD -->
+    <div id="dropZone" class="drop-zone">
+        📁 Drag & Drop Files Here or Click to Upload
+        <input type="file" id="fileInput" hidden />
+    </div>
+
+    <!-- MATERIALS -->
+    <div id="materialsList"></div>
+
+</div>
+
+<!-- PDF MODAL -->
+<div id="pdfModal" class="modal">
+    <div class="modal-content">
+        <span onclick="closePDF()" class="close">&times;</span>
+        <iframe id="pdfFrame"></iframe>
+    </div>
+</div>

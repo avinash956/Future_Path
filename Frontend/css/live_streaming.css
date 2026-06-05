@@ -1,0 +1,583 @@
+/* ==========================================
+   FUTURE PATH LIVE STREAMING MODULE
+   PREMIUM HITECH UI
+========================================== */
+
+:root{
+    --primary:#6366f1;
+    --primary-light:#8b5cf6;
+    --success:#10b981;
+    --danger:#ef4444;
+    --warning:#f59e0b;
+
+    --bg:#0f172a;
+    --card:#111827;
+    --card2:#1e293b;
+
+    --text:#ffffff;
+    --text-muted:#94a3b8;
+
+    --glass:rgba(255,255,255,0.06);
+    --border:rgba(255,255,255,0.08);
+
+    --shadow:
+        0 10px 40px rgba(0,0,0,.3);
+
+    --radius:18px;
+}
+
+/* ==========================================
+   CONTAINER
+========================================== */
+
+.live-container{
+    padding:30px;
+    animation:fadeIn .6s ease;
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.live-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.live-header h2{
+    color:white;
+    font-size:30px;
+    font-weight:700;
+    letter-spacing:.5px;
+}
+
+.live-header h2::before{
+    content:"📡 ";
+}
+
+/* ==========================================
+   FORM CARD
+========================================== */
+
+.live-form{
+
+    background:var(--glass);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius);
+
+    padding:25px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(250px,1fr));
+
+    gap:18px;
+
+    box-shadow:var(--shadow);
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+/* Animated border glow */
+
+.live-form::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:250px;
+    height:250px;
+
+    background:
+    radial-gradient(
+        circle,
+        rgba(99,102,241,.4),
+        transparent
+    );
+
+    top:-120px;
+    left:-120px;
+
+    animation:floatGlow 6s linear infinite;
+}
+
+.live-form::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:250px;
+    height:250px;
+
+    background:
+    radial-gradient(
+        circle,
+        rgba(139,92,246,.35),
+        transparent
+    );
+
+    bottom:-120px;
+    right:-120px;
+
+    animation:floatGlowReverse 7s linear infinite;
+}
+
+/* ==========================================
+   INPUTS
+========================================== */
+
+.live-form input,
+.live-form select,
+.live-form textarea{
+
+    width:100%;
+
+    background:
+    rgba(220, 218, 231, 0.05);
+
+    color:rgb(3, 3, 3);
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    border-radius:14px;
+
+    padding:14px 16px;
+
+    font-size:18px;
+
+    outline:none;
+
+    transition:.3s;
+
+    backdrop-filter:blur(10px);
+
+    z-index:2;
+}
+
+.live-form textarea{
+    resize:none;
+    min-height:120px;
+}
+
+.live-form input::placeholder,
+.live-form textarea::placeholder{
+    color:#94a3b8;
+}
+
+.live-form input:focus,
+.live-form select:focus,
+.live-form textarea:focus{
+
+    border-color:var(--primary);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(99,102,241,.2);
+
+    transform:translateY(-2px);
+}
+
+/* ==========================================
+   BUTTON
+========================================== */
+
+.live-form button{
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--primary-light)
+    );
+
+    color:rgb(9, 244, 5);
+
+    border:none;
+
+    border-radius:14px;
+
+    padding:15px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    box-shadow:
+        0 10px 30px
+        rgba(99,102,241,.3);
+
+    z-index:2;
+}
+
+.live-form button:hover{
+
+    transform:
+    translateY(-4px);
+
+    box-shadow:
+        0 15px 35px
+        rgba(131, 132, 214, 0.45);
+}
+
+.live-form button:active{
+
+    transform:scale(.97);
+}
+
+/* ==========================================
+   LIVE CLASS LIST
+========================================== */
+
+#liveList{
+
+    margin-top:30px;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fill,minmax(350px,1fr));
+
+    gap:22px;
+}
+
+/* ==========================================
+   LIVE CARD
+========================================== */
+
+.live-card{
+
+    background:
+    rgba(142, 237, 207, 0.05);
+
+    backdrop-filter:blur(15px);
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:22px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    transition:.35s;
+
+    box-shadow:var(--shadow);
+}
+
+.live-card:hover{
+
+    transform:
+    translateY(-8px);
+
+    border-color:
+    hsla(136, 80%, 65%, 0.4);
+
+    box-shadow:
+        0 20px 45px
+        lab(52.98% -36.81 15.29 / 0.15);
+}
+
+.live-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:4px;
+
+    background:
+    linear-gradient(
+        90deg,
+        hsl(156, 59%, 65%),
+        #bbce51
+    );
+}
+
+/* ==========================================
+   CARD CONTENT
+========================================== */
+
+.live-card h3{
+
+    color:rgb(0, 0, 0);
+
+    margin-bottom:10px;
+
+    font-size:20px;
+}
+
+.live-card p{
+
+    color:rgb(3, 3, 3);
+
+    margin-bottom:8px;
+
+    font-size:18px;
+}
+
+.platform-badge{
+
+    display:inline-block;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    margin-top:8px;
+    color:rgb(3, 3, 3);
+}
+
+.youtube{
+    background:#dc2626;
+    color:white;
+}
+
+.zoom{
+    background:#2563eb;
+    color:white;
+}
+
+.meet{
+    background:#10b981;
+    color:white;
+}
+
+/* ==========================================
+   JOIN BUTTON
+========================================== */
+
+.join-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    margin-top:20px;
+
+    color:#f8ec06;
+
+    background:
+    linear-gradient(135deg,#6ac3dc,#53b998);
+
+    padding:12px 18px;
+
+    border-radius:12px;
+
+    transition:.3s;
+}
+
+.join-btn:hover{
+
+    transform:
+    translateY(-3px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(244, 74, 1, 0.35);
+}
+
+/* ==========================================
+   STATUS BADGES
+========================================== */
+
+.status-live{
+
+    background:#ef4444;
+    color:white;
+
+    padding:5px 10px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    animation:pulse 1.5s infinite;
+}
+
+.status-scheduled{
+
+    background:#f59e0b;
+    color:white;
+
+    padding:5px 10px;
+
+    border-radius:20px;
+
+    font-size:12px;
+}
+
+.status-ended{
+
+    background:#3b66a1;
+    color:rgb(0, 0, 0);
+
+    padding:5px 10px;
+
+    border-radius:20px;
+
+    font-size:12px;
+}
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+@keyframes pulse{
+
+    0%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+    50%{
+        transform:scale(1.05);
+        opacity:.7;
+    }
+
+    100%{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+@keyframes floatGlow{
+
+    0%{
+        transform:translate(0,0);
+    }
+
+    50%{
+        transform:translate(30px,30px);
+    }
+
+    100%{
+        transform:translate(0,0);
+    }
+}
+
+@keyframes floatGlowReverse{
+
+    0%{
+        transform:translate(0,0);
+    }
+
+    50%{
+        transform:translate(-30px,-30px);
+    }
+
+    100%{
+        transform:translate(0,0);
+    }
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:768px){
+
+    .live-container{
+        padding:15px;
+    }
+
+    .live-header h2{
+        font-size:24px;
+    }
+
+    #liveList{
+        grid-template-columns:1fr;
+    }
+
+    .live-form{
+        grid-template-columns:1fr;
+    }
+}
+
+/* ===========Time=============== */
+
+.btn-disabled {
+    background: #efdc05;
+    color: rgb(237, 6, 6);
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: not-allowed;
+    font-size: 14px;
+}
+
+/* ============Live Status==================== */
+
+.status-live { color: green; font-weight: bold; }
+.status-upcoming { color: orange; font-weight: bold; }
+.status-ended { color: gray; font-weight: bold; }
+
+.btn-join {
+    background: green;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-delete {
+    background: red;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+}
+
+.btn-disabled {
+    background: gray;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    cursor: not-allowed;
+}
+
+.embed-box {
+    margin-top: 10px;
+}

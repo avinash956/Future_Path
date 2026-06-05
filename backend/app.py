@@ -1,6 +1,4 @@
-from urllib import response
-
-from flask import Flask, app, request, send_from_directory, jsonify
+from flask import Flask, request, send_from_directory, jsonify
 from flask_cors import CORS
 from config import Config
 import os
@@ -24,6 +22,8 @@ from routes.faculty_routes import faculty_bp
 from routes.batch_routes import batch_bp
 from routes.fees_routes import fees_bp
 from routes.management_portal_routes import management_portal_bp
+from routes.notes_video_routes import notes_video_bp
+from routes.live_streaming_routes import live_bp
 
 
 # ======================
@@ -37,9 +37,12 @@ def create_app():
     # ======================
     app.config["MONGO_URI"] = Config.MONGO_URI
     app.config["SECRET_KEY"] = Config.SECRET_KEY
+
+    # JWT CONFIG (ONLY ONCE)
     app.config["JWT_SECRET_KEY"] = Config.JWT_SECRET_KEY
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = Config.JWT_ACCESS_TOKEN_EXPIRES
 
+    # MAIL CONFIG
     app.config['MAIL_SERVER'] = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
     app.config['MAIL_PORT'] = int(os.getenv('SMTP_PORT', 587))
     app.config['MAIL_USE_TLS'] = True
@@ -51,13 +54,14 @@ def create_app():
     # EXTENSIONS INIT
     # ======================
     CORS(
-    app,
-    resources={r"/api/*": {"origins": ""}},
-    supports_credentials=True,
-    allow_headers=["Content-Type", "Authorization"],
-    expose_headers=["Content-Type", "Authorization"],
-    methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-)
+        app,
+        resources={r"/api/*": {"origins": "*"}},
+        supports_credentials=True,
+        allow_headers=["Content-Type", "Authorization"],
+        expose_headers=["Content-Type", "Authorization"],
+        methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+    )
+
     @app.after_request
     def after_request(response):
         response.headers.add("Access-Control-Allow-Origin", "*")
@@ -65,6 +69,7 @@ def create_app():
         response.headers.add("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS")
         return response
 
+    # INIT EXTENSIONS (ONLY ONCE)
     mongo.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
@@ -73,7 +78,7 @@ def create_app():
     mail.init_app(app)
 
     # ======================
-    # 🔥 MONGODB DEBUG CHECK (SAFE & POWERFUL)
+    # MONGODB DEBUG CHECK
     # ======================
     with app.app_context():
         try:
@@ -81,21 +86,17 @@ def create_app():
             print("🔍 MONGODB CONNECTION CHECK")
             print("==============================")
 
-            # Ping MongoDB server
             mongo.cx.admin.command("ping")
 
             print("✅ MongoDB Status: CONNECTED")
 
-            # Safe cluster info
             try:
                 print("📡 Cluster Info:", mongo.cx.address)
             except Exception:
-                print("📡 Cluster Info: Not available (Atlas driver limitation)")
+                print("📡 Cluster Info: Not available")
 
-            # Database check
             print("🗄️ Database:", mongo.db.name)
 
-            # Collection check
             collections = mongo.db.list_collection_names()
             print("📦 Collections Found:", len(collections))
             print(collections)
@@ -104,8 +105,8 @@ def create_app():
 
         except Exception as e:
             print("\n❌ MONGODB CONNECTION FAILED")
-            print("🔥 ERROR TYPE:", type(e).__name__)
-            print("🔥 ERROR MESSAGE:", str(e))
+            print("TYPE:", type(e).__name__)
+            print("MESSAGE:", str(e))
             print("==============================\n")
 
     # ======================
@@ -124,12 +125,14 @@ def create_app():
     app.register_blueprint(batch_bp, url_prefix="/api/batch")
     app.register_blueprint(fees_bp, url_prefix="/api/fees")
     app.register_blueprint(management_portal_bp, url_prefix="/api/management_portal")
+    app.register_blueprint(notes_video_bp, url_prefix="/api/materials")
+
+    # ✅ LIVE STREAM FIXED
+    app.register_blueprint(live_bp, url_prefix="/api/live")
 
     # ======================
-    # HEALTH CHECK (SAFE)
+    # HEALTH CHECK
     # ======================
-
-
     @app.route("/api/health")
     def health():
         try:
@@ -155,6 +158,13 @@ def create_app():
         })
 
     # ======================
+    # UPLOADS
+    # ======================
+    @app.route("/uploads/<path:filename>")
+    def uploaded_files(filename):
+        return send_from_directory("uploads", filename)
+
+    # ======================
     # GLOBAL ERROR HANDLER
     # ======================
     @app.errorhandler(Exception)
@@ -169,15 +179,7 @@ def create_app():
             "type": type(e).__name__
         }), 500
 
-    # ======================
-    # UPLOADS
-    # ======================
-    @app.route("/uploads/<path:filename>")
-    def uploaded_files(filename):
-        return send_from_directory("uploads", filename)
     return app
-
-    
 
 
 # ======================
@@ -191,9 +193,4 @@ if __name__ == "__main__":
     print("📍 http://127.0.0.1:5000")
     print("===================================\n")
 
-
-
     app.run(debug=True, host="0.0.0.0", port=5000)
-
-
-    

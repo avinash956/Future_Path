@@ -1,6 +1,5 @@
 /* ======================================
 FEES DASHBOARD ONLY (SAFE SCOPED VERSION)
-PASTE INTO YOUR CSS FILE
 ====================================== */
 
 #feesSection .fees-wrapper {
@@ -87,8 +86,9 @@ GRID INPUTS
 }
 
 #feesSection .field label {
-  color: #040404;
+  color: #e2e8f0;
   font-size: 15px;
+  font-weight: 500;
 }
 
 /* ======================================
@@ -102,9 +102,13 @@ INPUTS (FIXED READABILITY)
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   background: #96b7f0;
-  color: #080808;
+  color: #ffffff;
   font-size: 16px;
   outline: none;
+}
+
+#feesSection input::placeholder {
+  color: rgba(255, 255, 255, 0.75);
 }
 
 #feesSection input:focus,
@@ -114,9 +118,11 @@ INPUTS (FIXED READABILITY)
 }
 
 /* readonly */
+
 #feesSection input[readonly] {
   background: #82a2da;
-  color: #ecdd05;
+  color: #ffffff;
+  font-weight: 600;
 }
 
 /* ======================================
@@ -128,7 +134,7 @@ BUTTONS (ONLY FEES DASHBOARD)
   border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 12px 18px;
   border-radius: 12px;
-  color: rgb(15, 14, 14);
+  color: #ffffff;
   font-weight: 500;
   cursor: pointer;
   margin: 6px 8px 6px 0;
@@ -141,6 +147,7 @@ BUTTONS (ONLY FEES DASHBOARD)
 }
 
 /* PRIMARY BUTTON ONLY */
+
 #feesSection .primary-btn {
   background: linear-gradient(135deg, #7c3aed, #06b6d4);
   border: none;
@@ -155,41 +162,83 @@ QR BOX
 ====================================== */
 
 #feesSection #qrcode {
-    border: 2px solid red;
-    min-width: 300px;
-    min-height: 300px;
-    padding: 10px;
-    margin-top: 15px;
-    background: white;
+    width: 180px;
+    height: 180px;
+    padding: 5px;
+    margin: 10px auto;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.2);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
 }
 
+#feesSection #qrcode img,
+#feesSection #qrcode canvas {
+    width: 180px !important;
+    height: 180px !important;
+    max-width: 200px !important;
+    max-height: 200px !important;
+}
 /* ======================================
 TABLE
 ====================================== */
 
 #feesSection #historyTable {
-  width: 100%;
+  width: 10%;
   border-collapse: collapse;
   border-radius: 14px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
 }
 
 #feesSection #historyTable th {
   padding: 16px;
   background: rgba(255, 255, 255, 0.08);
-  color: #cbd5e1;
+  color: #facc15; /* Gold */
   text-transform: uppercase;
   font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 #feesSection #historyTable td {
   padding: 16px;
-  color: #e5e7eb;
+  color: #f8fafc; /* Bright white */
+  font-weight: 500;
+}
+
+#feesSection #historyTable tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 #feesSection #historyTable tr:hover {
   background: rgba(124, 58, 237, 0.1);
+}
+
+/* ======================================
+RECEIPT / PAYMENT DETAILS
+====================================== */
+
+#feesSection .receipt,
+#feesSection .receipt-content,
+#feesSection .receipt-body,
+#feesSection .payment-details {
+  color: #f8fafc !important;
+}
+
+#feesSection .receipt p,
+#feesSection .receipt span,
+#feesSection .receipt div,
+#feesSection .payment-details p,
+#feesSection .payment-details span,
+#feesSection .payment-details div {
+  color: #f8fafc !important;
 }
 
 /* ======================================

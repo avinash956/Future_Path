@@ -13,10 +13,12 @@
   <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="css/dashboard-Sectionview.css">
   <link rel="stylesheet" href="css/dashboard-modules.css">  
+  <link rel="stylesheet" href="css/notes_video.css">
+  <link rel="stylesheet" href="css/live_streaming.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<body onload="initializeDashboard()">
+<body>
 
   <!-- ================= PRELOADER ================= -->
   <div id="preloader">
@@ -103,41 +105,44 @@
         Management
       </button>
 
-      <!-- FACULTY -->
+      <!-- FACULTY Management-->
       <button class="side-btn" data-title="Faculty" onclick="loadSection('faculty')">
         <i class="fa-solid fa-chalkboard-user"></i>
         Faculty
       </button>
 
-      <!-- BATCH -->
+      <!-- BATCH Management-->
       <button class="side-btn" data-title="Batch" onclick="loadSection('batch')">
         <i class="fa-solid fa-layer-group"></i>
         Batch
       </button>
 
-      <!-- STUDENT -->
+      <!-- STUDENT Management-->
       <button class="side-btn" data-title="Student" onclick="loadSection('student')">
         <i class="fa-solid fa-user-graduate"></i>
         Student
       </button>
 
-      <!-- FEES -->
+      <!-- FEES Management-->
       <button class="side-btn" data-title="Fees" onclick="loadSection('fees')">
         <i class="fa-solid fa-money-bill"></i>
         Fees Management
       </button>
 
-      <!-- MATERIALS -->
+      <!-- MATERIALS (Notes / Videos) -->
       <button class="side-btn" data-title="Materials" onclick="loadSection('materials')">
         <i class="fa-solid fa-file"></i>
         Notes / Videos
       </button>
 
-      <!-- LIVE -->
-      <button class="side-btn" data-title="Live Streaming" onclick="loadSection('live')">
-        <i class="fa-solid fa-video"></i>
-        Live Streaming
-      </button>
+     <!-- LIVE Streaming -->
+          <button class="side-btn"
+                  data-title="Live Streaming"
+                  onclick="loadSection('live_stream')">
+
+              <i class="fa-solid fa-video"></i>
+              Live Streaming
+          </button>
 
       <!-- AI -->
       <button class="side-btn" data-title="AI Assist" onclick="window.location.href='ai.html'">
@@ -193,12 +198,15 @@
 <!-- ================= UI FILES ================= -->
 <script src="./js/sidebar.js"></script>
 <script src="./js/management.js"></script>
-<script src="./js/dashboard.js"></script>
 <script src="./js/faculty.js"></script>
 <script src="./js/batch.js"></script>
 <script src="./js/student.js"></script>
 <script src="./js/fees.js"></script>
 <script src="./js/fee_receipt.js"></script>
+<script src="./js/notes_video.js"></script>
+<script src="./js/live_streaming.js"></script>
+<script src="./js/dashboard.js"></script>
+
 
 <!-- =============================================== -->
 

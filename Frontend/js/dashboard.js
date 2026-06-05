@@ -12,7 +12,7 @@ const currentPage = window.location.pathname.toLowerCase();
 
 console.log("🔐 Token:", token);
 console.log("👤 Role:", role);
-
+console.log("👤 Name:", name);
 
 // ======================================
 // SAFE TOKEN CHECK (FIXED)
@@ -145,56 +145,56 @@ if (currentPage.includes("dashboard.html")) {
 }
 
 
-// ======================================
-// MEDIA UPLOAD (SAFE)
-// ======================================
+// // ======================================
+// // MEDIA UPLOAD (SAFE)
+// // ======================================
 
-async function uploadMedia(formData) {
+// async function uploadMedia(formData) {
 
-  try {
+//   try {
 
-    if (!isValidToken(token)) {
-      safeRedirect("Session expired");
-      return;
-    }
+//     if (!isValidToken(token)) {
+//       safeRedirect("Session expired");
+//       return;
+//     }
 
-    const res = await fetch(`${window.BASE_URL}/media/upload`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      },
-      body: formData
-    });
+//     const res = await fetch(`${window.BASE_URL}/media/upload`, {
+//       method: "POST",
+//       headers: {
+//         "Authorization": `Bearer ${token}`
+//       },
+//       body: formData
+//     });
 
-    const text = await res.text();
+//     const text = await res.text();
 
-    console.log("📨 Upload Response:", text);
+//     console.log("📨 Upload Response:", text);
 
-    let data;
+//     let data;
 
-    try {
-      data = JSON.parse(text);
-    } catch {
-      alert("Invalid server response");
-      return;
-    }
+//     try {
+//       data = JSON.parse(text);
+//     } catch {
+//       alert("Invalid server response");
+//       return;
+//     }
 
-    if (!res.ok) {
-      alert(data.message || "Upload failed");
-      return;
-    }
+//     if (!res.ok) {
+//       alert(data.message || "Upload failed");
+//       return;
+//     }
 
-    alert("Media uploaded successfully!");
+//     alert("Media uploaded successfully!");
 
-    return data;
+//     return data;
 
-  } catch (err) {
+//   } catch (err) {
 
-    console.error("❌ Media upload error:", err);
+//     console.error("❌ Media upload error:", err);
 
-    alert("Server error during media upload");
-  }
-}
+//     alert("Server error during media upload");
+//   }
+// }
 
 
 // ======================================
@@ -216,7 +216,7 @@ function uploadPhoto() {
 
 function initializeDashboard() {
   protect('admin');
-  loadSection('management');
+  loadSection('home');
 }
 
 
@@ -277,7 +277,7 @@ async function loadSection(section) {
   // ======================================
   // ACTIVE SIDEBAR BUTTON
   // ======================================
-
+ 
   document.querySelectorAll(".side-btn")
     .forEach(btn => btn.classList.remove("active"));
 
@@ -354,10 +354,11 @@ async function loadSection(section) {
 
       console.log(`✅ ${section}.html loaded into DOM`);
       
-      if (section === 'faculty' && typeof initializeFaculty === 'function') {
-        console.log("📚 Initializing Faculty Module...");
-        initializeFaculty();
-      }
+      // if (section === 'faculty' && typeof initializeFaculty === 'function') {
+      //   console.log("🔥 DASHBOARD.JS CALLING initializeFaculty");
+      //   initializeFaculty();
+      // }
+        initializeFaculty()
 
       if (section === 'student' && typeof initializeStudent === 'function') {
         console.log("🎓 Initializing Student Module...");
@@ -385,7 +386,7 @@ async function loadSection(section) {
   // FEES SECTION (FIXED PLACEMENT)
   // ======================================
 
-  else if (section === 'fees') {
+else if (section === 'fees') {
 
     try {
 
@@ -419,7 +420,104 @@ async function loadSection(section) {
       `;
     }
   }
+
+
+// ======================================
+// MATERIALS SECTION
+// ======================================
+
+else if (section === 'materials') {
+
+    try {
+
+        console.log("📂 Loading materials section...");
+
+        const response = await fetch('sections/notes_video.html');
+
+        if (!response.ok) {
+            throw new Error("Missing notes_video.html");
+        }
+
+        const html = await response.text();
+
+        container.innerHTML = html;
+
+        console.log("✅ notes_video.html loaded");
+
+        if (typeof initializeNotesVideo === "function") {
+            console.log("📚 Initializing Notes & Video Module...");
+            initializeNotesVideo();
+        }
+
+    } catch (err) {
+
+        console.error("❌ Materials Load Error:", err);
+
+        container.innerHTML = `
+            <div style="color:red;padding:20px;">
+                Failed to load Materials section
+            </div>
+        `;
+    }
 }
+// ======================================
+// LIVE STREAM SECTION
+// ======================================
+
+else if (section === "live_stream") {
+
+    try {
+
+        console.log("📂 Loading live stream section...");
+
+        const response = await fetch("sections/live_streaming.html");
+
+        if (!response.ok) {
+            throw new Error("Missing live_streaming.html");
+        }
+
+        const html = await response.text();
+
+        container.innerHTML = html;
+
+        console.log("✅ live_streaming.html loaded");
+
+        setTimeout(() => {
+
+            if (typeof window.initializeLiveStream === "function") {
+
+                console.log("🎥 Initializing Live Stream Module...");
+
+                window.initializeLiveStream();
+
+            } else {
+
+                console.error("❌ initializeLiveStream function not found");
+
+                container.innerHTML = `
+                    <div style="padding:20px;color:red;">
+                        Live Streaming JS not loaded.
+                    </div>
+                `;
+            }
+
+        }, 100);
+
+    } catch (err) {
+
+        console.error("❌ Live Stream Load Error:", err);
+
+        container.innerHTML = `
+            <div style="padding:20px;color:red;">
+                Failed to load Live Streaming section
+            </div>
+        `;
+    }
+  }
+}
+
+console.log("✅ dashboard.js loaded");
+console.log("✅ loadSection =", typeof loadSection);
 // ======================================
 // NAVIGATION
 // ======================================
@@ -427,3 +525,13 @@ async function loadSection(section) {
 function navigateTo(page) {
   window.location.href = page;
 }
+
+// ============Global Scope Functions (for sections to call)===========
+window.initializeDashboard = initializeDashboard;
+window.loadSection = loadSection;
+window.toggleMenu = toggleMenu;
+window.logout = logout;
+window.navigateTo = navigateTo;
+
+window.loadSection = loadSection;
+

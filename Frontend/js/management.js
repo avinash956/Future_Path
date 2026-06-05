@@ -29,22 +29,32 @@ async function authFetch(url, options = {}) {
 
     const token = localStorage.getItem("token");
 
-    const headers = {
-        ...options.headers,
-        Authorization: token ? `Bearer ${token}` : ""
-    };
+    const headers = new Headers(options.headers || {});
 
-    // only set JSON if NOT FormData
-    if (!(options.body instanceof FormData)) {
-        headers["Content-Type"] = "application/json";
+    if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
     }
 
-    const res = await fetch(url, {
-        ...options,
-        headers
-    });
+    // IMPORTANT: only set JSON header if NOT FormData
+    if (!(options.body instanceof FormData)) {
+        headers.set("Content-Type", "application/json");
+    }
 
-    return res;
+    try {
+
+        const res = await fetch(url, {
+            ...options,
+            headers
+        });
+
+        return res;
+
+    } catch (err) {
+
+        console.error("❌ FETCH FAILED:", err);
+
+        throw new Error("Network error (backend unreachable or blocked)");
+    }
 }
 
 
@@ -289,136 +299,105 @@ ADD MANAGEMENT
 async function addManagement(e) {
 
     e.preventDefault();
-
     e.stopPropagation();
 
     console.log("🔥 ADD MANAGEMENT TRIGGERED");
 
-    const form =
-        document.getElementById("managementForm");
-
-    const formData =
-        new FormData();
-
-    /* =========================
-    MANAGEMENT ID
-    ========================= */
-
-    formData.append("Id", document.getElementById("mgmtId").value.trim());
-
-    /* =========================
-    FORM FIELDS
-    ========================= */
-
-    formData.append("name", document.getElementById("mgmtName").value.trim());
-    formData.append("post", document.getElementById("mgmtPost").value.trim());
-    formData.append("Id", document.getElementById("mgmtId").value.trim());
-    formData.append("email", document.getElementById("mgmtEmail").value.trim());
-    formData.append("phone", document.getElementById("mgmtPhone").value.trim());
-    formData.append("department", document.getElementById("mgmtDepartment").value.trim());
-
-    formData.append("status", document.getElementById("mgmtStatus").value.trim());
-
-    formData.append("description", document.getElementById("mgmtDescription").value.trim());
-
-    /* =========================
-    IMAGE
-    ========================= */
-
-    const imageInput = document.getElementById("mgmtImage");
-
-    if (imageInput && imageInput.files.length > 0) {
-
-        formData.append("image", imageInput.files[0]);
-
-        console.log(
-            "🖼 IMAGE SELECTED:",
-            imageInput.files[0].name
-        );
-    }
-
     try {
 
-        const response =
-            await authFetch(
+        // =========================
+        // GET ELEMENTS SAFELY
+        // =========================
+        const form = document.getElementById("managementForm");
 
-                `${window.BASE_URL}/management/add-management`,
+        const idEl = document.getElementById("mgmtId");
+        const nameEl = document.getElementById("mgmtName");
+        const postEl = document.getElementById("mgmtPost");
+        const emailEl = document.getElementById("mgmtEmail");
+        const phoneEl = document.getElementById("mgmtPhone");
+        const deptEl = document.getElementById("mgmtDepartment");
+        const statusEl = document.getElementById("mgmtStatus");
+        const descEl = document.getElementById("mgmtDescription");
+        const imageEl = document.getElementById("mgmtImage");
 
-                {
-                    method: "POST",
-                    body: formData
-                }
-            );
-
-        if (!response.ok) {
-            throw new Error(`HTTP ERROR ${response.status}`);
+        if (!form) {
+            throw new Error("managementForm not found");
         }
 
-        console.log(
-            "📡 RESPONSE STATUS:",
-            response.status
+        // =========================
+        // BUILD FORM DATA
+        // =========================
+        const formData = new FormData();
+
+        formData.append("Id", idEl?.value?.trim() || "");
+        formData.append("name", nameEl?.value?.trim() || "");
+        formData.append("post", postEl?.value?.trim() || "");
+        formData.append("email", emailEl?.value?.trim() || "");
+        formData.append("phone", phoneEl?.value?.trim() || "");
+        formData.append("department", deptEl?.value?.trim() || "");
+        formData.append("status", statusEl?.value?.trim() || "");
+        formData.append("description", descEl?.value?.trim() || "");
+
+        if (imageEl?.files?.length > 0) {
+            formData.append("image", imageEl.files[0]);
+            console.log("🖼 IMAGE:", imageEl.files[0].name);
+        }
+
+        // =========================
+        // API CALL
+        // =========================
+        const response = await authFetch(
+            `${window.BASE_URL}/management/add-management`,
+            {
+                method: "POST",
+                body: formData
+            }
         );
 
-        const text =
-            await response.text();
+        console.log("📡 STATUS:", response.status);
 
-        console.log(
-            "📄 RAW RESPONSE:",
-            text
-        );
+        // =========================
+        // SAFE RESPONSE HANDLING
+        // =========================
+        const text = await response.text();
+        console.log("📄 RAW RESPONSE:", text);
 
-        let data;
+        let data = {};
 
         try {
-
-            data = JSON.parse(text);
-
-        } catch {
-
-            alert("Invalid server response");
-
-            return;
+            data = text ? JSON.parse(text) : {};
+        } catch (err) {
+            console.warn("⚠️ Response is not JSON");
         }
 
-        console.log("✅ ADD RESPONSE:", data);
+        // =========================
+        // SUCCESS LOGIC (ROBUST)
+        // =========================
 
-        if (data.success) {
+        if (response.ok) {
 
-            alert(
-                "✅ Management Added Successfully"
-            );
+            alert("✅ Management Added Successfully");
 
             form.reset();
-
-            const idInput =
-                document.getElementById("mgmtId");
-
-            if (idInput) {
-
-                idInput.value = "";
-
-            }
+            if (idEl) idEl.value = "";
 
             loadManagement();
 
         } else {
 
-            alert(
-                data.message ||
-                "Failed to add management"
-            );
+            alert(data.message || "Failed to add management");
         }
 
     } catch (err) {
 
-        console.error("❌ ADD ERROR:", err);
+        console.error("❌ ADD MANAGEMENT ERROR:", err);
 
-        alert("Backend not reachable");
+        // IMPORTANT: show real error instead of fake message
+        alert(err.message || "Something went wrong while adding management");
     }
 
     return false;
 }
-
 
 /* =========================
 LOAD MANAGEMENT

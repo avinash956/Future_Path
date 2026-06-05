@@ -1,0 +1,57 @@
+<div class="live-container">
+
+    <div class="live-header">
+        <h2>Live Streaming</h2>
+    </div>
+
+    <div class="live-form">
+
+        <!-- TITLE -->
+        <input
+            type="text"
+            id="title"
+            placeholder="Class Title"
+        />
+
+        <!-- DESCRIPTION -->
+        <textarea
+            id="description"
+            placeholder="Description"
+        ></textarea>
+
+        <!-- BATCH -->
+        <select id="batchSelect">
+            <option value="">Loading batches...</option>
+        </select>
+
+        <!-- FACULTY -->
+        <select id="facultySelect">
+            <option value="">Loading faculty...</option>
+        </select>
+
+        <!-- PLATFORM -->
+        <select id="platform">
+            <option value="">Select Platform</option>
+            <option value="youtube">YouTube Live</option>
+            <option value="google_meet">Google Meet</option>
+            <option value="zoom">Zoom</option>
+        </select>
+
+        <!-- MEETING LINK -->
+        <input type="url" id="meetingLink" placeholder="Meeting Link"/>
+
+        <!-- DATE -->
+        <input type="date" id="scheduledDate"/>
+
+        <!-- TIME -->
+        <input type="time" id="scheduledTime"/>
+
+        <!-- BUTTON -->
+        <button id="createLiveBtn">Create Live Class</button>
+
+    </div>
+
+    <!-- LIVE LIST -->
+    <div id="liveList"></div>
+
+</div>

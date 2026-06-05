@@ -111,11 +111,11 @@ function generateQR() {
 
     qrContainer.innerHTML = "";
 
-    new QRCode(qrContainer, {
-        text: upiUrl,
-        width: 250,
-        height: 250
-    });
+  new QRCode(qrContainer, {
+    text: upiUrl,
+    width: 80,
+    height: 80
+});;
 
     console.log("✅ QR generated");
 }

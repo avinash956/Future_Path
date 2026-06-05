@@ -59,15 +59,30 @@ def add_management():
 
         # 📡 NOTIFICATIONS
         try:
-            if email:
-                send_email(email, password)
+            import threading
 
-            if phone:
-                send_whatsapp(phone, password)
-                generate_otp(email, phone)
+            def notify():
+                try:
+                    if email:
+                        send_email(email, password)
+                except Exception as e:
+                    print("Email error:", e)
+
+                try:
+                    if phone:
+                        send_whatsapp(phone, password)
+                except Exception as e:
+                    print("WhatsApp error:", e)
+
+                try:
+                    generate_otp(email, phone)
+                except Exception as e:
+                    print("OTP error:", e)
+
+            threading.Thread(target=notify).start()
 
         except Exception as e:
-            print("⚠️ Notification error:", e)
+            print("Notification thread error:", e)
 
         return jsonify({
             "success": True,

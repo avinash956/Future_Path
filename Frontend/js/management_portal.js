@@ -317,7 +317,7 @@ async function loadSection(section) {
       console.log(`✅ ${section}.html loaded into DOM`);
       
       if (section === 'faculty' && typeof initializeFaculty === 'function') {
-        console.log("📚 Initializing Faculty Module...");
+        console.log("🔥 MANAGEMENT.JS CALLING initializeFaculty");
         initializeFaculty();
       }
 

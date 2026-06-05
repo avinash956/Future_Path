@@ -143,18 +143,32 @@ INITIALIZE FACULTY MODULE
 
 function initializeFaculty() {
 
+    // =====================================
+    // PREVENT DOUBLE INITIALIZATION
+    // =====================================
+    if (window.facultyInitialized) {
+        console.log("⚠️ Faculty already initialized - skipping");
+        return;
+    }
+    window.facultyInitialized = true;
+
     console.log("🚀 Initializing Faculty Module");
+
+    // Always load faculty cards
+    loadFaculty();
 
     const form = document.getElementById("facultyForm");
 
-    if (!form) {
+    if (form) {
 
-        console.error("❌ facultyForm NOT FOUND");
+        console.log("✅ facultyForm FOUND");
 
-        return;
+        // attach form events here
+
+    } else {
+
+        console.warn("⚠️ facultyForm NOT FOUND");
     }
-
-    console.log("✅ facultyForm FOUND");
 
 
     // =========================================
@@ -284,6 +298,7 @@ ADD FACULTY
 ========================================= */
 
 async function addFaculty(e) {
+    console.log("🔥 addFaculty CALLED");
 
     console.log("🔥 ADD FACULTY FUNCTION STARTED");
 
@@ -556,244 +571,173 @@ LOAD FACULTY
 ========================================= */
 
 async function loadFaculty() {
-
     console.log("📥 Loading faculty list...");
 
-    const container =
-        document.getElementById("facultyList");
+    const container = document.getElementById("facultyList");
 
     if (!container) {
-
-        console.error(
-            "❌ facultyList container not found"
-        );
-
+        console.error("❌ facultyList container not found");
         return;
     }
 
-    container.innerHTML =
-        "Loading faculty...";
+    container.innerHTML = "<p>Loading faculty...</p>";
 
     try {
 
-        const apiURL =
-            `${window.BASE_URL}/faculty/get-faculty`;
+        const apiURL = `${window.BASE_URL}/faculty/get-faculty`;
 
         console.log("🌐 GET API:", apiURL);
 
         const res = await authFetch(apiURL);
 
-        console.log(
-            "📡 GET response:",
-            res.status
-        );
+        console.log("📡 Response Status:", res.status);
 
-        const rawText = await res.text();
-
-        console.log("📄 RAW RESPONSE:", rawText);
-
-        let data;
-
-        try {
-
-            data = JSON.parse(rawText);
-
-        } catch (err) {
-
-            console.error("❌ Invalid JSON");
-
-            container.innerHTML =
-                "Invalid server response";
-
-            return;
+        if (!res.ok) {
+            throw new Error(`HTTP Error: ${res.status}`);
         }
 
-        console.log("📄 Faculty data:", data);
+        const data = await res.json();
 
-        const items = data.faculty || [];
+        console.log("📄 Faculty Data:", data);
+
+        // Supports:
+        // { faculties: [...] }
+        // { faculty: [...] }
+        // [ ... ]
+
+        const items =data.faculties ||data.faculty ||(Array.isArray(data) ? data : []);
+
+        console.log("📊 Faculty Count:", items.length);
+        console.table(items);
 
         // =========================================
-        // NO FACULTY
+        // NO FACULTY FOUND
         // =========================================
 
         if (!items.length) {
 
-            console.warn("⚠️ No faculty found");
-
             container.innerHTML = `
-
                 <div class="empty-message">
-
                     <i class="fa-solid fa-users"></i>
-
                     <h3>No Faculty Found</h3>
-
                     <p>Add faculty members to display here.</p>
-
                 </div>
-
             `;
 
             return;
         }
 
         // =========================================
-        // FACULTY CARDS
+        // GENERATE CARDS
         // =========================================
 
-        container.innerHTML = `
+        let html = `<div class="faculty-grid">`;
 
-            <div class="faculty-grid">
+        items.forEach(item => {
 
-                ${items.map(item => `
+            const imageURL = item.image
+                ? `${window.BASE_URL}/faculty/uploads/${item.image}`
+                : "https://via.placeholder.com/120x120?text=Faculty";
 
-                    <div class="faculty-card">
+            html += `
 
-                        <!-- IMAGE -->
+                <div class="faculty-card">
 
-                        <div class="faculty-image-wrapper">
+                    <div class="faculty-image-wrapper">
 
-                            <img
-                                src="http://127.0.0.1:5000/uploads/${item.image || ''}"
-                                alt="Faculty Image"
-                                class="faculty-image"
+                        <img
+                            src="${imageURL}"
+                            alt="Faculty Image"
+                            class="faculty-image"
+                            onerror="this.src='https://via.placeholder.com/120x120?text=Faculty';"
+                        >
 
-                                onerror="
-                                    this.onerror=null;
-                                    this.src='https://via.placeholder.com/120x120?text=Faculty';
-                                "
+                    </div>
+
+                    <div class="faculty-info">
+
+                        <h3>${item.name || "No Name"}</h3>
+
+                        <p>
+                            <strong>ID:</strong>
+                            ${item.facultyId || "N/A"}
+                        </p>
+
+                        <p>
+                            <strong>Email:</strong>
+                            ${item.email || "N/A"}
+                        </p>
+
+                        <p>
+                            <strong>Phone:</strong>
+                            ${item.phone || "N/A"}
+                        </p>
+
+                        <p>
+                            <strong>Department:</strong>
+                            ${item.department || "N/A"}
+                        </p>
+
+                        <p>
+                            <strong>Designation:</strong>
+                            ${item.post || item.designation || "N/A"}
+                        </p>
+
+                        <p>
+                            <strong>Experience:</strong>
+                            ${item.experience || 0} Years
+                        </p>
+
+                        <p>
+                            <strong>Status:</strong>
+                            ${item.status || "Inactive"}
+                        </p>
+
+                        <div class="faculty-actions">
+
+                            <button
+                                class="download-btn"
+                                onclick="downloadFacultyCard('${item._id}')"
                             >
-
-                        </div>
-
-                        <!-- INFO -->
-
-                        <div class="faculty-info">
-
-                            <h3>
-                                ${item.name || "No Name"}
-                            </h3>
-
-                            <p>
                                 <i class="fa-solid fa-id-card"></i>
+                                ID Card
+                            </button>
 
-                                <strong>ID:</strong>
-
-                                ${item.facultyId || "N/A"}
-                            </p>
-
-                            <p>
-                                <i class="fa-solid fa-envelope"></i>
-
-                                <strong>Email:</strong>
-
-                                ${item.email || "N/A"}
-                            </p>
-
-                            <p>
-                                <i class="fa-solid fa-phone"></i>
-
-                                <strong>Phone:</strong>
-
-                                ${item.phone || "N/A"}
-                            </p>
-
-                            <p>
-                                <i class="fa-solid fa-building"></i>
-
-                                <strong>Department:</strong>
-
-                                ${item.department || "N/A"}
-                            </p>
-
-                            <p>
-                                <i class="fa-solid fa-user-tie"></i>
-
-                                <strong>Designation:</strong>
-
-                                ${item.post || "N/A"}
-                            </p>
-
-                            <p>
-                                <i class="fa-solid fa-briefcase"></i>
-
-                                <strong>Experience:</strong>
-
-                                ${item.experience || 0} Years
-                            </p>
-
-                            <p>
-                                <i class="fa-solid fa-circle-check"></i>
-
-                                <strong>Status:</strong>
-
-                                ${item.status || "inactive"}
-                            </p>
-
-                            <!-- ACTIONS -->
-
-                            <div class="faculty-actions">
-
-                                <!-- DOWNLOAD ID CARD -->
-
-                                <button
-                                    class="download-btn"
-                                    onclick='downloadFacultyCard(${JSON.stringify(item)})'
-                                >
-
-                                    <i class="fa-solid fa-id-card"></i>
-
-                                    ID Card
-
-                                </button>
-
-                                <!-- DELETE -->
-
-                                <button
-                                    class="delete-btn"
-                                    onclick="deleteFaculty('${item._id}')"
-                                >
-
-                                    <i class="fa-solid fa-trash"></i>
-
-                                    Delete
-
-                                </button>
-
-                            </div>
+                            <button
+                                class="delete-btn"
+                                onclick="deleteFaculty('${item._id}')"
+                            >
+                                <i class="fa-solid fa-trash"></i>
+                                Delete
+                            </button>
 
                         </div>
 
                     </div>
 
-                `).join("")}
+                </div>
 
-            </div>
+            `;
+        });
 
-        `;
+        html += `</div>`;
+
+        container.innerHTML = html;
 
         console.log("✅ Faculty loaded successfully");
 
-    } catch (err) {
+    } catch (error) {
 
-        console.error("❌ LOAD FACULTY ERROR");
-
-        console.error(err);
+        console.error("❌ LOAD FACULTY ERROR:", error);
 
         container.innerHTML = `
-
             <div class="error-message">
-
                 <i class="fa-solid fa-triangle-exclamation"></i>
-
-                Error loading faculty data
-
+                <p>Error loading faculty data</p>
+                <small>${error.message}</small>
             </div>
-
         `;
-
     }
-
 }
 
 
@@ -913,24 +857,24 @@ window.searchFaculty = function () {
 AUTO INITIALIZE
 ========================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+// document.addEventListener(
+//     "DOMContentLoaded",
+//     function () {
 
-        console.log(
-            "📄 DOM CONTENT LOADED"
-        );
+//         console.log(
+//             "📄 DOM CONTENT LOADED"
+//         );
 
-        if (
-            document.getElementById("facultyForm")
-        ) {
+//         if (
+//             document.getElementById("facultyForm")
+//         ) {
 
-            initializeFaculty();
+//             initializeFaculty();
 
-        }
+//         }
 
-    }
-);
+//     }
+// );
 
 
 /* =========================================
@@ -1104,17 +1048,43 @@ function createFacultyCardHTML(faculty) {
     `;
 }
 
-
-/* =========================================
+/* =========================
 DOWNLOAD FACULTY CARD
-========================================= */
+========================= */
 
-async function downloadFacultyCard(faculty) {
+async function downloadFacultyCard(id) {
 
     try {
 
+        console.log("📌 Download request for ID:", id);
+
         /* =========================
-        STEP 1: CREATE TEMP CONTAINER
+        STEP 1: GET FACULTY FROM CACHE OR API
+        ========================= */
+
+        let faculty = window.facultyCache?.find(f => f._id === id);
+
+        if (!faculty) {
+
+            console.warn("⚠️ Not in cache, fetching from API...");
+
+            const res = await authFetch(`${window.BASE_URL}/faculty/get-faculty`);
+            const data = await res.json();
+
+            const list = data.faculty || data.faculties || [];
+
+            faculty = list.find(f => f._id === id);
+        }
+
+        if (!faculty) {
+            alert("Faculty data not found");
+            return;
+        }
+
+        console.log("✅ Faculty found:", faculty);
+
+        /* =========================
+        STEP 2: CREATE TEMP CONTAINER
         ========================= */
 
         const container = document.createElement("div");
@@ -1124,9 +1094,8 @@ async function downloadFacultyCard(faculty) {
         container.style.left = "50%";
         container.style.transform = "translate(-50%, -50%)";
         container.style.zIndex = "999999";
-        container.style.background = "#8e93f4";
+        container.style.background = "white";
         container.style.padding = "10px";
-        container.style.color = "black";
 
         document.body.appendChild(container);
 
@@ -1135,74 +1104,46 @@ async function downloadFacultyCard(faculty) {
         const card = container.firstElementChild;
 
         /* =========================
-        STEP 2: FORCE STABLE STYLES
+        STEP 3: WAIT FOR IMAGES
         ========================= */
-
-        card.style.background = "#8677f3";
-        card.style.color = "black";
-        card.style.border = "2px solid #4606f6";
 
         const images = card.querySelectorAll("img");
 
         for (const img of images) {
 
-            img.crossOrigin = "anonymous";
-
             if (!img.complete) {
-
                 await new Promise(resolve => {
-
                     img.onload = resolve;
                     img.onerror = resolve;
-
                 });
-
             }
-
         }
-
-        /* =========================
-        STEP 3: WAIT FOR RENDER
-        ========================= */
 
         await new Promise(resolve => setTimeout(resolve, 300));
 
-        await new Promise(requestAnimationFrame);
-
         /* =========================
-        STEP 4: PDF GENERATION (Using jsPDF & html2canvas)
+        STEP 4: GENERATE PDF
         ========================= */
 
-        // Capture the card element using your specific html2canvas settings
         const canvas = await html2canvas(card, {
             scale: 3,
             useCORS: true,
-            backgroundColor: "#ffffff",
-            scrollX: 0,
-            scrollY: 0
+            backgroundColor: "#ffffff"
         });
 
-        // Convert canvas data to a JPEG image asset matching your original settings
-        const imgData = canvas.toDataURL('image/jpeg', 1.0);
+        const imgData = canvas.toDataURL("image/jpeg", 1.0);
 
-        // Initialize jsPDF using the global UMD module namespace
         const { jsPDF } = window.jspdf;
-        
-        // Define dimensions based on your opt.jsPDF array: [width, height] in pixels
-        const cardWidth = 350;
-        const cardHeight = 220;
 
         const pdf = new jsPDF({
             orientation: "landscape",
             unit: "px",
-            format: [cardWidth, cardHeight]
+            format: [350, 220]
         });
 
-        // Draw the image exactly spanning the custom dimensions of the canvas area
-        pdf.addImage(imgData, 'JPEG', 0, 0, cardWidth, cardHeight);
-        
-        // Finalize and prompt the client browser window to download
-        pdf.save(`${faculty.name}_ID_Card.pdf`);
+        pdf.addImage(imgData, "JPEG", 0, 0, 350, 220);
+
+        pdf.save(`${faculty.name || "faculty"}_ID_Card.pdf`);
 
         /* =========================
         STEP 5: CLEANUP
@@ -1210,14 +1151,11 @@ async function downloadFacultyCard(faculty) {
 
         document.body.removeChild(container);
 
-        console.log("✅ Faculty ID Card Downloaded");
+        console.log("✅ PDF downloaded successfully");
 
     } catch (err) {
 
-        console.error("❌ PDF generation failed:", err);
-
-        alert("PDF download failed. Check console.");
-
+        console.error("❌ PDF ERROR:", err);
+        alert("PDF download failed");
     }
-
 }

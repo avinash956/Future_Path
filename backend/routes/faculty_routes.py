@@ -82,17 +82,32 @@ def add_faculty():
 
         result = mongo.db.faculty.insert_one(data)
 
+        # 📡 NOTIFICATIONS (NON-BLOCKING FIX)
         try:
-            if email:
-                send_email(email, password)
+            import threading
 
-            if phone:
-                send_sms(phone, password)
-                send_whatsapp(phone, password)
-                generate_otp(phone)
+            def notify():
+                try:
+                    if email:
+                        send_email(email, password)
+                except Exception as e:
+                    print("Email error:", e)
+
+                try:
+                    if phone:
+                        send_whatsapp(phone, password)
+                except Exception as e:
+                    print("WhatsApp error:", e)
+
+                try:
+                    generate_otp(email, phone)
+                except Exception as e:
+                    print("OTP error:", e)
+
+            threading.Thread(target=notify).start()
 
         except Exception as e:
-            print("Notification error:", e)
+            print("Notification thread error:", e)
 
         return jsonify({
             "success": True,
@@ -136,14 +151,33 @@ def get_faculty():
 def delete_faculty(id):
 
     try:
-        res = mongo.db.faculty.delete_one({"_id": ObjectId(id)})
+
+        print("DELETE REQUEST ID:", id)
+
+        faculty = mongo.db.faculty.find_one({
+            "_id": ObjectId(id)
+        })
+
+        print("FOUND FACULTY:", faculty)
+
+        res = mongo.db.faculty.delete_one({
+            "_id": ObjectId(id)
+        })
+
+        print("DELETED COUNT:", res.deleted_count)
 
         return jsonify({
             "success": res.deleted_count > 0
         })
 
     except Exception as e:
-        return jsonify({"success": False, "message": str(e)}), 500
+
+        print("DELETE ERROR:", e)
+
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 500
 
 
 # =========================================
