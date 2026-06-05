@@ -358,20 +358,21 @@ async function viewAttendance(classId) {
 async function loadBatches() {
 
     const select = document.getElementById("batchSelect");
-
     if (!select) return;
 
     try {
 
-        const res = await fetch(`${LIVE_API}/batches`);
+        const res = await authFetch(
+            `${window.BASE_URL}/live/batches`
+        );
+
+        if (!res.ok) throw new Error("Unauthorized or CORS issue");
 
         const data = await res.json();
 
-        select.innerHTML =
-            `<option value="">Select Batch</option>`;
+        select.innerHTML = `<option value="">Select Batch</option>`;
 
         data.forEach(batch => {
-
             select.innerHTML += `
                 <option value="${batch._id}">
                     ${batch.name}
@@ -380,9 +381,7 @@ async function loadBatches() {
         });
 
     } catch (err) {
-
-        console.error("Load Batches Error:", err);
-
+        console.error("Batch Load Error:", err);
     }
 }
 
@@ -393,20 +392,21 @@ async function loadBatches() {
 async function loadFacultyDropdown() {
 
     const select = document.getElementById("facultySelect");
-
     if (!select) return;
 
     try {
 
-        const res = await fetch(`${LIVE_API}/faculty`);
+        const res = await authFetch(
+            `${window.BASE_URL}/live/faculty`
+        );
+
+        if (!res.ok) throw new Error("Unauthorized or CORS issue");
 
         const data = await res.json();
 
-        select.innerHTML =
-            `<option value="">Select Faculty</option>`;
+        select.innerHTML = `<option value="">Select Faculty</option>`;
 
         data.forEach(faculty => {
-
             select.innerHTML += `
                 <option value="${faculty._id}">
                     ${faculty.name}
@@ -415,9 +415,7 @@ async function loadFacultyDropdown() {
         });
 
     } catch (err) {
-
-        console.error("Load Faculty Dropdown Error:", err);
-
+        console.error("Faculty Load Error:", err);
     }
 }
 /* =====================================================
