@@ -194,13 +194,13 @@ async function uploadMaterial(e) {
     }
 }
 
-const materials = data.materials || [];
+// const materials = data.materials || [];
 
-materials.forEach((m, i) => {
-    console.log(`Material ${i}:`, m);
-});
+// materials.forEach((m, i) => {
+//     console.log(`Material ${i}:`, m);
+// });
 
-container.innerHTML = "<h3>Test Render Working</h3>";
+// container.innerHTML = "<h3>Test Render Working</h3>";
 
 async function deleteMaterial(id) {
 

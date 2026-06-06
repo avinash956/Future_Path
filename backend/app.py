@@ -24,6 +24,7 @@ from routes.fees_routes import fees_bp
 from routes.management_portal_routes import management_portal_bp
 from routes.notes_video_routes import notes_video_bp
 from routes.live_streaming_routes import live_bp
+from routes.faculty_portal_routes import faculty_portal_bp
 
 
 # ======================
@@ -126,7 +127,8 @@ def create_app():
     app.register_blueprint(fees_bp, url_prefix="/api/fees")
     app.register_blueprint(management_portal_bp, url_prefix="/api/management_portal")
     app.register_blueprint(notes_video_bp, url_prefix="/api/materials")
-
+    app.register_blueprint(faculty_portal_bp, url_prefix="/api/faculty_portal")
+    
     # ✅ LIVE STREAM FIXED
     app.register_blueprint(live_bp, url_prefix="/api/live")
 

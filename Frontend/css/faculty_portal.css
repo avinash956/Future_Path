@@ -1,0 +1,261 @@
+/* =========================================
+GLOBAL THEME
+========================================= */
+
+:root {
+    --bg1: #070b1a;
+    --bg2: #0b1220;
+    --glass: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --primary: #7c3aed;
+    --secondary: #06b6d4;
+    --text: #e6edf7;
+    --muted: rgba(230, 237, 247, 0.7);
+}
+
+/* =========================================
+BODY
+========================================= */
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top, #111827, #050816);
+    color: black;
+    overflow-x: hidden;
+}
+
+/* =========================================
+PAGE TITLE (GLOW EFFECT)
+========================================= */
+
+.page-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 15px 0 25px;
+    letter-spacing: 0.5px;
+    position: relative;
+    animation: fadeDown 0.6s ease;
+}
+
+.page-title::after {
+    content: "";
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    border-radius: 10px;
+}
+
+/* =========================================
+GRID (SMOOTH ANIMATION)
+========================================= */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+    animation: fadeUp 0.6s ease;
+    padding: 30px;
+}
+
+/* =========================================
+GLASS CARD (GLOSSY + HOVER GLOW)
+========================================= */
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(18px);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* glossy shine effect */
+.glass-card::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,0.08),rgb(76, 208, 235)
+        transparent
+    );
+    transform: rotate(25deg);
+    transition: 0.5s;
+}
+
+.glass-card:hover::before {
+    left: 100%;
+}
+
+.glass-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 0 25px rgba(124, 58, 237, 0.4);
+    border: 1px solid rgba(124, 58, 237, 0.4);
+}
+
+/* =========================================
+BUTTONS (MODERN GRADIENT + ANIMATION)
+========================================= */
+
+button {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border: none;
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+button:hover {
+    transform: scale(1.07);
+    box-shadow: 0 0 18px rgba(6, 182, 212, 0.5);
+}
+
+/* =========================================
+INPUTS (CLEAN MODERN STYLE)
+========================================= */
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 11px 12px;
+    margin: 6px 0;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgb(24, 74, 74);
+    color: var(--text);
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 12px rgba(124, 58, 237, 0.3);
+}
+
+/* =========================================
+ACTION BAR
+========================================= */
+
+.action-bar {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+/* =========================================
+ANIMATIONS
+========================================= */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* WORK AREA (main dashboard) */
+#batchContent {
+    background:rgb(105, 189, 186);   /* dark workspace */
+    padding: 15px;
+    border-radius: 12px;
+}
+
+/* STUDENT LIST AREA */
+.student-card {
+    background: white;
+    border: 1px solid rgba(245, 238, 238, 0.1);
+}
+
+/* optional hover */
+.student-card:hover {
+    background: lightpink
+    ;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 55px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #22c55e; /* 🟢 default green */
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* OFF STATE = ABSENT (RED) */
+input:not(:checked) + .slider {
+  background-color: #ef4444; /* 🔴 red */
+}
+
+/* knob move */
+input:checked + .slider:before {
+  transform: translateX(27px);
+}
+
+/* optional smooth glow */
+input:checked + .slider {
+  box-shadow: 0 0 6px #22c55e;
+}
+
+input:not(:checked) + .slider {
+  box-shadow: 0 0 6px #ef4444;
+}
