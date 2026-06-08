@@ -3,592 +3,256 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Student Portal</title>
+    <title>Student Portal</title>
 
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/sidebar.css">
-<link rel="stylesheet" href="css/index.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/live_streaming.css">
+    <link rel="stylesheet" href="css/notes_video.css">
+    <link rel="stylesheet" href="css/student_portal.css">
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 
-<body onload="protect('student'); startClock();">
+<body onload="loadStudentDashboard()">
 
-<!-- ================= HEADER ================= -->
-<header>
+    <!-- PRELOADER -->
 
-<nav class="navbar">
-
-    <!-- LEFT -->
-    <div class="logo-container">
-
-        <img src="Logo.png" class="logo">
-
-        <div class="logo-text">
-            <h2>Student Portal</h2>
-            <p><i>Future Path EduTech Institute</i></p>
-        </div>
-
+    <div id="preloader">
+        <div class="loader"></div>
     </div>
 
-    <!-- RIGHT -->
-    <div class="nav-right">
+    <!-- HEADER -->
 
-        <!-- LIVE CLOCK -->
-        <div class="live-clock" id="liveClock">
-            00:00:00
-        </div>
+    <header>
 
-        <!-- HAMBURGER -->
-        <div class="menu-toggle"
-        onclick="toggleMenu()">
+        <nav class="navbar">
 
-            <i class="fa-solid fa-bars"></i>
+            <div class="logo-container">
 
-        </div>
+                <img src="Logo.png" class="logo">
 
-        <!-- DROPDOWN -->
-        <div id="dropdownMenu"
-        class="dropdown-menu">
+                <div class="logo-text">
 
-            <div class="menu-group">
+                    <h2>Student Portal</h2>
 
-                <h4>
-                    ACCOUNT
-                </h4>
+                    <p>
+                        <i>Future Path EduTech Institute</i>
+                    </p>
 
-                <a href="profile.html">
-
-                    <i class="fa-solid fa-user"></i>
-
-                    Update Profile
-
-                </a>
-
-                <a href="change-password.html">
-
-                    <i class="fa-solid fa-key"></i>
-
-                    Change Password
-
-                </a>
-
-                <a href="#"
-                onclick="logout()">
-
-                    <i class="fa-solid fa-right-from-bracket"></i>
-
-                    Logout
-
-                </a>
+                </div>
 
             </div>
 
-        </div>
+            <div class="live-clock" id="liveClock"></div>
+
+            <div class="menu-toggle" onclick="toggleMenu()">
+
+                <i class="fa-solid fa-bars"></i>
+
+            </div>
+
+            <div id="dropdownMenu" class="dropdown-menu">
+
+                <div class="menu-group">
+
+                    <h4>ACCOUNT</h4>
+
+                    <a href="complete-profile.html">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        Update Profile
+
+                    </a>
+
+                    <a href="change-password.html">
+
+                        <i class="fa-solid fa-key"></i>
+
+                        Change Password
+
+                    </a>
+
+                    <a href="#" onclick="logout()">
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Logout
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+    <!-- MAIN LAYOUT -->
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-toggle"
+                onclick="toggleSidebar()">
+
+                <i class="fa-solid fa-chevron-left"
+                    id="toggleIcon"></i>
+
+            </div>
+
+            <h3>Student Controls</h3>
+
+            <input
+                type="text"
+                id="menuSearch"
+                class="menu-search"
+                placeholder="Search Menu...">
+
+            <!-- BATCH -->
+
+            <button
+                class="side-btn"
+                data-title="Batch"
+                onclick="loadSection('batch')">
+
+                <i class="fa-solid fa-layer-group"></i>
+
+                Batch
+
+            </button>
+            <!-- <button
+                    class="side-btn"
+                    onclick="loadSection('fees')">
+
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                    Fees Payment
+
+                </button> -->
+
+            <!-- MATERIALS -->
+
+            <button
+                class="side-btn"
+                data-title="Materials"
+                onclick="loadSection('materials')">
+
+                <i class="fa-solid fa-book"></i>
+
+                Notes / Videos
+
+            </button>
+
+            <!-- LIVE -->
+
+            <button
+                class="side-btn"
+                data-title="Live Streaming"
+                onclick="loadSection('live')">
+
+                <i class="fa-solid fa-video"></i>
+
+                Live Streaming
+
+            </button>
+
+            <!-- AI -->
+
+            <button
+                class="side-btn"
+                onclick="window.location.href='ai.html'">
+
+                <i class="fa-solid fa-robot"></i>
+
+                AI Assist
+
+            </button>
+
+        </aside>
+
+        <!-- WORK AREA -->
+
+        <main class="work-area">
+           
+
+            <div id="dynamicContent">
+
+                <div class="welcome-panel">
+
+                    <h2>
+                        Student Dashboard
+                    </h2>
+
+                    <p>
+                        Loading Student Information...
+                    </p>
+
+                </div>
+
+            </div>
+
+        </main>
 
     </div>
 
-</nav>
+    <!-- FOOTER -->
 
-</header>
-
-<!-- ================= MAIN LAYOUT ================= -->
-<div class="admin-layout">
-
-    <!-- ================= SIDEBAR ================= -->
-    <aside class="sidebar" id="sidebar">
-
-        <!-- TOGGLE -->
-        <div class="sidebar-toggle"
-        onclick="toggleSidebar()">
-
-            <i class="fa-solid fa-chevron-left"
-            id="toggleIcon"></i>
-
-        </div>
+    <footer>
 
         <h3>
-            Student Controls
+            Future Path EduTech Institute
         </h3>
 
-        <button class="side-btn active"
-        onclick="showSection('dashboardSection', this)">
+        <p>
+            Academic • Competitive • Technical Education
+        </p>
 
-            <i class="fa-solid fa-house"></i>
+        <p>
+            Email:
+            avinash.nha@gmail.com
+        </p>
 
-            Dashboard
+        <p>
+            Contact:
+            +91 9936698578
+        </p>
 
-        </button>
+        <p>
+            © 2026 All Rights Reserved
+        </p>
 
-        <button class="side-btn"
-        onclick="showSection('notesSection', this)">
+    </footer>
 
-            <i class="fa-solid fa-download"></i>
+    <!-- CORE -->
 
-            Notes
+    <script src="./js/api.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/sidebar.js"></script>
 
-        </button>
+    <!-- MODULES -->
 
-        <button class="side-btn"
-        onclick="showSection('videoSection', this)">
+    <script src="./js/notes_video.js"></script>
+    <script src="./js/live_streaming.js"></script>
 
-            <i class="fa-solid fa-play"></i>
+    <!-- STUDENT PORTAL -->
 
-            Video Lectures
-
-        </button>
-
-        <button class="side-btn"
-        onclick="showSection('assignmentSection', this)">
-
-            <i class="fa-solid fa-book"></i>
-
-            Assignments
-
-        </button>
-
-        <button class="side-btn"
-        onclick="showSection('attendanceSection', this)">
-
-            <i class="fa-solid fa-user-check"></i>
-
-            Attendance
-
-        </button>
-
-        <button class="side-btn"
-        onclick="showSection('testSection', this)">
-
-            <i class="fa-solid fa-clipboard-question"></i>
-
-            Online Tests
-
-        </button>
-
-        <button class="side-btn"
-        onclick="showSection('resultSection', this)">
-
-            <i class="fa-solid fa-chart-column"></i>
-
-            Results
-
-        </button>
-
-        <button class="side-btn"
-        onclick="window.location.href='ai.html'">
-
-            <i class="fa-solid fa-robot"></i>
-
-            AI Assist
-
-        </button>
-
-    </aside>
-
-    <!-- ================= MAIN CONTENT ================= -->
-    <main class="main-content" style="background:linear-gradient(135deg,#8f25eb,#27bccf);">
-
-        <!-- ================= DASHBOARD ================= -->
-        <section id="dashboardSection" class="content-section active">
-
-            <div class="section-title">
-                <h2>Student Dashboard</h2>
-                <p>
-                    Access Study Material, Assignments & Learning Resources
-                </p>
-            </div>
-
-            <div class="dashboard-grid">
-
-                <!-- Download Notes -->
-                <div class="dashboard-card">
-
-                    <i class="fa-solid fa-download"></i>
-
-                    <h3>Download Notes</h3>
-
-                    <p>
-                        Access PDF notes, handwritten material and study resources.
-                    </p>
-
-                    <button class="primary-btn">
-                        Open
-                    </button>
-
-                </div>
-
-                <!-- Watch Videos -->
-                <div class="dashboard-card">
-
-                    <i class="fa-solid fa-play"></i>
-
-                    <h3>Watch Videos</h3>
-
-                    <p>
-                        Watch recorded lectures and video tutorials anytime.
-                    </p>
-
-                    <button class="primary-btn">
-                        Watch
-                    </button>
-
-                </div>
-
-                <!-- Assignments -->
-                <div class="dashboard-card">
-
-                    <i class="fa-solid fa-book"></i>
-
-                    <h3>Assignments</h3>
-
-                    <p>
-                        View and submit assignments provided by faculty members.
-                    </p>
-
-                    <button class="primary-btn">
-                        View
-                    </button>
-
-                </div>
-
-                <!-- Attendance -->
-                <div class="dashboard-card">
-
-                    <i class="fa-solid fa-user-check"></i>
-
-                    <h3>Attendance</h3>
-
-                    <p>
-                        Check attendance percentage and monthly attendance report.
-                    </p>
-
-                    <button class="primary-btn">
-                        Check
-                    </button>
-
-                </div>
-
-                <!-- Test Series -->
-                <div class="dashboard-card">
-
-                    <i class="fa-solid fa-clipboard-question"></i>
-
-                    <h3>Online Tests</h3>
-
-                    <p>
-                        Attempt online quizzes, mock tests and practice exams.
-                    </p>
-
-                    <button class="primary-btn">
-                        Start
-                    </button>
-
-                </div>
-
-                <!-- Results -->
-                <div class="dashboard-card">
-
-                    <i class="fa-solid fa-chart-column"></i>
-
-                    <h3>Results</h3>
-
-                    <p>
-                        Analyze your academic progress and exam performance.
-                    </p>
-
-                    <button class="primary-btn">
-                        Open
-                    </button>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- ================= NOTES ================= -->
-        <section id="notesSection"
-        class="content-section">
-
-            <div class="section-title">
-                <h2>Study Notes</h2>
-                <p>Download study materials and PDFs</p>
-            </div>
-
-            <div class="dashboard-grid">
-
-                <div class="dashboard-card">
-                    <i class="fa-solid fa-file-pdf"></i>
-                    <h3>Physics Notes</h3>
-                    <p>Complete chapter wise notes.</p>
-                    <button class="primary-btn">Download</button>
-                </div>
-
-                <div class="dashboard-card">
-                    <i class="fa-solid fa-file-lines"></i>
-                    <h3>Math Notes</h3>
-                    <p>Important formulas and concepts.</p>
-                    <button class="primary-btn">Download</button>
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- ================= VIDEOS ================= -->
-        <section id="videoSection"
-        class="content-section">
-
-            <div class="section-title">
-                <h2>Video Lectures</h2>
-                <p>Watch recorded classroom sessions</p>
-            </div>
-
-            <div class="dashboard-grid">
-
-                <div class="dashboard-card">
-                    <i class="fa-solid fa-circle-play"></i>
-                    <h3>Physics Lecture</h3>
-                    <p>Concept based recorded sessions.</p>
-                    <button class="primary-btn">Play</button>
-                </div>
-
-                <div class="dashboard-card">
-                    <i class="fa-solid fa-video"></i>
-                    <h3>Programming Lecture</h3>
-                    <p>Technical course video tutorials.</p>
-                    <button class="primary-btn">Watch</button>
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- ================= ASSIGNMENTS ================= -->
-        <section id="assignmentSection" class="content-section">
-
-            <div class="section-title">
-                <h2>Assignments</h2>
-                <p>Practice and submit assignments</p>
-            </div>
-
-            <div class="dashboard-grid">
-
-                <div class="dashboard-card">
-                    <i class="fa-solid fa-book-open"></i>
-                    <h3>Assignment 1</h3>
-                    <p>Mathematics practice assignment.</p>
-                    <button class="primary-btn">Open</button>
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- ================= ATTENDANCE ================= -->
-        <section id="attendanceSection" class="content-section">
-
-            <div class="section-title">
-                <h2>Attendance Report</h2>
-                <p>Track monthly attendance records</p>
-            </div>
-
-            <div class="dashboard-grid">
-
-                <div class="dashboard-card">
-                    <i class="fa-solid fa-user-check"></i>
-                    <h3>Current Attendance</h3>
-                    <p>Overall attendance performance.</p>
-                    <button class="primary-btn">View</button>
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- ================= TEST ================= -->
-        <section id="testSection" class="content-section">
-
-            <div class="section-title">
-                <h2>Online Tests</h2>
-                <p>Mock tests and quizzes</p>
-            </div>
-
-            <div class="dashboard-grid">
-
-                <div class="dashboard-card">
-                    <i class="fa-solid fa-laptop-file"></i>
-                    <h3>Mock Test</h3>
-                    <p>Competitive exam test series.</p>
-                    <button class="primary-btn">Start</button>
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- ================= RESULTS ================= -->
-        <section id="resultSection"
-        class="content-section">
-
-            <div class="section-title">
-                <h2>Academic Results</h2>
-                <p>Performance analytics and reports</p>
-            </div>
-
-            <div class="dashboard-grid">
-
-                <div class="dashboard-card">
-                    <i class="fa-solid fa-chart-line"></i>
-                    <h3>Performance Report</h3>
-                    <p>Analyze overall academic performance.</p>
-                    <button class="primary-btn">Open</button>
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-</div>
-
-<!-- ================= FOOTER ================= -->
-<footer>
-
-<h3>Future Path EduTech Institute</h3>
-
-<p>Academic • Competitive • Technical Education</p>
-
-<p>Email: avinash.nha@gmail.com</p>
-
-<p>Contact: +91 9936698578</p>
-
-<p>© 2026 All Rights Reserved</p>
-
-</footer>
-
-<!-- ================= JS ================= -->
-<script>
-
-/* ================= MENU ================= */
-
-function toggleMenu() {
-
-document
-.getElementById("dropdownMenu")
-.classList
-.toggle("active");
-
-}
-
-document.addEventListener("click", function(e){
-
-let menu =
-document.getElementById("dropdownMenu");
-
-let btn =
-document.querySelector(".menu-toggle");
-
-if (
-menu &&
-btn &&
-!menu.contains(e.target) &&
-!btn.contains(e.target)
-){
-
-menu.classList.remove("active");
-
-}
-
-});
-
-/* ================= SIDEBAR ================= */
-
-function toggleSidebar(){
-
-document
-.getElementById("sidebar")
-.classList
-.toggle("collapsed");
-
-document
-.getElementById("toggleIcon")
-.classList
-.toggle("fa-chevron-right");
-
-}
-
-/* ================= SECTION ================= */
-
-function showSection(id, button){
-
-document
-.querySelectorAll(".content-section")
-.forEach(section => {
-
-section.classList.remove("active");
-
-});
-
-document
-.getElementById(id)
-.classList.add("active");
-
-document
-.querySelectorAll(".side-btn")
-.forEach(btn => {
-
-btn.classList.remove("active");
-
-});
-
-button.classList.add("active");
-
-}
-
-/* ================= LIVE CLOCK ================= */
-
-function startClock(){
-
-function updateClock(){
-
-const now = new Date();
-
-const time =
-now.toLocaleTimeString();
-
-document
-.getElementById("liveClock")
-.innerHTML = time;
-
-}
-
-updateClock();
-
-setInterval(updateClock, 1000);
-
-}
-
-/* ================= LOGOUT ================= */
-
-function logout(){
-
-localStorage.clear();
-
-window.location.href = "login.html";
-
-}
-
-</script>
-
-<script src="js/auth.js"></script>
-<script src="js/sidebar.js"></script>
-<script src="js/api.js"></script>
-<script src="js/login.js"></script>
+    <script src="./js/student_portal.js"></script>
 
 </body>
+
 </html>

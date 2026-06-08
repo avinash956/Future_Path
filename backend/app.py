@@ -12,7 +12,6 @@ from extensions import mongo, bcrypt, jwt
 from routes.auth_routes import auth_bp
 from routes.dashboard_routes import dashboard_bp
 from routes.ai_routes import ai_bp as ai_routes_bp
-from routes.ai_chatbot_routes import ai_bp as ai_chatbot_bp
 from routes.contact_routes import contact_bp
 from routes.about_routes import about_bp
 from routes.media_routes import media_bp
@@ -25,7 +24,7 @@ from routes.management_portal_routes import management_portal_bp
 from routes.notes_video_routes import notes_video_bp
 from routes.live_streaming_routes import live_bp
 from routes.faculty_portal_routes import faculty_portal_bp
-
+from routes.student_portal_routes import student_portal_bp
 
 # ======================
 # APP FACTORY
@@ -63,12 +62,12 @@ def create_app():
         methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
     )
 
-    @app.after_request
-    def after_request(response):
-        response.headers.add("Access-Control-Allow-Origin", "*")
-        response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
-        response.headers.add("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS")
-        return response
+    # @app.after_request
+    # def after_request(response):
+    #     response.headers.add("Access-Control-Allow-Origin", "*")
+    #     response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+    #     response.headers.add("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS")
+    #     return response
 
     # INIT EXTENSIONS (ONLY ONCE)
     mongo.init_app(app)
@@ -118,7 +117,6 @@ def create_app():
     app.register_blueprint(faculty_bp, url_prefix="/api/faculty")
     app.register_blueprint(dashboard_bp, url_prefix="/api/dashboard")
     app.register_blueprint(ai_routes_bp, url_prefix="/api/ai")
-    app.register_blueprint(ai_chatbot_bp, url_prefix="/api")
     app.register_blueprint(contact_bp, url_prefix="/api/contact")
     app.register_blueprint(about_bp, url_prefix="/api/about")
     app.register_blueprint(media_bp, url_prefix="/api/media")
@@ -128,6 +126,7 @@ def create_app():
     app.register_blueprint(management_portal_bp, url_prefix="/api/management_portal")
     app.register_blueprint(notes_video_bp, url_prefix="/api/materials")
     app.register_blueprint(faculty_portal_bp, url_prefix="/api/faculty_portal")
+    app.register_blueprint(student_portal_bp, url_prefix="/api/student_portal")
     
     # ✅ LIVE STREAM FIXED
     app.register_blueprint(live_bp, url_prefix="/api/live")

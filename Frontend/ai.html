@@ -15,10 +15,22 @@ content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="css/index.css">
 <link rel="stylesheet" href="css/ai.css">
 
+<!-- FONT AWESOME -->
 <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- INTER FONT -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<!-- KATEX -->
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 
 </head>
 
@@ -281,261 +293,69 @@ Contact:
 </footer>
 
 <!-- ================= SCRIPTS ================= -->
+<!-- ================= SCRIPTS ================= -->
+
 <script src="js/auth.js"></script>
+
+<!-- MARKDOWN -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script src="js/api.js"></script>
 
 <script src="js/sidebar.js"></script>
 
-<script>
-
-/* =========================
-MENU TOGGLE
-========================= */
-
-function toggleMenu(){
-
-document
-.getElementById(
-"dropdownMenu"
-)
-.classList.toggle(
-"active"
-);
-
-}
-
-/* =========================
-CLOSE DROPDOWN
-========================= */
-
-document.addEventListener(
-"click",
-function(e){
-
-const menu =
-document.getElementById(
-"dropdownMenu"
-);
-
-const btn =
-document.querySelector(
-".menu-toggle"
-);
-
-if(
-menu &&
-btn &&
-!menu.contains(e.target) &&
-!btn.contains(e.target)
-){
-
-menu.classList.remove(
-"active"
-);
-
-}
-
-});
-
-/* =========================
-LOGOUT
-========================= */
-
-function logout(){
-
-localStorage.clear();
-
-window.location.href =
-"login.html";
-
-}
-
-/* =========================
-SAVE HISTORY
-========================= */
-
-function saveHistory(text){
-
-if(!text.trim()) return;
-
-let history =
-JSON.parse(
-localStorage.getItem(
-"aiHistory"
-)
-) || [];
-
-/* REMOVE DUPLICATES */
-if(!history.includes(text)){
-
-history.unshift(text);
-
-localStorage.setItem(
-"aiHistory",
-JSON.stringify(history)
-);
-
-loadChatHistory();
-
-}
-
-}
-
-/* =========================
-LOAD HISTORY
-========================= */
-
-function loadChatHistory(){
-
-let history =
-JSON.parse(
-localStorage.getItem(
-"aiHistory"
-)
-) || [];
-
-const list =
-document.getElementById(
-"historyList"
-);
-
-list.innerHTML = "";
-
-history.forEach(item => {
-
-const div =
-document.createElement(
-"div"
-);
-
-div.className =
-"history-item";
-
-div.innerText =
-item;
-
-div.title =
-item;
-
-div.style.cursor =
-"pointer";
-
-div.style.padding =
-"10px";
-
-div.style.marginBottom =
-"8px";
-
-div.style.background =
-"#1e2d40";
-
-div.style.color =
-"#fff";
-
-div.style.borderRadius =
-"8px";
-
-div.onclick = () => {
-
-const input =
-document.getElementById(
-"query"
-);
-
-input.value =
-item;
-
-input.focus();
-
-};
-
-list.appendChild(div);
-
-});
-
-}
-
-/* =========================
-CLEAR HISTORY
-========================= */
-
-function clearHistory(){
-
-if(
-confirm(
-"Clear complete AI history?"
-)
-){
-
-localStorage.removeItem(
-"aiHistory"
-);
-
-loadChatHistory();
-
-}
-
-}
-
-/* =========================
-DOWNLOAD PDF
-========================= */
-
-function downloadPDF(){
-
-const { jsPDF } =
-window.jspdf;
-
-const doc =
-new jsPDF();
-
-const chatBox =
-document.getElementById(
-"chatBox"
-);
-
-let textArray = [];
-
-chatBox
-.querySelectorAll('.msg')
-.forEach(msg => {
-
-const prefix =
-msg.classList.contains(
-'user'
-)
-? 'User: '
-: 'AI: ';
-
-textArray.push(
-prefix + msg.innerText
-);
-
-});
-
-const fullText =
-textArray.join("\n\n");
-
-const splitText =
-doc.splitTextToSize(
-fullText,
-180
-);
-
-doc.text(
-splitText,
-10,
-10
-);
-
-doc.save(
-"AI_Chat.pdf"
-);
-
-}
-
+<!-- KATEX -->
+<script defer
+src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js">
 </script>
 
+<script defer
+src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- Place this inside your HTML <head> or right before your closing </body> tag -->
+<script src="https://cloudflare.com"></script>
+
+<script>
+
+document.addEventListener(
+"DOMContentLoaded",
+() => {
+
+    if (
+        typeof renderMathInElement !==
+        "undefined"
+    ) {
+
+        renderMathInElement(
+            document.body,
+            {
+
+                delimiters: [
+
+                    {
+                        left: "$$",
+                        right: "$$",
+                        display: true
+                    },
+
+                    {
+                        left: "$",
+                        right: "$",
+                        display: false
+                    }
+
+                ],
+
+                throwOnError: false
+
+            }
+        );
+
+    }
+
+});
+
+</script>
 </body>
 </html>

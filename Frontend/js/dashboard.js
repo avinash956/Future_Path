@@ -144,59 +144,6 @@ if (currentPage.includes("dashboard.html")) {
   window.addEventListener("DOMContentLoaded", loadDashboardStats);
 }
 
-
-// // ======================================
-// // MEDIA UPLOAD (SAFE)
-// // ======================================
-
-// async function uploadMedia(formData) {
-
-//   try {
-
-//     if (!isValidToken(token)) {
-//       safeRedirect("Session expired");
-//       return;
-//     }
-
-//     const res = await fetch(`${window.BASE_URL}/media/upload`, {
-//       method: "POST",
-//       headers: {
-//         "Authorization": `Bearer ${token}`
-//       },
-//       body: formData
-//     });
-
-//     const text = await res.text();
-
-//     console.log("📨 Upload Response:", text);
-
-//     let data;
-
-//     try {
-//       data = JSON.parse(text);
-//     } catch {
-//       alert("Invalid server response");
-//       return;
-//     }
-
-//     if (!res.ok) {
-//       alert(data.message || "Upload failed");
-//       return;
-//     }
-
-//     alert("Media uploaded successfully!");
-
-//     return data;
-
-//   } catch (err) {
-
-//     console.error("❌ Media upload error:", err);
-
-//     alert("Server error during media upload");
-//   }
-// }
-
-
 // ======================================
 // QUICK ACTIONS
 // ======================================
@@ -218,8 +165,84 @@ function initializeDashboard() {
   protect('admin');
   loadSection('home');
 }
+// ======================================
+//   Load Dashboard Home page by default
+// ======================================
+async function loadDashboard() {
 
+    try {
 
+        const res = await fetch(
+            `${window.BASE_URL}/dashboard/admin-overview`,
+            {
+                headers: {
+                    Authorization:
+                    `Bearer ${localStorage.getItem("token")}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        console.log(data);
+
+        if (!data.success) {
+            return;
+        }
+
+        document.getElementById(
+            "adminWelcome"
+        ).innerText =
+        `Welcome ${data.adminName} 👋`;
+
+        document.getElementById(
+            "totalStudents"
+        ).innerText =
+        data.stats.students || 0;
+
+        document.getElementById(
+            "totalFaculty"
+        ).innerText =
+        data.stats.faculty || 0;
+
+        document.getElementById(
+            "totalManagement"
+        ).innerText =
+        data.stats.management || 0;
+
+        document.getElementById(
+            "totalBatches"
+        ).innerText =
+        data.stats.batches || 0;
+
+        document.getElementById(
+            "totalRevenue"
+        ).innerText =
+        `₹${Number(
+            data.stats.revenue || 0
+        ).toLocaleString()}`;
+
+        document.getElementById(
+            "pendingFees"
+        ).innerText =
+        `₹${Number(
+            data.stats.pending || 0
+        ).toLocaleString()}`;
+
+        document.getElementById(
+            "thoughtText"
+        ).innerText =
+        data.thought;
+
+    } catch (err) {
+
+        console.error(
+            "Dashboard Load Error:",
+            err
+        );
+
+    }
+}
 // ======================================
 // MENU TOGGLE
 // ======================================
@@ -528,10 +551,10 @@ function navigateTo(page) {
 
 // ============Global Scope Functions (for sections to call)===========
 window.initializeDashboard = initializeDashboard;
+window.onload = loadDashboard;
 window.loadSection = loadSection;
 window.toggleMenu = toggleMenu;
 window.logout = logout;
 window.navigateTo = navigateTo;
-
 window.loadSection = loadSection;
 

@@ -295,3 +295,4 @@ def live_attendance(live_id):
 
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
+    

@@ -1,3 +1,33 @@
+/* =========================================
+   MENU TOGGLE
+========================================= */
+
+function toggleMenu() {
+
+  document
+    .getElementById("dropdownMenu")
+    .classList.toggle("active");
+}
+
+document.addEventListener("click", function(e){
+
+  let menu =
+    document.getElementById("dropdownMenu");
+
+  let btn =
+    document.querySelector(".menu-toggle");
+
+  if (
+    menu &&
+    btn &&
+    !menu.contains(e.target) &&
+    !btn.contains(e.target)
+  ) {
+    menu.classList.remove("active");
+  }
+
+});
+
 // =====================================
 // FUTURE PATH - ADVANCED SIDEBAR SYSTEM
 // =====================================
