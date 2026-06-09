@@ -11,6 +11,7 @@ from extensions import mongo, bcrypt, jwt
 # ======================
 from routes.auth_routes import auth_bp
 from routes.dashboard_routes import dashboard_bp
+from routes.achievement_routes import achievement_bp
 from routes.ai_routes import ai_bp as ai_routes_bp
 from routes.contact_routes import contact_bp
 from routes.about_routes import about_bp
@@ -113,6 +114,7 @@ def create_app():
     # REGISTER BLUEPRINTS
     # ======================
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
+    app.register_blueprint(achievement_bp, url_prefix="/api/achievements")
     app.register_blueprint(student_bp, url_prefix="/api/student")
     app.register_blueprint(faculty_bp, url_prefix="/api/faculty")
     app.register_blueprint(dashboard_bp, url_prefix="/api/dashboard")

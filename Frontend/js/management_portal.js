@@ -1,42 +1,20 @@
 // ======================================
-// MANAGEMENT SECURITY + SYSTEM CONTROL
+// MANAGEMENT PORTAL CORE CONTROLLER (UPDATED)
 // ======================================
 
 window.BASE_URL = window.BASE_URL || "http://127.0.0.1:5000";
 
+// ==========================
+// AUTH DATA
+// ==========================
 const token = localStorage.getItem("token");
 const role = localStorage.getItem("role");
 const name = localStorage.getItem("name");
 const currentPage = window.location.pathname.toLowerCase();
 
-// ==============================================================
-// GLOBAL AUTH FETCH to connect portal page to sections pages
-// ===============================================================
-
-window.authFetch = async function(url, options = {}) {
-
-    const token = localStorage.getItem("token");
-
-    const headers = {
-        ...(options.headers || {}),
-        Authorization: `Bearer ${token}`
-    };
-
-    return fetch(url, {
-        ...options,
-        headers
-    });
-};
-// ==============================================================
-// ==============================================================
-console.log("🔐 Token:", token);
-console.log("👤 Role:", role);
-
-
-// ======================================
-// SAFE TOKEN CHECK (FIXED)
-// ======================================
-
+// ==========================
+// TOKEN VALIDATION
+// ==========================
 function isValidToken(t) {
   return t && t !== "undefined" && t !== "null";
 }
@@ -46,346 +24,236 @@ function safeRedirect(msg) {
   window.location.href = "login.html";
 }
 
+// FORCE LOGIN CHECK
 if (!isValidToken(token)) {
   safeRedirect("Please Login First");
 }
 
-
-// ======================================
-// ROLE BASED SECURITY (SAFE FIX)
-// ======================================
-
-if (currentPage.includes("management_portal.html")) {
-  if (role !== "management" && role !== "admin") {
-    safeRedirect("Management Access Required");
-  }
+// ROLE CHECK
+if (role !== "management" && role !== "admin") {
+  safeRedirect("Management Access Required");
 }
 
-// ======================================
-// PROTECT FUNCTION (UNCHANGED STYLE)
-// ======================================
+// ==========================
+// GLOBAL AUTH FETCH
+// ==========================
+window.authFetch = async function (url, options = {}) {
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...(options.headers || {}),
+      Authorization: `Bearer ${token}`
+    }
+  });
+};
 
-function protect(requiredRole) {
-  if (!isValidToken(token)) {
-    safeRedirect("Please Login First");
-    return;
-  }
-
-  if (role !== requiredRole && role !== "management" && role !== "admin") {
-    safeRedirect("Access Denied");
-  }
-}
-
-
-// ======================================
+// ==========================
 // LOGOUT
-// ======================================
-
+// ==========================
 function logout() {
   localStorage.clear();
   window.location.href = "login.html";
 }
 
-
-// ======================================
-// MANAGEMENT STATS (FIXED SAFE CALL)
-// ======================================
-
+// ==========================
+// LOAD DASHBOARD STATS
+// ==========================
 async function loadManagementDashboard() {
-
   try {
-
-    console.log("📡 Loading management stats...");
-
-    if (!isValidToken(token)) return;
 
     const res = await fetch(`${window.BASE_URL}/management_portal/stats`, {
       method: "GET",
       headers: {
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       }
     });
 
-    console.log("📡 Status:", res.status);
-
-    const text = await res.text();
-    console.log("📨 RAW RESPONSE:", text);
-
-    let data;
-
-    try {
-      data = JSON.parse(text);
-    } catch (e) {
-      console.error("❌ Invalid JSON:", text);
-      return;
-    }
+    const data = await res.json();
+    console.log("📊 STATS RESPONSE:", data);
 
     if (!res.ok) {
-      console.error("❌ Management Dashboard Error:", data.message || data);
+      console.error("Stats API failed:", res.status);
       return;
     }
 
-    document.getElementById("studentCount") &&
-      (document.getElementById("studentCount").innerText = data.students || 0);
+    // STUDENTS
+    const studentEl = document.getElementById("studentCount");
+    if (studentEl) studentEl.innerText = data.students || 0;
 
-    document.getElementById("facultyCount") &&
-      (document.getElementById("facultyCount").innerText = data.faculty || 0);
+    // FACULTY
+    const facultyEl = document.getElementById("facultyCount");
+    if (facultyEl) facultyEl.innerText = data.faculty || 0;
 
-    document.getElementById("userCount") &&
-      (document.getElementById("userCount").innerText = data.users || 0);
+    // BATCHES
+    const batchEl = document.getElementById("batchCount");
+    if (batchEl) batchEl.innerText = data.batches || 0;
+
+    // ACTIVE INFO (optional use)
+    const activeStudentEl = document.getElementById("activeStudentCount");
+    if (activeStudentEl) activeStudentEl.innerText = data.active_students || 0;
+
+    const activeFacultyEl = document.getElementById("activeFacultyCount");
+    if (activeFacultyEl) activeFacultyEl.innerText = data.active_faculty || 0;
+
+    // ==========================
+    // MANAGEMENT COUNT (FIXED SAFE LOGIC)
+    // ==========================
+    const userEl = document.getElementById("userCount");
+
+    const managementCount =
+      data.management ??
+      data.users ??
+      data.admin ??
+      data.admins ??
+      0;
+
+    if (userEl) userEl.innerText = managementCount;
 
   } catch (err) {
-
-    console.error("❌ Management Dashboard API failed:", err);
-
+    console.error("Dashboard load error:", err);
   }
 }
 
-
-// ======================================
-// AUTO LOAD DASHBOARD
-// ======================================
-
-if (currentPage.includes("management_portal.html")) {
-  window.addEventListener("DOMContentLoaded", loadManagementDashboard);
-}
-
-
-// ======================================
-// MEDIA UPLOAD (SAFE)
-// ======================================
-
-async function uploadMedia(formData) {
-
-  try {
-
-    if (!isValidToken(token)) {
-      safeRedirect("Session expired");
-      return;
-    }
-
-    const res = await fetch(`${window.BASE_URL}/media/upload`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      },
-      body: formData
-    });
-
-    const text = await res.text();
-
-    console.log("📨 Upload Response:", text);
-
-    let data;
-
-    try {
-      data = JSON.parse(text);
-    } catch {
-      alert("Invalid server response");
-      return;
-    }
-
-    if (!res.ok) {
-      alert(data.message || "Upload failed");
-      return;
-    }
-
-    alert("Media uploaded successfully!");
-
-    return data;
-
-  } catch (err) {
-
-    console.error("❌ Media upload error:", err);
-
-    alert("Server error during media upload");
-  }
-}
-
-
-// ======================================
-// QUICK ACTIONS
-// ======================================
-
-function openProfile() {
-  alert("Profile feature can be connected later");
-}
-
-function uploadPhoto() {
-  alert("Connect this with /api/media/upload route");
-}
-
-
-// ======================================
-// INITIALIZE DASHBOARD
-// ======================================
-
-function initializeDashboard() {
-  protect('admin');
-  loadSection('management');
-}
-
-
-// ======================================
-// MENU TOGGLE
-// ======================================
-
-function toggleMenu() {
-
-  const dropdown = document.getElementById('dropdownMenu');
-
-  dropdown?.classList.toggle('active');
-
-}
-
-// ======================================
-// CLOSE MENU OUTSIDE CLICK
-// ======================================
-
-document.addEventListener("click", function (e) {
-
-  const menu = document.getElementById("dropdownMenu");
-
-  const btn = document.querySelector(".menu-toggle");
-
-  if (
-    menu &&
-    btn &&
-    !menu.contains(e.target) &&
-    !btn.contains(e.target)
-  ) {
-    menu.classList.remove("active");
-  }
-
-});
-
-// ======================================
-// LOAD SECTION
-// ======================================
-
+// ==========================
+// LOAD SECTION SYSTEM
+// ==========================
 async function loadSection(section) {
 
-  console.log("📂 Requested Section:", section);
-
-  if (!isValidToken(token)) {
-    safeRedirect("Session expired");
-    return;
-  }
-
-  const container = document.getElementById('dynamicContent');
+  const container = document.getElementById("dynamicContent");
 
   if (!container) {
-    console.error("❌ dynamicContent container not found");
+    console.error("dynamicContent not found");
     return;
   }
 
-  // ======================================
-  // ACTIVE SIDEBAR BUTTON
-  // ======================================
-
-  document.querySelectorAll(".side-btn")
-    .forEach(btn => btn.classList.remove("active"));
-
-  const activeBtn = Array.from(
-    document.querySelectorAll(".side-btn")
-  ).find(btn =>
-    btn.getAttribute("onclick")?.includes(section)
+  // ACTIVE BUTTON UI
+  document.querySelectorAll(".side-btn").forEach(btn =>
+    btn.classList.remove("active")
   );
+
+  const activeBtn = Array.from(document.querySelectorAll(".side-btn"))
+    .find(btn => btn.getAttribute("onclick")?.includes(section));
 
   activeBtn?.classList.add("active");
 
-  // ======================================
+  // ==========================
+  // HOME DASHBOARD
+  // ==========================
+  if (section === "home") {
+
+    container.innerHTML = `
+      <div class="dashboard-home">
+
+        <h2 id="greetingText">👋 Welcome</h2>
+
+        <div class="stats-grid">
+
+          <div class="stat-card">
+            <i class="fa-solid fa-user-graduate"></i>
+            <h3>Total Students</h3>
+            <p id="studentCount">0</p>
+          </div>
+
+          <div class="stat-card">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            <h3>Total Faculty</h3>
+            <p id="facultyCount">0</p>
+          </div>
+
+          <div class="stat-card">
+            <i class="fa-solid fa-user-tie"></i>
+            <h3>Total Management</h3>
+            <p id="userCount">0</p>
+          </div>
+
+          <div class="stat-card">
+            <i class="fa-solid fa-layer-group"></i>
+            <h3>Total Batches</h3>
+            <p id="batchCount">0</p>
+          </div>
+
+        </div>
+
+      </div>
+    `;
+
+    const greet = document.getElementById("greetingText");
+    if (greet) {
+      greet.innerText = `👋 Welcome, ${name || "Admin"}`;
+    }
+
+    loadManagementDashboard();
+    return;
+  }
+
+  // ==========================
   // FACULTY / STUDENT / BATCH
-  // ======================================
-
-  if (['faculty', 'student', 'batch'].includes(section)) {
-
+  // ==========================
+  if (["faculty", "student", "batch"].includes(section)) {
     try {
+      const res = await fetch(`sections/${section}.html`);
 
-      console.log(`📂 Loading ${section} section...`);
+      if (!res.ok) throw new Error("Missing section file");
 
-      const response = await fetch(`sections/${section}.html`);
-
-      if (!response.ok) {
-        throw new Error(`Missing ${section}.html`);
-      }
-
-      const html = await response.text();
-
+      const html = await res.text();
       container.innerHTML = html;
 
-      console.log(`✅ ${section}.html loaded into DOM`);
-      
-      if (section === 'faculty' && typeof initializeFaculty === 'function') {
-        console.log("🔥 MANAGEMENT.JS CALLING initializeFaculty");
-        initializeFaculty();
-      }
-
-      if (section === 'student' && typeof initializeStudent === 'function') {
-        console.log("🎓 Initializing Student Module...");
-        initializeStudent();
-      }
-
-      if (section === 'batch' && typeof initializeBatch === 'function') {
-        console.log("🧩 Initializing Batch Module...");
-        initializeBatch();
-      }
-
     } catch (err) {
-
-      console.error("❌ Section Load Error:", err);
-
-      container.innerHTML = `
-        <div style="color:red;padding:20px;">
-          Failed to load section
-        </div>
-      `;
+      console.error(err);
+      container.innerHTML = `<p style="color:red;">Failed to load ${section}</p>`;
     }
+    return;
   }
 
-  // ======================================
-  // FEES SECTION (FIXED PLACEMENT)
-  // ======================================
-
-  else if (section === 'fees') {
-
+  // ==========================
+  // FEES SECTION
+  // ==========================
+  if (section === "fees") {
     try {
+      const res = await fetch("sections/fees.html");
 
-      console.log("📂 Loading fees section...");
+      if (!res.ok) throw new Error("Missing fees.html");
 
-      const response = await fetch('sections/fees.html');
-
-      if (!response.ok) {
-        throw new Error("Missing fees.html");
-      }
-
-      const html = await response.text();
-
+      const html = await res.text();
       container.innerHTML = html;
 
-      console.log("✅ fees.html loaded into DOM");
-
-      if (typeof initializeFees === "function") {
-        console.log("💰 Initializing Fees Module...");
-        initializeFees();
-      }
-
     } catch (err) {
-
-      console.error("❌ Fees Load Error:", err);
-
-      container.innerHTML = `
-        <div style="color:red;padding:20px;">
-          Failed to load Fees section
-        </div>
-      `;
+      console.error(err);
+      container.innerHTML = `<p style="color:red;">Failed to load fees section</p>`;
     }
+    return;
   }
+
+  container.innerHTML = `<p>Section not found</p>`;
 }
-// ======================================
-// NAVIGATION
-// ======================================
 
+// ==========================
+// AUTO LOAD HOME
+// ==========================
+window.addEventListener("DOMContentLoaded", () => {
+  loadSection("home");
+});
+
+// ==========================
+// MENU TOGGLE
+// ==========================
+function toggleMenu() {
+  document.getElementById("dropdownMenu")?.classList.toggle("active");
+}
+
+// CLOSE MENU OUTSIDE CLICK
+document.addEventListener("click", function (e) {
+  const menu = document.getElementById("dropdownMenu");
+  const btn = document.querySelector(".menu-toggle");
+
+  if (menu && btn && !menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.remove("active");
+  }
+});
+
+// ==========================
+// NAVIGATION HELPER
+// ==========================
 function navigateTo(page) {
   window.location.href = page;
 }

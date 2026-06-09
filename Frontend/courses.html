@@ -2,104 +2,47 @@
 <html lang="en">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Courses | Future Path EduTech Institute</title>
 
-<!-- <link rel="stylesheet" href="css/style.css"> -->
-<link rel="stylesheet" href="css/sidebar.css">
 <link rel="stylesheet" href="css/index.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/sidebar.css">
 
-<style>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-body{
-background:#899eb4;
-}
-
-.courses-page{
-padding:120px 8% 80px;
-}
-
-.course-detail-card{
-background:white;
-border-radius:22px;
-padding:25px;
-margin-bottom:30px;
-box-shadow:0 8px 25px rgba(0,0,0,0.08);
-overflow:hidden;
-}
-
-.course-header{
-display:flex;
-align-items:center;
-justify-content:space-between;
-cursor:pointer;
-gap:20px;
-}
-
-.course-header h2{
-color:#0f172a;
-}
-
-.course-header i{
-font-size:32px;
-color:#2563eb;
-}
-
-.slide-content{
-max-height:0;
-overflow:hidden;
-transition:0.5s ease;
-}
-
-.slide-content.active{
-max-height:1200px;
-margin-top:25px;
-}
-
-.slide-content img{
-width:100%;
-height:320px;
-object-fit:cover;
-border-radius:18px;
-margin-bottom:25px;
-}
-
-.course-list{
-line-height:2;
-color:#334155;
-font-size:17px;
-}
-
-.highlight{
-font-weight:700;
-color:#2563eb;
-}
-
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
 
 </head>
 
 <body>
 
+<!-- ================= HEADER ================= -->
+
 <header>
+
 <nav class="navbar">
 
 <div class="logo-container">
+
 <img src="Logo.png" class="logo">
 
 <div class="logo-text">
+
 <h2>Future Path EduTech Institute</h2>
-<p><i>Professional Learning Platform</i></p>
+<p><i>Shaping Future With Smart Learning.....</i></p>
+
 </div>
 
 </div>
 
 <div class="nav-right">
 
-<div id="liveClock" class="live-clock"></div>
+<div class="live-clock" id="liveClock">00:00:00</div>
 
 <div class="menu-toggle" onclick="toggleMenu()">
 <i class="fa-solid fa-bars"></i>
@@ -108,10 +51,24 @@ color:#2563eb;
 <div id="dropdownMenu" class="dropdown-menu">
 
 <div class="menu-group">
+
 <h4>MAIN</h4>
-<a href="index.html">Home</a>
-<a href="gallery.html">Gallery</a>
-<a href="about.html">About</a>
+
+<a href="index.html">
+<i class="fa fa-home"></i>
+Home
+</a>
+
+<a href="about.html">
+<i class="fa fa-user"></i>
+About
+</a>
+
+<a href="gallery.html">
+<i class="fa fa-images"></i>
+Gallery
+</a>
+
 </div>
 
 </div>
@@ -119,145 +76,268 @@ color:#2563eb;
 </div>
 
 </nav>
+
 </header>
 
-<section class="courses-page">
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+<div class="hero-content">
+
+<h1>
+Explore Our
+<span>Professional Courses</span>
+</h1>
+
+<p>
+Industry-Oriented Academic, Competitive and Technical Programs
+designed to build successful careers.
+</p>
+
+<div class="hero-buttons">
+
+<a href="#courses">
+
+<button class="primary-btn">
+Browse Courses
+</button>
+
+</a>
+
+<a href="index.html">
+
+<button class="secondary-btn">
+Back To Home
+</button>
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= COURSES ================= -->
+
+<section id="courses">
 
 <div class="section-title">
-<h2 style="color: rgb(35, 3, 241);">Our Professional Courses</h2>
-<p style="color: #0f172a;">
-Explore Academic, Competitive and Technical Learning Programs.
+
+<h2>Learning Programs</h2>
+
+<p>
+Choose your path and start building your future with expert guidance.
 </p>
+
 </div>
+
+<div class="course-grid">
 
 <!-- Academic -->
-<div class="course-detail-card">
 
-<div class="course-header"
+<div class="course-card">
+
+<img
+src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1200&auto=format&fit=crop"
+class="course-image">
+
+<i class="fa-solid fa-school"></i>
+
+<h3>Academic Education</h3>
+
+<p>
+
+Classes 9th to 12th
+
+<br><br>
+
+CBSE, ICSE,
+UP Board and all major State Boards.
+
+<br><br>
+
+Science • Commerce • Arts
+
+</p>
+
+<button
+class="course-btn"
 onclick="toggleSlide('academicSlide')">
 
-<div>
-<i class="fa-solid fa-school"></i>
-<h2>Academic Courses</h2>
-</div>
+View Details
 
-<i class="fa-solid fa-chevron-down"></i>
-
-</div>
+</button>
 
 <div class="slide-content" id="academicSlide">
 
-<img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1200&auto=format&fit=crop">
-
-<div class="course-list">
+<br>
 
 <p>
-<span class="highlight">Classes Covered:</span>
-9th, 10th, 11th and 12th.
-</p>
 
-<p>
-<span class="highlight">Boards:</span>
-CBSE, ICSE, UP Board, Bihar Board, Maharashtra Board and all State Boards.
-</p>
+✔ Smart Classrooms
 
-<p>
-Science, Commerce and Arts streams available with complete guidance.
-</p>
+<br>
 
-<p>
-Special doubt sessions, smart classrooms, assignments and weekly tests included.
-</p>
+✔ Weekly Tests
 
-</div>
+<br>
+
+✔ Assignments
+
+<br>
+
+✔ Doubt Solving Sessions
+
+<br>
+
+✔ Career Guidance
+
+</p>
 
 </div>
 
 </div>
 
 <!-- Competitive -->
-<div class="course-detail-card">
 
-<div class="course-header"
+<div class="course-card">
+
+<img
+src="https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop"
+class="course-image">
+
+<i class="fa-solid fa-user-graduate"></i>
+
+<h3>Competitive Exams</h3>
+
+<p>
+
+Government & Entrance Exam Preparation
+
+<br><br>
+
+Technical and Non-Technical Streams
+
+</p>
+
+<button
+class="course-btn"
 onclick="toggleSlide('competitiveSlide')">
 
-<div>
-<i class="fa-solid fa-user-graduate"></i>
-<h2>Competitive Exams</h2>
-</div>
+View Details
 
-<i class="fa-solid fa-chevron-down"></i>
-
-</div>
+</button>
 
 <div class="slide-content" id="competitiveSlide">
 
-<img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop">
-
-<div class="course-list">
+<br>
 
 <p>
-Preparation for Central and State Government Exams.
-</p>
 
-<p>
-<span class="highlight">Technical Exams:</span>
-GATE, SSC JE, RRB JE, DRDO, ISRO, BSNL, PSU Exams.
-</p>
+✔ UPSC / State PSC
 
-<p>
-<span class="highlight">Non‑Technical Exams:</span>
-UPSC, SSC CGL, CHSL, Banking, Railway, Police, Teaching and State PCS.
-</p>
+<br>
 
-<p>
-Complete syllabus coverage, mock tests and interview preparation.
-</p>
+✔ SSC
 
-</div>
+<br>
+
+✔ Banking
+
+<br>
+
+✔ Railway
+
+<br>
+
+✔ GATE
+
+<br>
+
+✔ RRB JE
+
+<br>
+
+✔ PSU Exams
+
+</p>
 
 </div>
 
 </div>
 
 <!-- Technical -->
-<div class="course-detail-card">
 
-<div class="course-header"
+<div class="course-card">
+
+<img
+src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200&auto=format&fit=crop"
+class="course-image">
+
+<i class="fa-solid fa-code"></i>
+
+<h3>Technical Courses</h3>
+
+<p>
+
+Industry Focused Skill Development Programs
+
+<br><br>
+
+Programming • Cloud • AI • Office Tools
+
+</p>
+
+<button
+class="course-btn"
 onclick="toggleSlide('technicalSlide')">
 
-<div>
-<i class="fa-solid fa-code"></i>
-<h2>Technical Courses</h2>
-</div>
+View Details
 
-<i class="fa-solid fa-chevron-down"></i>
-
-</div>
+</button>
 
 <div class="slide-content" id="technicalSlide">
 
-<img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200&auto=format&fit=crop">
-
-<div class="course-list">
+<br>
 
 <p>
-<span class="highlight">Software & Development:</span>
-HTML, CSS, JavaScript, Python, Java, C, C++, Full Stack Development.
-</p>
 
-<p>
-<span class="highlight">Advanced Technologies:</span>
-AWS Cloud, AI, IoT, VLSI Design, Embedded Systems, Cyber Security.
-</p>
+✔ HTML
 
-<p>
-<span class="highlight">Professional Skills:</span>
-Microsoft Word, Excel, PowerPoint, Power BI and Office Automation.
-</p>
+<br>
 
-<p>
-Industry projects, certifications and interview preparation included.
+✔ CSS
+
+<br>
+
+✔ JavaScript
+
+<br>
+
+✔ Python
+
+<br>
+
+✔ Java
+
+<br>
+
+✔ AWS Cloud
+
+<br>
+
+✔ AI & Machine Learning
+
+<br>
+
+✔ MS Office
+
+<br>
+
+✔ Power BI
+
 </p>
 
 </div>
@@ -268,27 +348,123 @@ Industry projects, certifications and interview preparation included.
 
 </section>
 
+<!-- ================= WHY CHOOSE US ================= -->
+
+<section class="stats-section">
+
+<div class="section-title">
+
+<h2>Why Choose Future Path?</h2>
+
+<p>
+Focused on quality education, practical learning and career growth.
+</p>
+
+</div>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+
+<h2>🎯</h2>
+
+<p>
+Personalized Learning Approach
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2>💡</h2>
+
+<p>
+Practical Skill Development
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2>🚀</h2>
+
+<p>
+Career Focused Training
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2>🏆</h2>
+
+<p>
+Dedicated Mentorship
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= CONTACT ================= -->
+
+<section class="contact-section">
+
+<div class="section-title">
+
+<h2>Ready To Start?</h2>
+
+<p>
+Join Future Path EduTech Institute and begin your learning journey.
+</p>
+
+</div>
+
+<div style="text-align:center;">
+
+<a href="login.html">
+
+<button class="primary-btn">
+
+Enroll Now
+
+</button>
+
+</a>
+
+</div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+
 <footer>
 
 <h3>Future Path EduTech Institute</h3>
+
 <p>Academic • Competitive • Technical Education</p>
+
 <p>Email: avinash.nha@gmail.com</p>
+
 <p>Contact: +91 9936698578</p>
+
 <p>© 2026 All Rights Reserved</p>
 
 </footer>
 
-<script>
+<script src="js/sidebar.js"></script>
+<script src="js/api.js"></script>
 
-function toggleMenu() {
-  document.getElementById("dropdownMenu").classList.toggle("active");
-}
+<script>
 
 function toggleSlide(id){
 
-const element = document.getElementById(id);
-
-element.classList.toggle('active');
+document
+.getElementById(id)
+.classList
+.toggle("active");
 
 }
 
@@ -296,14 +472,9 @@ function updateClock(){
 
 const now = new Date();
 
-const options = {
-weekday:'short',
-hour:'2-digit',
-minute:'2-digit',
-second:'2-digit'
-};
-
-document.getElementsByClassName('live-clock').innerHTML = now.toLocaleTimeString('en-IN', options);
+document.getElementById("liveClock")
+.innerHTML =
+now.toLocaleTimeString();
 
 }
 
@@ -311,9 +482,6 @@ setInterval(updateClock,1000);
 updateClock();
 
 </script>
-
-<script src="js/sidebar.js"></script>
-<script src="js/api.js"></script>
 
 </body>
 </html>

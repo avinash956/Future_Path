@@ -3,237 +3,200 @@
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Faculty Portal</title>
+<title>Faculty Portal</title>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/sidebar.css">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/live_streaming.css">
-    <link rel="stylesheet" href="css/notes_video.css">
-    <link rel="stylesheet" href="css/faculty_portal.css">
+<!-- CSS -->
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/live_streaming.css">
+<link rel="stylesheet" href="css/notes_video.css">
+<link rel="stylesheet" href="css/faculty_portal.css">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 
 <body onload="loadFacultyDashboard()">
 
-    <!-- ================= PRELOADER ================= -->
+<!-- ================= PRELOADER ================= -->
+<div id="preloader">
+    <div class="loader"></div>
+</div>
 
-    <div id="preloader">
-        <div class="loader"></div>
+<!-- ================= HEADER ================= -->
+<header>
+
+<nav class="navbar">
+
+    <div class="logo-container">
+
+        <img src="Logo.png" class="logo">
+
+        <div class="logo-text">
+            <h2>Faculty Portal</h2>
+            <p><i>Institute Management System</i></p>
+        </div>
+
     </div>
 
-    <!-- ================= HEADER ================= -->
+    <!-- LIVE CLOCK -->
+    <div class="live-clock" id="liveClock"></div>
 
-    <header>
-
-        <nav class="navbar">
-
-            <div class="logo-container">
-
-                <img src="Logo.png" class="logo">
-
-                <div class="logo-text">
-                    <h2>Faculty Portal</h2>
-                    <p><i>Institute Management System</i></p>
-                </div>
-
-            </div>
-
-            <!-- LIVE CLOCK -->
-
-            <div class="live-clock" id="liveClock"></div>
-
-            <!-- HAMBURGER -->
-
-            <div class="menu-toggle" onclick="toggleMenu()">
-                <i class="fa-solid fa-bars"></i>
-            </div>
-
-            <!-- DROPDOWN -->
-
-            <div id="dropdownMenu" class="dropdown-menu">
-
-                <div class="menu-group">
-
-                    <h4>ACCOUNT</h4>
-
-                    <a href="complete-profile.html">
-                        <i class="fa-solid fa-user"></i>
-                        Update Profile
-                    </a>
-
-                    <a href="change-password.html">
-                        <i class="fa-solid fa-key"></i>
-                        Change Password
-                    </a>
-
-                    <a href="#" onclick="logout()">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        Logout
-                    </a>
-
-                </div>
-
-            </div>
-
-        </nav>
-
-    </header>
-
-    <!-- ================= MAIN LAYOUT ================= -->
-
-    <div class="admin-layout">
-
-        <!-- ================= SIDEBAR ================= -->
-
-        <aside class="sidebar" id="sidebar">
-
-            <!-- TOGGLE -->
-
-            <div class="sidebar-toggle" onclick="toggleSidebar()">
-                <i class="fa-solid fa-chevron-left" id="toggleIcon"></i>
-            </div>
-
-            <h3>Faculty Controls</h3>
-
-            <!-- SEARCH -->
-
-            <input
-                type="text"
-                id="menuSearch"
-                class="menu-search"
-                placeholder="Search Menu...">
-
-            <!-- BATCH -->
-
-            <button
-                class="side-btn"
-                data-title="Batch"
-                onclick="loadSection('batch')">
-
-                <i class="fa-solid fa-layer-group"></i>
-                Batch
-
-            </button>
-
-            <!-- STUDENT -->
-
-            <button
-                class="side-btn"
-                data-title="Student"
-                onclick="loadSection('student')">
-
-                <i class="fa-solid fa-user-graduate"></i>
-                Student
-
-            </button>
-
-            <!-- MATERIALS -->
-
-            <button
-                class="side-btn"
-                data-title="Materials"
-                onclick="loadSection('materials')">
-
-                <i class="fa-solid fa-file"></i>
-                Notes / Videos
-
-            </button>
-
-            <!-- LIVE -->
-
-            <button
-                class="side-btn"
-                data-title="Live Streaming"
-                onclick="loadSection('live')">
-
-                <i class="fa-solid fa-video"></i>
-                Live Streaming
-
-            </button>
-
-            <!-- AI -->
-
-            <button
-                class="side-btn"
-                data-title="AI Assist"
-                onclick="window.location.href='ai.html'">
-
-                <i class="fa-solid fa-robot"></i>
-                AI Assist
-
-            </button>
-
-        </aside>
-
-        <!-- ================= WORK AREA ================= -->
-
-        <main
-            class="work-area"
-            style="background:linear-gradient(135deg,#042265,#a746e7);">
-
-            <div id="dynamicContent">
-
-                <!-- Dynamic Content Loaded Here -->
-
-                <div class="welcome-panel">
-
-                    <h2>Faculty Dashboard</h2>
-
-                    <p>
-                        Welcome to Future Path EduTech Institute.
-                    </p>
-
-                    <p>
-                        Select an option from the sidebar to continue.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </main>
+    <!-- HAMBURGER -->
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
     </div>
+
+    <!-- DROPDOWN -->
+    <div id="dropdownMenu" class="dropdown-menu">
+
+        <div class="menu-group">
+
+            <h4>ACCOUNT</h4>
+
+            <a href="profile.html">
+                <i class="fa-solid fa-user"></i>
+                Update Profile
+            </a>
+
+            <a href="change-password.html">
+                <i class="fa-solid fa-key"></i>
+                Change Password
+            </a>
+
+            <a href="#" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+</header>
+
+<!-- ================= MAIN LAYOUT ================= -->
+<div class="admin-layout">
+
+<!-- ================= SIDEBAR ================= -->
+<aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-toggle" onclick="toggleSidebar()">
+        <i class="fa-solid fa-chevron-left" id="toggleIcon"></i>
+    </div>
+
+    <h3>Faculty Controls</h3>
+
+    <input type="text" id="menuSearch" class="menu-search" placeholder="Search Menu...">
+
+    <!-- HOME -->
+    <button class="side-btn" data-title="Home" onclick="loadSection('home')">
+        <i class="fa-solid fa-house"></i>
+        Home
+    </button>
+
+    <!-- BATCH -->
+    <button class="side-btn" data-title="Batch" onclick="loadSection('batch')">
+        <i class="fa-solid fa-layer-group"></i>
+        Batch
+    </button>
+
+    <!-- STUDENT -->
+    <button class="side-btn" data-title="Student" onclick="loadSection('student')">
+        <i class="fa-solid fa-user-graduate"></i>
+        Student
+    </button>
+
+    <!-- MATERIALS -->
+    <button class="side-btn" data-title="Materials" onclick="loadSection('materials')">
+        <i class="fa-solid fa-file"></i>
+        Notes / Videos
+    </button>
+
+    <!-- LIVE -->
+    <button class="side-btn" data-title="Live Streaming" onclick="loadSection('live')">
+        <i class="fa-solid fa-video"></i>
+        Live Streaming
+    </button>
+
+    <!-- AI -->
+    <button class="side-btn" data-title="AI Assist" onclick="window.location.href='ai.html'">
+        <i class="fa-solid fa-robot"></i>
+        AI Assist
+    </button>
+
+</aside>
+
+<!-- ================= WORK AREA ================= -->
+<main class="work-area" style="background:linear-gradient(135deg,#042265,#a746e7);">
+
+    <div id="dynamicContent">
+
+        <!-- DEFAULT HOME DASHBOARD (also replaced by JS) -->
+        <div class="faculty-home">
+
+            <h2 class="greet">👋 Welcome</h2>
+
+            <div class="home-grid">
+
+                <div class="glass-card">
+                    <h3>📚 My Batches</h3>
+                    <div id="homeBatches">Loading...</div>
+                </div>
+
+                <div class="glass-card">
+                    <h3>🎥 Upcoming Live Classes</h3>
+                    <div id="homeLive">Loading...</div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+</div>
+
 <!-- ================= FOOTER ================= -->
+<footer>
 
-    <footer>
+<h3>Future Path EduTech Institute</h3>
 
-        <h3>Future Path EduTech Institute</h3>
+<p>Academic • Competitive • Technical Education</p>
 
-        <p>Academic • Competitive • Technical Education</p>
+<p>Email: avinash.nha@gmail.com</p>
 
-        <p>Email: avinash.nha@gmail.com</p>
+<p>Contact: +91 9936698578</p>
 
-        <p>Contact: +91 9936698578</p>
+<p>© 2026 All Rights Reserved</p>
 
-        <p>© 2026 All Rights Reserved</p>
+</footer>
 
-    </footer>
-    <!-- ================= CORE APP ================= -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="./js/api.js"></script>
-    <script src="./js/auth.js"></script>
+<!-- ================= CORE APP ================= -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-    <!-- ================= UI ================= -->
+<script src="./js/api.js"></script>
+<script src="./js/auth.js"></script>
 
-    <script src="./js/sidebar.js"></script>
+<!-- ================= UI ================= -->
+<script src="./js/sidebar.js"></script>
 
-    <!-- ================= MODULES ================= -->
+<!-- ================= MODULES ================= -->
+<script src="./js/notes_video.js"></script>
+<script src="./js/live_streaming.js"></script>
 
-    <script src="./js/notes_video.js"></script>
-    <script src="./js/live_streaming.js"></script>
-
-    <!-- ================= FACULTY PORTAL ================= -->
-
-    <script src="./js/faculty_portal.js"></script>
+<!-- ================= FACULTY ================= -->
+<script src="./js/faculty_portal.js"></script>
 
 </body>
 

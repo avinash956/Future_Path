@@ -1,0 +1,206 @@
+/* =========================
+   GLOBAL DASHBOARD STYLE
+========================= */
+
+.dashboard-home {
+  padding: 25px;
+  color: white;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* =========================
+   GREETING HEADER
+========================= */
+
+.dashboard-home h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 25px;
+
+  background: linear-gradient(90deg, #ffffff, #b8e7ff, #ffffff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: shine 4s linear infinite;
+}
+
+/* =========================
+   STATS GRID
+========================= */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 22px;
+  margin-top: 10px;
+}
+
+/* =========================
+   GLASS CARD (MAIN DESIGN)
+========================= */
+
+.stat-card {
+  position: relative;
+  padding: 22px;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.25),
+    inset 0 0 15px rgba(255, 255, 255, 0.05);
+
+  text-align: center;
+
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+
+/* =========================
+   HOVER GLOW EFFECT
+========================= */
+
+.stat-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.25),
+    transparent 60%
+  );
+
+  transform: rotate(25deg);
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.stat-card:hover::before {
+  opacity: 1;
+}
+
+.stat-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow:
+    0 15px 45px rgba(0, 0, 0, 0.4),
+    0 0 25px rgba(0, 255, 255, 0.25);
+}
+
+/* =========================
+   ICON STYLE
+========================= */
+
+.stat-card i {
+  font-size: 34px;
+  margin-bottom: 10px;
+
+  background: linear-gradient(135deg, #00e5ff, #8f25eb);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: floatIcon 3s ease-in-out infinite;
+}
+
+/* =========================
+   TITLE
+========================= */
+
+.stat-card h3 {
+  font-size: 15px;
+  margin: 8px 0;
+  opacity: 0.9;
+  letter-spacing: 0.5px;
+}
+
+/* =========================
+   NUMBER COUNTER
+========================= */
+
+.stat-card p {
+  font-size: 26px;
+  font-weight: bold;
+
+  background: linear-gradient(90deg, #ffffff, #00e5ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: popIn 0.8s ease;
+}
+
+/* =========================
+   BACKGROUND FLOAT EFFECT
+========================= */
+
+.dashboard-home::before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0,255,255,0.15), transparent);
+  top: -100px;
+  left: -120px;
+  filter: blur(60px);
+  z-index: 0;
+}
+
+.dashboard-home::after {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(143,37,235,0.15), transparent);
+  bottom: -120px;
+  right: -120px;
+  filter: blur(60px);
+  z-index: 0;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shine {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .stat-card {
+    padding: 18px;
+  }
+
+  .dashboard-home h2 {
+    font-size: 22px;
+  }
+}

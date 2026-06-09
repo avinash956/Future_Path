@@ -1,0 +1,302 @@
+/* =========================================
+   ABOUT PAGE BASE & WORKSPACE AREA
+========================================= */
+.work-area {
+    background: linear-gradient(135deg, #090d16, #111827, #0f172a);
+    min-height: 100vh;
+    color: #f8fafc;
+    padding: 40px;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.content-section {
+    display: none;
+    width: 100%;
+}
+
+.content-section.active {
+    display: block;
+}
+
+/* =========================================
+   HERO
+========================================= */
+.hero-about {
+    background: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(168,85,247,0.12));
+    border: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 50px 40px;
+    text-align: center;
+}
+
+.hero-about h1 {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 18px;
+    background: linear-gradient(to right, #60a5fa, #c084fc, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-about p {
+    max-width: 850px;
+    margin: auto;
+    color: #94a3b8;
+    line-height: 1.7;
+}
+
+/* =========================================
+   GRID
+========================================= */
+.management-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* =========================================
+   PROFILE CARD (VISIBLE OVERFLOW)
+========================================= */
+.profile-card {
+    background: linear-gradient(145deg, rgba(30,41,59,0.6), rgba(15,23,42,0.7));
+    border: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(25px);
+    border-radius: 32px;
+    max-width: 720px;
+    min-width: 420px;
+    width: 100%;
+    
+    /* KEY FIX: Retained visible overflow to allow clean hover scaling */
+    overflow: visible;
+    
+    box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.profile-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+}
+
+/* =========================================
+   IMAGE CONTAINER (AUTO + SAFE EXTRACTION)
+========================================= */
+.card-image-container {
+    width: 100%;
+    
+    /* KEY FIX: Set to auto to scale with any portrait/landscape image aspect ratio */
+    height: auto;
+    position: relative;
+    
+    /* 
+       CRITICAL FIX: Swapped 'overflow: auto' for 'visible'. 
+       Using 'auto' cuts off hover transformations, clips the dashboard admin overlays, 
+       and creates accidental scrollbars during active drag positioning.
+    */
+    overflow: visible;
+    
+    background: #0f172a;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-radius: 32px 32px 0 0; /* Keeps image borders clean inside the card */
+    
+    /* Flex alignment prevents structural gaps regardless of photo geometry dimensions */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* IMAGE */
+.profile-avatar-img {
+    width: 100%;
+    height: auto;
+    display: visible;
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 650px; /* Optional cap prevents large raw portrait photos from breaking height boundaries */
+    transform-origin: center center;
+    border-radius: 32px 32px 0 0;
+}
+
+/* DRAG EFFECT ENGINE CONFIGURATIONS */
+.draggable-avatar {
+    transform: translate(0px, 0px);
+    transition: transform 0.1s linear, filter 0.2s ease;
+}
+
+.draggable-avatar.dragging-active {
+    cursor: move !important;
+    filter: brightness(1.15) contrast(1.05);
+    outline: 2px dashed #38bdf8;
+    outline-offset: -4px;
+    z-index: 10;
+}
+
+/* =========================================
+   ADMIN OVERLAY
+========================================= */
+.admin-upload-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 5;
+    border-radius: 32px 32px 0 0;
+}
+
+.card-image-container:hover .admin-upload-overlay {
+    display: flex !important;
+}
+
+.upload-sub-btn {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    width: 180px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.upload-sub-btn:hover {
+    background: #2563eb;
+    border-color: #3b82f6;
+}
+
+.upload-sub-btn.adjust-btn {
+    background: linear-gradient(135deg, #7c3aed, #9333ea);
+    border: none;
+}
+
+.upload-sub-btn.adjust-btn:hover {
+    filter: brightness(1.15);
+}
+
+/* =========================================
+   CONTENT
+========================================= */
+.card-content {
+    padding: 45px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.blue-badge {
+    background: rgba(59, 130, 246, 0.12);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.purple-badge {
+    background: rgba(168, 85, 247, 0.12);
+    color: #c084fc;
+    border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.card-content h3 {
+    font-size: 38px;
+    font-weight: 800;
+    margin: 16px 0 8px 0;
+    background: linear-gradient(to right, #60a5fa, #c084fc, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    display: block;
+}
+
+/* ROLE COLORS */
+#founderSection .subtitle {
+    background: linear-gradient(to right, #38bdf8, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+#coFounderSection .subtitle {
+    background: linear-gradient(to right, #f472b6, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.card-content p[id$="Description"] {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #cbd5e1;
+}
+
+/* =========================================
+   ABOUT CARDS
+========================================= */
+.about-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+/* =========================================
+   CONTACT
+========================================= */
+.contact-list {
+    list-style: none;
+    padding: 0;
+}
+
+.contact-list li {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    color: #cbd5e1;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+@media (max-width: 900px) {
+    .profile-card {
+        max-width: 100%;
+        min-width: 100%;
+    }
+
+    .hero-about h1 {
+        font-size: 32px;
+    }
+    
+    .card-content {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 600px) {
+    .work-area {
+        padding: 20px;
+    }
+}

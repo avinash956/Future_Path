@@ -259,3 +259,38 @@ input:checked + .slider {
 input:not(:checked) + .slider {
   box-shadow: 0 0 6px #ef4444;
 }
+
+.faculty-home {
+  padding: 20px;
+  color: white;
+}
+
+.faculty-home .greet {
+  font-size: 26px;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #fff, #00e5ff, #fff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.mini-card {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.mini-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255,255,255,0.15);
+}

@@ -8,17 +8,17 @@
 
 <title>Management Panel</title>
 
-<<link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/sidebar.css">
-  <link rel="stylesheet" href="css/index.css">
-  <link rel="stylesheet" href="css/dashboard-Sectionview.css">
-  <link rel="stylesheet" href="css/dashboard-modules.css">  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/dashboard-Sectionview.css">
+<link rel="stylesheet" href="css/dashboard-modules.css">
+<link rel="stylesheet" href="css/management_portal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 
-<body onload="loadManagementDashboard()">
+<body onload="loadSection('home')">
 
 <!-- ================= PRELOADER ================= -->
 <div id="preloader">
@@ -56,7 +56,7 @@
 
 <h4>ACCOUNT</h4>
 
-<a href="complete-profile.html">
+<a href="profile.html">
 <i class="fa-solid fa-user"></i>
 Update Profile
 </a>
@@ -83,106 +83,133 @@ Logout
 <div class="admin-layout" style="background:linear-gradient(135deg,#8f25eb,#27bccf);">
 
 <!-- ================= SIDEBAR ================= -->
-    <aside class="sidebar" id="sidebar">
+<aside class="sidebar" id="sidebar">
 
-      <!-- TOGGLE -->
-      <div class="sidebar-toggle" onclick="toggleSidebar()">
-        <i class="fa-solid fa-chevron-left" id="toggleIcon"></i>
+  <div class="sidebar-toggle" onclick="toggleSidebar()">
+    <i class="fa-solid fa-chevron-left" id="toggleIcon"></i>
+  </div>
+
+  <h3>Management Controls Segment</h3>
+
+  <input type="text" id="menuSearch" class="menu-search" placeholder="Search Menu...">
+
+  <!-- HOME -->
+  <button class="side-btn" data-title="Home" onclick="loadSection('home')">
+    <i class="fa-solid fa-house"></i>
+    Home
+  </button>
+
+  <!-- FACULTY -->
+  <button class="side-btn" data-title="Faculty" onclick="loadSection('faculty')">
+    <i class="fa-solid fa-chalkboard-user"></i>
+    Faculty
+  </button>
+
+  <!-- BATCH -->
+  <button class="side-btn" data-title="Batch" onclick="loadSection('batch')">
+    <i class="fa-solid fa-layer-group"></i>
+    Batch
+  </button>
+
+  <!-- STUDENT -->
+  <button class="side-btn" data-title="Student" onclick="loadSection('student')">
+    <i class="fa-solid fa-user-graduate"></i>
+    Student
+  </button>
+
+  <!-- FEES -->
+  <button class="side-btn" data-title="Fees" onclick="loadSection('fees')">
+    <i class="fa-solid fa-money-bill"></i>
+    Fees Management
+  </button>
+
+  <!-- MATERIALS -->
+  <button class="side-btn" data-title="Materials" onclick="loadSection('materials')">
+    <i class="fa-solid fa-file"></i>
+    Notes / Videos
+  </button>
+
+  <!-- LIVE -->
+  <button class="side-btn" data-title="Live Streaming" onclick="loadSection('live')">
+    <i class="fa-solid fa-video"></i>
+    Live Streaming
+  </button>
+
+  <!-- AI -->
+  <button class="side-btn" data-title="AI Assist" onclick="window.location.href='ai.html'">
+    <i class="fa-solid fa-robot"></i>
+    AI Assist
+  </button>
+
+</aside>
+
+<!-- ================= MAIN CONTENT ================= -->
+<main class="work-area" style="background:linear-gradient(135deg,#042265,#a746e7);">
+
+  <div id="dynamicContent">
+    <!-- HOME DASHBOARD (DEFAULT VIEW LOADED BY JS) -->
+
+    <div class="dashboard-home">
+
+      <h2 id="greetingText">👋 Welcome</h2>
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <i class="fa-solid fa-user-graduate"></i>
+          <h3>Total Students</h3>
+          <p id="studentCount">0</p>
+        </div>
+
+        <div class="stat-card">
+          <i class="fa-solid fa-chalkboard-user"></i>
+          <h3>Total Faculty</h3>
+          <p id="facultyCount">0</p>
+        </div>
+
+        <div class="stat-card">
+          <i class="fa-solid fa-user-tie"></i>
+          <h3>Total Management</h3>
+          <p id="userCount">0</p>
+        </div>
+
+        <div class="stat-card">
+          <i class="fa-solid fa-layer-group"></i>
+          <h3>Total Batches</h3>
+          <p id="batchCount">0</p>
+        </div>
+
       </div>
 
-      <h3>Management Controls Segment</h3>
-
-      <!-- SEARCH -->
-      <input type="text" id="menuSearch" class="menu-search" placeholder="Search Menu...">
-
-      <!-- FACULTY -->
-      <button class="side-btn" data-title="Faculty" onclick="loadSection('faculty')">
-        <i class="fa-solid fa-chalkboard-user"></i>
-        Faculty
-      </button>
-
-      <!-- BATCH -->
-      <button class="side-btn" data-title="Batch" onclick="loadSection('batch')">
-        <i class="fa-solid fa-layer-group"></i>
-        Batch
-      </button>
-
-      <!-- STUDENT -->
-      <button class="side-btn" data-title="Student" onclick="loadSection('student')">
-        <i class="fa-solid fa-user-graduate"></i>
-        Student
-      </button>
-
-      <!-- FEES -->
-      <button class="side-btn" data-title="Fees" onclick="loadSection('fees')">
-        <i class="fa-solid fa-money-bill"></i>
-        Fees Management
-      </button>
-
-      <!-- MATERIALS -->
-      <button class="side-btn" data-title="Materials" onclick="loadSection('materials')">
-        <i class="fa-solid fa-file"></i>
-        Notes / Videos
-      </button>
-
-      <!-- LIVE -->
-      <button class="side-btn" data-title="Live Streaming" onclick="loadSection('live')">
-        <i class="fa-solid fa-video"></i>
-        Live Streaming
-      </button>
-
-      <!-- AI -->
-      <button class="side-btn" data-title="AI Assist" onclick="window.location.href='ai.html'">
-        <i class="fa-solid fa-robot"></i>
-        AI Assist
-      </button>
-
-    </aside>
-
-    <!-- ================= MAIN CONTENT ================= -->
-    <main class="work-area" style="background:linear-gradient(135deg,#042265,#a746e7);">
-
-      <div id="dynamicContent">
-        <!-- Dynamic Content -->
-      </div>
-
-    </main>
+    </div>
 
   </div>
-  
-  <!-- ================= FOOTER ================= -->
-  <footer>
-    <h3>Future Path EduTech Institute</h3>
-    <p>Academic • Competitive • Technical Education</p>
-    <p>Email: avinash.nha@gmail.com</p>
-    <p>Contact: +91 9936698578</p>
-    <p>© 2026 All Rights Reserved</p>
-  </footer>
 
-  <!-- ================= JAVASCRIPT LIBRARIES ================= -->
+</main>
 
-<!-- html2canvas (for DOM capture) -->
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <h3>Future Path EduTech Institute</h3>
+  <p>Academic • Competitive • Technical Education</p>
+  <p>Email: avinash.nha@gmail.com</p>
+  <p>Contact: +91 9936698578</p>
+  <p>© 2026 All Rights Reserved</p>
+</footer>
+
+<!-- ================= LIBRARIES ================= -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-<!-- jsPDF (for PDF generation) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<!--  -->
-<script src="https://cloudflare.com"></script>
-
-<!-- QR Code generator -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-<!-- XLSX (Excel export) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
-<!-- Chart.js (charts/graphs) -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- ================= CORE APP FILES ================= -->
+<!-- ================= CORE JS ================= -->
 <script src="./js/api.js"></script>
 <script src="./js/auth.js"></script>
 
-<!-- ================= UI FILES ================= -->
+<!-- ================= UI JS ================= -->
 <script src="./js/sidebar.js"></script>
 <script src="./js/management_portal.js"></script>
 <script src="./js/faculty.js"></script>
@@ -190,8 +217,6 @@ Logout
 <script src="./js/student.js"></script>
 <script src="./js/fees.js"></script>
 <script src="./js/fee_receipt.js"></script>
-
-<!-- =============================================== -->
 
 </body>
 </html>

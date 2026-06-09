@@ -18,6 +18,7 @@ def dashboard_stats():
         total_students = mongo.db.students.count_documents({})
 
         total_faculty = mongo.db.faculty.count_documents({})
+        total_management = mongo.db.management.count_documents({})
 
         total_batches = mongo.db.batches.count_documents({
             "isDeleted": False
@@ -32,13 +33,19 @@ def dashboard_stats():
         active_faculty = mongo.db.faculty.count_documents({
             "status": "active"
         })
+        # MANAGEMENT COUNT (FIX)
+        total_management = mongo.db.management.count_documents({"status": "active"})
+        print("DB NAME:", mongo.db.name)
+        print("Collections:", mongo.db.list_collection_names())
+        print("Total_management count is :", total_management)
 
         return jsonify({
             "students": total_students,
             "faculty": total_faculty,
             "batches": total_batches,
             "active_students": active_students,
-            "active_faculty": active_faculty
+            "active_faculty": active_faculty,
+            "management": total_management
         })
 
     except Exception as e:
