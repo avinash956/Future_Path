@@ -27,7 +27,10 @@ function safeRedirect(msg) {
   window.location.href = "login.html";
 }
 
-if (!isValidToken(token)) {
+if (
+  !isValidToken(token) &&
+  !currentPage.includes("login.html")
+) {
   safeRedirect("Please Login First");
 }
 
@@ -195,44 +198,26 @@ async function loadDashboard() {
         ).innerText =
         `Welcome ${data.adminName} 👋`;
 
-        document.getElementById(
-            "totalStudents"
-        ).innerText =
-        data.stats.students || 0;
+        document.getElementById("totalStudents").innerText = data.stats.students || 0;
 
-        document.getElementById(
-            "totalFaculty"
-        ).innerText =
-        data.stats.faculty || 0;
+        document.getElementById("totalFaculty").innerText = data.stats.faculty || 0;
 
-        document.getElementById(
-            "totalManagement"
-        ).innerText =
-        data.stats.management || 0;
+        document.getElementById("totalManagement").innerText = data.stats.management || 0;
 
-        document.getElementById(
-            "totalBatches"
-        ).innerText =
-        data.stats.batches || 0;
+        document.getElementById("totalBatches").innerText = data.stats.batches || 0;
 
-        document.getElementById(
-            "totalRevenue"
-        ).innerText =
-        `₹${Number(
-            data.stats.revenue || 0
-        ).toLocaleString()}`;
+        document.getElementById("totalRevenue").innerText =`₹${Number(data.stats.revenue || 0).toLocaleString()}`;
 
-        document.getElementById(
-            "pendingFees"
-        ).innerText =
-        `₹${Number(
-            data.stats.pending || 0
-        ).toLocaleString()}`;
+        console.log("Thought:", data.thought);
+        console.log("Element:", document.getElementById("thoughtText"));
+     const thoughtEl =
+document.getElementById("thoughtText");
 
-        document.getElementById(
-            "thoughtText"
-        ).innerText =
-        data.thought;
+if (thoughtEl) {
+    thoughtEl.innerText =
+        data.thought ||
+        "Stay focused and never stop learning.";
+}
 
     } catch (err) {
 
@@ -284,6 +269,16 @@ document.addEventListener("click", function (e) {
 async function loadSection(section) {
 
   console.log("📂 Requested Section:", section);
+  if (section === "home") {
+
+    console.log("🏠 Loading Home Dashboard");
+
+    if (typeof loadDashboard === "function") {
+        loadDashboard();
+    }
+
+    return;
+}
 
   if (!isValidToken(token)) {
     safeRedirect("Session expired");
@@ -376,12 +371,14 @@ async function loadSection(section) {
       container.innerHTML = html;
 
       console.log(`✅ ${section}.html loaded into DOM`);
-      
-      // if (section === 'faculty' && typeof initializeFaculty === 'function') {
-      //   console.log("🔥 DASHBOARD.JS CALLING initializeFaculty");
-      //   initializeFaculty();
-      // }
-        initializeFaculty()
+
+        if (
+    section === "faculty" &&
+    typeof initializeFaculty === "function"
+) {
+    console.log("🔥 DASHBOARD.JS CALLING initializeFaculty");
+    initializeFaculty();
+}
 
       if (section === 'student' && typeof initializeStudent === 'function') {
         console.log("🎓 Initializing Student Module...");
@@ -551,7 +548,7 @@ function navigateTo(page) {
 
 // ============Global Scope Functions (for sections to call)===========
 window.initializeDashboard = initializeDashboard;
-window.onload = loadDashboard;
+window.onload = initializeDashboard;;
 window.loadSection = loadSection;
 window.toggleMenu = toggleMenu;
 window.logout = logout;

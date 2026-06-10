@@ -1,174 +1,120 @@
-from flask import Blueprint, request, jsonify
-
+from flask import Blueprint, request, jsonify, send_from_directory
 from extensions import mongo
-
-about_bp = Blueprint("about",__name__)
-
-# ======================================
-# GET ABOUT DATA
-# ======================================
-
-@about_bp.route("/", methods=["GET"])
-def get_about():
-
-    data = list(mongo.db.about.find())
-
-    for item in data:
-
-        item["_id"] = str(item["_id"])
-
-    return jsonify(data)
-
-
-# ======================================
-# SAVE ABOUT DATA
-# ======================================
-
-@about_bp.route("/save", methods=["POST"])
-def save_about():
-
-    try:
-
-        data = request.json
-
-        # CLEAR OLD DATA
-        mongo.db.about.delete_many({})
-
-        # INSERT NEW DATA
-        if data:
-
-            mongo.db.about.insert_many(data)
-
-        return jsonify({
-            "message":
-            "About Data Saved Successfully"
-        })
-
-    except Exception as e:
-
-        return jsonify({
-            "message": str(e)
-        }), 500
-
-
-# ======================================
-# IMPORTS FOR MANAGEMENT
-# ======================================
-
 from werkzeug.utils import secure_filename
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from bson.objectid import ObjectId
 import os
 
+about_bp = Blueprint("about", __name__)
+
+UPLOAD_FOLDER = "uploads/about"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # ======================================
-# ADD MANAGEMENT
+# GET CURRENT USER ROLE FROM DB
 # ======================================
+def is_admin_user(user_id):
+    user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+    return user and user.get("role") == "admin"
 
-@about_bp.route("/add-management", methods=["POST", "OPTIONS"])
-def add_management():
 
-    try:
+# ======================================
+# SAFE GET ABOUT
+# ======================================
+@about_bp.route("/", methods=["GET"])
+def get_about():
 
-        name = request.form.get("name")
-        post = request.form.get("post")
-        email = request.form.get("email")
-        phone = request.form.get("phone")
-        department = request.form.get("department")
-        status = request.form.get("status")
-        description = request.form.get("description")
+    doc = mongo.db.about.find_one()
 
-        image = request.files.get("image")
-
-        image_path = ""
-
-        if image:
-
-            filename = secure_filename(image.filename)
-
-            upload_folder = "uploads"
-
-            os.makedirs(upload_folder, exist_ok=True)
-
-            image_path = os.path.join(upload_folder, filename)
-
-            image.save(image_path)
-
-        management_data = {
-            "name": name,
-            "post": post,
-            "email": email,
-            "phone": phone,
-            "department": department,
-            "status": status,
-            "description": description,
-            "image": image_path
-        }
-
-        mongo.db.management.insert_one(management_data)
-
+    if not doc:
         return jsonify({
-            "success": True,
-            "message": "Management Added Successfully"
+            "vision": "",
+            "mission": "",
+            "description": "",
+            "founder_image": "",
+            "cofounder_image": "",
+            "founder_name": "Founder",
+            "cofounder_name": "Co-Founder"
         })
 
-    except Exception as e:
-
-        print("ADD MANAGEMENT ERROR:", str(e))
-
-        return jsonify({
-            "success": False,
-            "message": str(e)
-        }), 500
+    doc["_id"] = str(doc["_id"])
+    return jsonify(doc)
 
 
 # ======================================
-# GET MANAGEMENT
+# SAVE TEXT (ADMIN ONLY - JWT)
 # ======================================
+@about_bp.route("/save", methods=["POST"])
+@jwt_required()
+def save_about():
 
-@about_bp.route("/get-management", methods=["GET"])
-def get_management():
+    user_id = get_jwt_identity()
 
-    try:
+    if not is_admin_user(user_id):
+        return jsonify({"success": False, "message": "Admin only"}), 403
 
-        data = list(mongo.db.management.find())
+    data = request.get_json() or {}
 
-        for item in data:
+    mongo.db.about.update_one(
+        {},
+        {"$set": {
+            "vision": data.get("vision", ""),
+            "mission": data.get("mission", ""),
+            "description": data.get("description", "")
+        }},
+        upsert=True
+    )
 
-            item["_id"] = str(item["_id"])
-
-        return jsonify({
-            "management": data
-        })
-
-    except Exception as e:
-
-        return jsonify({
-            "success": False,
-            "message": str(e)
-        }), 500
+    return jsonify({"success": True, "message": "Updated"})
 
 
 # ======================================
-# DELETE MANAGEMENT
+# UPLOAD IMAGE (ADMIN ONLY - JWT)
 # ======================================
+@about_bp.route("/upload-image", methods=["POST"])
+@jwt_required()
+def upload_image():
 
-@about_bp.route("/delete-management/<id>", methods=["DELETE"])
-def delete_management(id):
+    user_id = get_jwt_identity()
 
-    try:
+    if not is_admin_user(user_id):
+        return jsonify({"success": False, "message": "Admin only"}), 403
 
-        mongo.db.management.delete_one({
-            "_id": ObjectId(id)
-        })
+    image = request.files.get("image")
+    img_type = request.form.get("type")
 
-        return jsonify({
-            "success": True,
-            "message": "Deleted Successfully"
-        })
+    if not image or not img_type:
+        return jsonify({"success": False, "message": "Invalid request"}), 400
 
-    except Exception as e:
+    filename = secure_filename(image.filename)
+    file_path = os.path.join(UPLOAD_FOLDER, filename)
+    image.save(file_path)
 
-        return jsonify({
-            "success": False,
-            "message": str(e)
-        }), 500
+    field_map = {
+        "founderImg": "founder_image",
+        "cofounderImg": "cofounder_image"
+    }
+
+    if img_type not in field_map:
+        return jsonify({"success": False, "message": "Invalid type"}), 400
+
+    db_field = field_map[img_type]
+
+    mongo.db.about.update_one(
+        {},
+        {"$set": {db_field: file_path}},
+        upsert=True
+    )
+
+    return jsonify({
+        "success": True,
+        "image_url": file_path
+    })
+
+
+# ======================================
+# SERVE IMAGE FILES
+# ======================================
+@about_bp.route("/uploads/<path:filename>")
+def serve_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)

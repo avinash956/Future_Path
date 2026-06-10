@@ -224,8 +224,14 @@ def get_student_materials():
                 "materials": []
             })
 
+        batch_id = str(batch["_id"])
+
         materials = mongo.db.materials.find({
-            "batchId": str(batch["_id"])
+            "$or": [
+                {"batch": batch_id},
+                {"batchId": batch_id},
+                {"batchCode": batch_code}
+            ]
         })
 
         result = []
@@ -235,11 +241,13 @@ def get_student_materials():
             result.append({
 
                 "_id": str(m["_id"]),
-                "title": m.get("title"),
-                "description": m.get("description"),
-                "file": m.get("file"),
-                "videoUrl": m.get("videoUrl"),
-                "batchId": m.get("batchId")
+                "title": m.get("title", ""),
+                "description": m.get("description", ""),
+                "type": m.get("type", ""),
+                "videoUrl": m.get("videoUrl", ""),
+                "file_id": str(m.get("file_id", "")),
+                "batch": m.get("batch", ""),
+                "batchCode": m.get("batchCode", "")
 
             })
 

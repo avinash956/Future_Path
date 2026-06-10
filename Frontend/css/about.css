@@ -1,16 +1,45 @@
 /* =========================================
-   ABOUT PAGE BASE & WORKSPACE AREA
+   MODERN INTERACTIVE ANIMATIONS & KEYFRAMES
+========================================= */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+    }
+    50% {
+        box-shadow: 0 0 35px rgba(168, 85, 247, 0.3);
+    }
+}
+
+/* Base class applied to all active view transitions */
+.content-section.active {
+    display: block;
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* =========================================
+   ABOUT PAGE BASE
 ========================================= */
 .work-area {
-    background: linear-gradient(135deg, #090d16, #111827, #0f172a);
+    background: radial-gradient(circle at 50% 0%, #111c35 0%, #0b0f19 70%, #070a12 100%);
     min-height: 100vh;
     color: #f8fafc;
-    padding: 40px;
+    padding: 50px 40px;
     box-sizing: border-box;
     font-family: system-ui, -apple-system, sans-serif;
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 50px;
 }
 
 .content-section {
@@ -18,285 +47,352 @@
     width: 100%;
 }
 
-.content-section.active {
-    display: block;
-}
-
 /* =========================================
-   HERO
+   MODERN HERO SECTION
 ========================================= */
 .hero-about {
-    background: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(168,85,247,0.12));
-    border: 1px solid rgba(255,255,255,0.06);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(168, 85, 247, 0.08));
+    border: 1px solid rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(20px);
-    border-radius: 24px;
-    padding: 50px 40px;
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 28px;
+    padding: 60px 40px;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: pulseGlow 8s infinite ease-in-out;
 }
 
 .hero-about h1 {
-    font-size: 42px;
+    font-size: 46px;
     font-weight: 800;
-    margin-bottom: 18px;
-    background: linear-gradient(to right, #60a5fa, #c084fc, #f472b6);
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+    color: #60a5fa; 
+    background: linear-gradient(135deg, #60a5fa, #c084fc, #f472b6);
     -webkit-background-clip: text;
+    background-clip: text; 
     -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 .hero-about p {
-    max-width: 850px;
+    max-width: 750px;
     margin: auto;
     color: #94a3b8;
-    line-height: 1.7;
+    font-size: 17px;
+    line-height: 1.8;
 }
 
 /* =========================================
-   GRID
+   FLEX GRID SYSTEM
 ========================================= */
 .management-grid {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap; 
+    gap: 40px; 
     width: 100%;
 }
 
 /* =========================================
-   PROFILE CARD (VISIBLE OVERFLOW)
+   PROFILE LAYOUT WRAPPER
 ========================================= */
-.profile-card {
-    background: linear-gradient(145deg, rgba(30,41,59,0.6), rgba(15,23,42,0.7));
-    border: 1px solid rgba(255,255,255,0.06);
-    backdrop-filter: blur(25px);
-    border-radius: 32px;
-    max-width: 720px;
-    min-width: 420px;
+.profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 440px;
     width: 100%;
-    
-    /* KEY FIX: Retained visible overflow to allow clean hover scaling */
-    overflow: visible;
-    
-    box-shadow: 0 20px 50px rgba(0,0,0,0.45);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    gap: 25px;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.profile-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+.profile-wrapper:hover {
+    transform: translateY(-8px);
 }
 
 /* =========================================
-   IMAGE CONTAINER (AUTO + SAFE EXTRACTION)
+   ANIMATED IMAGE FRAME
 ========================================= */
 .card-image-container {
     width: 100%;
-    
-    /* KEY FIX: Set to auto to scale with any portrait/landscape image aspect ratio */
-    height: auto;
+    max-width: 360px;
+    aspect-ratio: 1 / 1;
     position: relative;
-    
-    /* 
-       CRITICAL FIX: Swapped 'overflow: auto' for 'visible'. 
-       Using 'auto' cuts off hover transformations, clips the dashboard admin overlays, 
-       and creates accidental scrollbars during active drag positioning.
-    */
-    overflow: visible;
-    
+    overflow: hidden; 
     background: #0f172a;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    border-radius: 32px 32px 0 0; /* Keeps image borders clean inside the card */
-    
-    /* Flex alignment prevents structural gaps regardless of photo geometry dimensions */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    border: 2px solid rgba(255, 255, 255, 0.05);
+    border-radius: 100% 100% 100% 100%; /* Modern organic rounded structure */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.4s ease, box-shadow 0.4s ease, border-radius 0.5s ease;
 }
 
-/* IMAGE */
+/* Specific glowing highlights depending on role hierarchy gradients */
+.blue-gradient {
+    background: linear-gradient(135deg, #090d16, #1e293b);
+}
+.purple-gradient {
+    background: linear-gradient(135deg, #090d16, #2e1065);
+}
+
+.profile-wrapper:hover .card-image-container {
+    border-radius: 32px; /* Smoothly morphs from a circle profile into a soft square on hover */
+    box-shadow: 0 25px 50px rgba(59, 130, 246, 0.25);
+}
+
+#coFounderSection .profile-wrapper:hover .card-image-container {
+    box-shadow: 0 25px 50px rgba(168, 85, 247, 0.25);
+}
+
+/* IMAGE BOUNDS RESET */
 .profile-avatar-img {
-    width: 100%;
-    height: auto;
-    display: visible;
-    object-fit: contain;
-    max-width: 100%;
-    max-height: 650px; /* Optional cap prevents large raw portrait photos from breaking height boundaries */
-    transform-origin: center center;
-    border-radius: 32px 32px 0 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* DRAG EFFECT ENGINE CONFIGURATIONS */
+.profile-wrapper:hover .profile-avatar-img {
+    transform: scale(1.06);
+}
+
 .draggable-avatar {
-    transform: translate(0px, 0px);
-    transition: transform 0.1s linear, filter 0.2s ease;
-}
-
-.draggable-avatar.dragging-active {
-    cursor: move !important;
-    filter: brightness(1.15) contrast(1.05);
-    outline: 2px dashed #38bdf8;
-    outline-offset: -4px;
-    z-index: 10;
+    cursor: move;
 }
 
 /* =========================================
-   ADMIN OVERLAY
+   MODERN GLASSMORPHISM DETAIL CARDS
+========================================= */
+.profile-card {
+    background: linear-gradient(145deg, rgba(22, 32, 54, 0.65), rgba(13, 20, 38, 0.8));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 28px;
+    width: 100%;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+    position: relative;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Smooth border color fade-in matching active accents */
+#founderSection .profile-wrapper:hover .profile-card {
+    border-color: rgba(59, 130, 246, 0.3);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+}
+
+#coFounderSection .profile-wrapper:hover .profile-card {
+    border-color: rgba(168, 85, 247, 0.3);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+}
+
+/* =========================================
+   ADMIN FLOATING CONTROL OVERLAY
 ========================================= */
 .admin-upload-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(15, 23, 42, 0.85);
+    background: rgba(10, 15, 30, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     display: none;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    gap: 14px;
     z-index: 5;
-    border-radius: 32px 32px 0 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.card-image-container:hover .admin-upload-overlay {
-    display: flex !important;
+.card-image-container:hover .admin-upload-overlay,
+.card-image-container:focus-within .admin-upload-overlay {
+    display: flex;
+    opacity: 1;
 }
 
 .upload-sub-btn {
-    background: #1e293b;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border: none;
     color: #fff;
-    padding: 12px 24px;
-    border-radius: 10px;
+    padding: 14px 28px;
+    border-radius: 14px;
     font-weight: 600;
-    width: 180px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
     cursor: pointer;
-    transition: background 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .upload-sub-btn:hover {
-    background: #2563eb;
-    border-color: #3b82f6;
-}
-
-.upload-sub-btn.adjust-btn {
-    background: linear-gradient(135deg, #7c3aed, #9333ea);
-    border: none;
-}
-
-.upload-sub-btn.adjust-btn:hover {
-    filter: brightness(1.15);
+    transform: scale(1.05);
+    box-shadow: 0 12px 25px rgba(37, 99, 235, 0.5);
 }
 
 /* =========================================
-   CONTENT
+   CARD COPY & METADATA
 ========================================= */
 .card-content {
-    padding: 45px;
+    padding: 35px;
+    text-align: center;
 }
 
 .badge {
     display: inline-block;
-    padding: 6px 16px;
-    border-radius: 50px;
-    font-size: 12px;
-    font-weight: 700;
+    padding: 6px 18px;
+    border-radius: 100px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
+    font-weight: 800;
 }
 
 .blue-badge {
     background: rgba(59, 130, 246, 0.12);
-    color: #60a5fa;
     border: 1px solid rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
 }
 
 .purple-badge {
     background: rgba(168, 85, 247, 0.12);
-    color: #c084fc;
     border: 1px solid rgba(168, 85, 247, 0.2);
+    color: #c084fc;
 }
 
 .card-content h3 {
-    font-size: 38px;
+    font-size: 32px;
     font-weight: 800;
-    margin: 16px 0 8px 0;
-    background: linear-gradient(to right, #60a5fa, #c084fc, #f472b6);
+    letter-spacing: -0.5px;
+    margin: 16px 0 8px;
+    color: #60a5fa; 
+    background: linear-gradient(135deg, #ffffff 30%, #cbd5e1 100%);
     -webkit-background-clip: text;
+    background-clip: text; 
     -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 .subtitle {
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
     margin-bottom: 18px;
-    display: block;
 }
 
-/* ROLE COLORS */
 #founderSection .subtitle {
     background: linear-gradient(to right, #38bdf8, #60a5fa);
     -webkit-background-clip: text;
+    background-clip: text; 
     -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 #coFounderSection .subtitle {
     background: linear-gradient(to right, #f472b6, #c084fc);
     -webkit-background-clip: text;
+    background-clip: text; 
     -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
-.card-content p[id$="Description"] {
-    font-size: 16px;
-    line-height: 1.8;
-    color: #cbd5e1;
+.card-content p:last-of-type {
+    color: #94a3b8;
+    line-height: 1.6;
+    font-size: 15px;
 }
 
 /* =========================================
-   ABOUT CARDS
+   VISION, MISSION & GENERAL ABOUT CARDS
 ========================================= */
 .about-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-    max-width: 1000px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1050px;
     margin: auto;
 }
 
+.about-card {
+    background: linear-gradient(145deg, rgba(22, 32, 54, 0.4), rgba(13, 20, 38, 0.6));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+    transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(96, 165, 250, 0.25);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.about-card i {
+    font-size: 36px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #60a5fa, #c084fc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.about-card h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #ffffff;
+}
+
+.about-card p {
+    color: #94a3b8;
+    line-height: 1.7;
+    font-size: 15px;
+}
+
 /* =========================================
-   CONTACT
+   CONTACT COMPONENT
 ========================================= */
 .contact-list {
     list-style: none;
     padding: 0;
+    margin: 20px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
 }
 
 .contact-list li {
     display: flex;
+    align-items: center;
     gap: 12px;
-    margin-bottom: 14px;
     color: #cbd5e1;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.contact-list li i {
+    font-size: 16px;
+    margin-bottom: 0;
 }
 
 /* =========================================
-   RESPONSIVE
+   RESPONSIVE DESIGN ADAPTATIONS
 ========================================= */
 @media (max-width: 900px) {
-    .profile-card {
-        max-width: 100%;
-        min-width: 100%;
-    }
-
     .hero-about h1 {
-        font-size: 32px;
+        font-size: 36px;
     }
-    
-    .card-content {
-        padding: 30px;
+    .work-area {
+        padding: 30px 20px;
     }
 }
 
 @media (max-width: 600px) {
-    .work-area {
-        padding: 20px;
+    .hero-about {
+        padding: 40px 20px;
+    }
+    .card-content {
+        padding: 25px;
     }
 }

@@ -2,300 +2,203 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Future Path EduTech Institute</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/about.css">
+    <link rel="stylesheet" href="css/sidebar.css">
 
-<title>About Us | Future Path EduTech Institute</title>
-
-<link rel="stylesheet" href="css/index.css">
-<link rel="stylesheet" href="css/about.css">
-<link rel="stylesheet" href="css/sidebar.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+    <!-- ✅ Font Awesome Enabled -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
 
-<!-- HEADER -->
-
-<header>
-
-<nav class="navbar">
-
-<div class="logo-container">
-
-<img src="Logo.png" class="logo" alt="Logo">
-
-<div class="logo-text">
-<h2>Future Path EduTech Institute</h2>
-<p><i>Shaping Future With Smart Learning...</i></p>
-</div>
-
-</div>
-
-<div class="nav-right">
-
-<div class="live-clock" id="liveClock">
-Future Path EduTech
-</div>
-
-<div class="menu-toggle" onclick="toggleMenu()">
-<i class="fa-solid fa-bars"></i>
-</div>
-
-<div id="dropdownMenu" class="dropdown-menu">
-
-<div class="menu-group">
-
-<h4>MAIN</h4>
-
-<a href="index.html">
-<i class="fa fa-home"></i>
-Home
-</a>
-
-<a href="about.html">
-<i class="fa fa-circle-info"></i>
-About
-</a>
-
-</div>
-
-<div class="menu-group">
-
-<h4>ACCOUNT</h4>
-
-<a href="login.html">
-<i class="fa fa-right-to-bracket"></i>
-Login
-</a>
-
-<a href="#" onclick="logout()">
-<i class="fa fa-sign-out-alt"></i>
-Logout
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</nav>
-
-</header>
-
-<!-- MAIN LAYOUT -->
-
-<div class="admin-layout">
-
-<!-- SIDEBAR -->
-
-<aside class="sidebar" id="sidebar">
-
-<div class="sidebar-toggle"
-onclick="toggleSidebar()">
-
-<i class="fa-solid fa-chevron-left"></i>
-
-</div>
-
-<h3>ABOUT MENU</h3>
-
-<button class="side-btn active"
-onclick="showSection('visionSection')">
-
-<i class="fa-solid fa-bullseye"></i>
-
-Vision & Mission
-
-</button>
-
-<button class="side-btn"
-onclick="showSection('founderSection')">
-
-<i class="fa-solid fa-user"></i>
-
-Founder
-
-</button>
-
-<button class="side-btn"
-onclick="showSection('coFounderSection')">
-
-<i class="fa-solid fa-user-tie"></i>
-
-Co-Founder
-
-</button>
-
-<button class="side-btn"
-onclick="showSection('contactSection')">
-
-<i class="fa-solid fa-address-book"></i>
-
-Contact
-
-</button>
-
-<!-- ADMIN PANEL -->
-
-<div id="adminControls"
-style="display:none; margin-top:30px;">
-
-<button class="action-btn"
-onclick="enableEditing()">
-
-<i class="fa-solid fa-pen"></i>
-Edit Content
-
-</button>
-
-<button class="action-btn save-btn"
-onclick="saveData()">
-
-<i class="fa-solid fa-floppy-disk"></i>
-Save Changes
-
-</button>
-
-</div>
-
-</aside>
-
-<!-- CONTENT -->
-
-<!-- CONTENT -->
-<!-- MAIN WORK LAYOUT CONTENT AREA -->
-<main class="work-area">
-
-    <!-- HERO -->
-    <div class="hero-about">
-        <h1>About Future Path EduTech Institute</h1>
-        <p id="instituteDescription">Empowering students through Academic Excellence, Competitive Preparation, Technical Skills, Innovation and Career-Oriented Learning.</p>
-    </div>
-
-    <!-- VISION & MISSION -->
-    <section id="visionSection" class="content-section active">
-        <div class="about-container">
-            <div class="about-card animate-up">
-                <i class="fa-solid fa-bullseye"></i>
-                <h3>Our Vision</h3>
-                <p id="visionText" class="editable">To become one of India's most trusted education and technology-driven learning institutions by empowering students with knowledge, innovation, practical skills, confidence and ethical values that prepare them for future opportunities.</p>
-            </div>
-
-            <div class="about-card animate-up">
-                <i class="fa-solid fa-rocket"></i>
-                <h3>Our Mission</h3>
-                <p id="missionText" class="editable">Our mission is to provide high-quality academic, competitive and technical education through modern teaching methodologies, technology integration, personalized mentoring, career guidance and continuous innovation.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOUNDER PROFILE CARD -->
-<section id="founderSection" class="content-section">
-    <div class="management-grid">
-        <div class="profile-card animate-up">
-            <!-- Added container boundary wrapper for relative drag shifts -->
-            <div class="card-image-container blue-gradient image-crop-container" id="founderCropArea">
-                <img id="founderImg" src="images/founder.jpg" alt="Founder" class="profile-avatar-img draggable-avatar" data-path="" data-pos-x="0" data-pos-y="0">
-                
-                <div class="drag-hint"><i class="fa-solid fa-arrows-commute"></i> Drag to reposition</div>
-                
-                <div class="admin-upload-overlay upload-overlay">
-                    <button class="upload-sub-btn" onclick="document.getElementById('founderFile').click()"><i class="fa-solid fa-camera"></i> Change</button>
-                    <button class="upload-sub-btn adjust-btn" onclick="activateImageDrag('founderImg')"><i class="fa-solid fa-arrows-up-down-left-right"></i> Move</button>
+    <!-- HEADER -->
+    <header>
+        <nav class="navbar">
+            <div class="logo-container">
+                <img src="Logo.png" class="logo" alt="Logo">
+                <div class="logo-text">
+                    <h2>Future Path EduTech Institute</h2>
+                    <p><i>Shaping Future With Smart Learning...</i></p>
                 </div>
             </div>
 
-            <div class="card-content">
-                <span class="badge blue-badge">Founder</span>
-                <h3 id="founderName" class="editable">Avinash Tripathi</h3>
-                <p id="founderDesignation" class="subtitle editable">Founder & CEO</p>
-                <p id="founderDescription" class="editable" style="color: #cbd5e1; font-size: 14.5px; line-height: 1.7;">
-                    A passionate educator, technology enthusiast, developer and mentor dedicated to building future-ready learners.
-                </p>
-                <input type="file" id="founderFile" style="display:none" accept="image/*" onchange="uploadProfileImage(event, 'founderImg')">
-            </div>
-        </div>
-    </div>
-</section>
+            <div class="nav-right">
+                <div class="live-clock" id="liveClock">Future Path EduTech</div>
+                <div class="menu-toggle" onclick="toggleMenu()">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
 
-<!-- CO-FOUNDER PROFILE CARD -->
-<section id="coFounderSection" class="content-section">
-    <div class="management-grid">
-        <div class="profile-card animate-up">
-            <div class="card-image-container purple-gradient image-crop-container" id="cofounderCropArea">
-                <img id="cofounderImg" src="images/cofounder.jpg" alt="Co-Founder" class="profile-avatar-img draggable-avatar" data-path="" data-pos-x="0" data-pos-y="0">
-                
-                <div class="drag-hint"><i class="fa-solid fa-arrows-commute"></i> Drag to reposition</div>
-                
-                <div class="admin-upload-overlay upload-overlay">
-                    <button class="upload-sub-btn" onclick="document.getElementById('cofounderFile').click()"><i class="fa-solid fa-camera"></i> Change</button>
-                    <button class="upload-sub-btn adjust-btn" onclick="activateImageDrag('cofounderImg')"><i class="fa-solid fa-arrows-up-down-left-right"></i> Move</button>
+                <div id="dropdownMenu" class="dropdown-menu">
+                    <div class="menu-group">
+                        <h4>MAIN</h4>
+                        <a href="index.html"><i class="fa fa-home"></i> Home</a>
+                        <a href="about.html"><i class="fa fa-circle-info"></i> About</a>
+                    </div>
+                    <div class="menu-group">
+                        <h4>ACCOUNT</h4>
+                        <a href="login.html"><i class="fa fa-right-to-bracket"></i> Login</a>
+                        <a href="#" onclick="logout()"><i class="fa fa-sign-out-alt"></i> Logout</a>
+                    </div>
                 </div>
             </div>
+        </nav>
+    </header>
 
-            <div class="card-content">
-                <span class="badge purple-badge">Co-Founder</span>
-                <h3 id="cofounderName" class="editable">Kavita Tripathi</h3>
-                <p id="cofounderDesignation" class="subtitle editable">Co-Founder & Academic Director</p>
-                <p id="cofounderDescription" class="editable" style="color: #cbd5e1; font-size: 14.5px; line-height: 1.7;">
-                    Dedicated to academic excellence, student development and educational leadership.
+    <!-- MAIN LAYOUT -->
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fa-solid fa-chevron-left"></i>
+            </div>
+
+            <h3>ABOUT MENU</h3>
+
+            <button class="side-btn active" onclick="showSection('visionSection')">
+                <i class="fa-solid fa-bullseye"></i> Vision & Mission
+            </button>
+            <button class="side-btn" onclick="showSection('founderSection')">
+                <i class="fa-solid fa-user"></i> Founder
+            </button>
+            <button class="side-btn" onclick="showSection('coFounderSection')">
+                <i class="fa-solid fa-user-tie"></i> Co-Founder
+            </button>
+            <button class="side-btn" onclick="showSection('contactSection')">
+                <i class="fa-solid fa-address-book"></i> Contact
+            </button>
+
+            <!-- ADMIN PANEL -->
+            <div id="adminControls" style="display:none; margin-top:30px;">
+                <button class="action-btn" onclick="saveData()">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                </button>
+            </div>
+        </aside>
+
+        <!-- CONTENT -->
+        <main class="work-area">
+
+            <!-- HERO -->
+            <div class="hero-about">
+                <h1>About Future Path EduTech Institute</h1>
+                <p id="instituteDescription">
+                    We believe education is not just knowledge — it is transformation.
                 </p>
-                <input type="file" id="cofounderFile" style="display:none" accept="image/*" onchange="uploadProfileImage(event, 'cofounderImg')">
             </div>
-        </div>
+
+            <!-- VISION & MISSION -->
+            <section id="visionSection" class="content-section active">
+                <div class="about-container">
+                    <div class="about-card animate-up">
+                        <i class="fa-solid fa-bullseye"></i>
+                        <h3>Our Vision</h3>
+                        <p id="visionText" class="editable"></p>
+                    </div>
+                    <div class="about-card animate-up">
+                        <i class="fa-solid fa-rocket"></i>
+                        <h3>Our Mission</h3>
+                        <p id="missionText" class="editable"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FOUNDER -->
+            <section id="founderSection" class="content-section">
+                <div class="management-grid">
+                    
+                    <!-- ✅ RECTIFIED: Wrapped image container and text card together outside -->
+                    <div class="profile-wrapper animate-up">
+                        
+                        <div class="card-image-container blue-gradient image-crop-container">
+                            <!-- Note: Your JavaScript removes display:none once an image loads -->
+                            <img id="founderImg" alt="Founder" class="profile-avatar-img draggable-avatar" style="display:none;">
+                            
+                            <div class="admin-upload-overlay upload-overlay">
+                                <button class="upload-sub-btn" onclick="document.getElementById('founderFile').click()">
+                                    <i class="fa-solid fa-camera"></i> Change
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="profile-card">
+                            <div class="card-content">
+                                <span class="badge blue-badge">Founder</span>
+                                <h3 id="founderName" class="editable">Avinash Tripathi</h3>
+                                <p class="subtitle editable">Founder & Visionary Director</p>
+                                <p class="editable">An education innovator dedicated to modern learning systems.</p>
+                                <input type="file" id="founderFile" style="display:none" accept="image/*" onchange="uploadProfileImage(event, 'founderImg')">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- CO-FOUNDER -->
+            <section id="coFounderSection" class="content-section">
+                <div class="management-grid">
+                    
+                    <!-- ✅ RECTIFIED: Wrapped image container and text card together outside -->
+                    <div class="profile-wrapper animate-up">
+                        
+                        <div class="card-image-container purple-gradient image-crop-container">
+                            <img id="cofounderImg" alt="Co-Founder" class="profile-avatar-img draggable-avatar" style="display:none;">
+                            
+                            <div class="admin-upload-overlay upload-overlay">
+                                <button class="upload-sub-btn" onclick="document.getElementById('cofounderFile').click()">
+                                    <i class="fa-solid fa-camera"></i> Change
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="profile-card">
+                            <div class="card-content">
+                                <span class="badge purple-badge">Co-Founder</span>
+                                <h3 id="cofounderName" class="editable">Kavita Tripathi</h3>
+                                <p class="subtitle editable">Co-Founder & Academic Strategist</p>
+                                <p class="editable">Dedicated to academic excellence and student growth.</p>
+                                <input type="file" id="cofounderFile" style="display:none" accept="image/*" onchange="uploadProfileImage(event, 'cofounderImg')">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- CONTACT -->
+            <section id="contactSection" class="content-section">
+                <div class="about-container">
+                    <div class="about-card animate-up">
+                        <i class="fa-solid fa-address-book"></i>
+                        <h3>Contact Information</h3>
+                        <ul class="contact-list">
+                            <li><i class="fa-solid fa-envelope"></i> avinash.nha@gmail.com</li>
+                            <li><i class="fa-solid fa-phone"></i> +91 9936698578</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </main>
     </div>
-</section>
-    <!-- CONTACT DETAILS -->
-    <section id="contactSection" class="content-section">
-        <div class="about-container">
-            <div class="about-card animate-up">
-                <i class="fa-solid fa-address-book"></i>
-                <h3>Contact Information</h3>
-                <ul class="contact-list" style="text-align: left; display: inline-block; margin-top: 15px;">
-                    <li><i class="fa-solid fa-envelope"></i> avinash.nha@gmail.com</li>
-                    <li><i class="fa-solid fa-phone"></i> +91 9936698578</li>
-                    <li><i class="fa-brands fa-linkedin"></i> LinkedIn Profile</li>
-                </ul>
-            </div>
-        </div>
-    </section>
 
-</main>
-</div>
+    <!-- FOOTER -->
+    <footer>
+        <h3>Future Path EduTech Institute</h3>
+        <p>Academic • Competitive • Technical Education</p>
+        <p>© 2026 All Rights Reserved</p>
+    </footer>
 
-<!-- FOOTER -->
-
-<footer>
-
-<h3>
-Future Path EduTech Institute
-</h3>
-
-<p>
-Academic • Competitive • Technical Education
-</p>
-
-<p>
-Email: avinash.nha@gmail.com
-</p>
-
-<p>
-Contact: +91 9936698578
-</p>
-
-<p>
-© 2026 All Rights Reserved
-</p>
-
-</footer>
-
-<script src="js/about_page.js"></script>
-<script src="js/sidebar.js"></script> 
-
+    <script src="js/about_page.js"></script>
+    <script src="js/sidebar.js"></script>
 </body>
 
 </html>

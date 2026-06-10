@@ -7,6 +7,40 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 live_bp = Blueprint("live_bp", __name__)
 
 # ==========================================================
+# SAFE CURRENT USER
+# Works for BOTH:
+# 1. JWT identity = user id string
+# 2. JWT identity = user object/dict
+# ==========================================================
+
+def get_current_user():
+
+    identity = get_jwt_identity()
+
+    print("JWT Identity:", identity)
+    print("Type:", type(identity))
+
+    # JWT contains only user id
+    if isinstance(identity, str):
+
+        user = mongo.db.users.find_one({
+            "_id": ObjectId(identity)
+        })
+
+        if user:
+
+            user["_id"] = str(user["_id"])
+
+        return user
+
+    # JWT already contains user object
+    elif isinstance(identity, dict):
+
+        return identity
+
+    return None
+
+# ==========================================================
 # GET ACTIVE BATCHES
 # ==========================================================
 
@@ -56,42 +90,59 @@ def get_faculty():
 @jwt_required()
 def create_live():
 
-    current_user = get_jwt_identity()
+    try:
 
-    role = current_user.get("role", "")
+        user = get_current_user()
 
-    if role not in ["admin", "faculty", "management"]:
+        if not user:
+            return jsonify({
+                "success": False,
+                "message": "User not found"
+            }), 404
+
+        role = user.get("role", "")
+
+        if role not in ["admin", "faculty", "management"]:
+            return jsonify({
+                "success": False,
+                "message": "Unauthorized"
+            }), 403
+
+        data = request.get_json() or {}
+
+        live = {
+            "title": data.get("title", ""),
+            "description": data.get("description", ""),
+            "batchId": data.get("batchId", ""),
+            "batchName": data.get("batchName", ""),
+            "facultyId": data.get("facultyId", ""),
+            "facultyName": data.get("facultyName", ""),
+            "platform": data.get("platform", ""),
+            "meetingLink": data.get("meetingLink", ""),
+            "scheduledDate": data.get("scheduledDate", ""),
+            "scheduledTime": data.get("scheduledTime", ""),
+            "status": "scheduled",
+            "recordingLink": "",
+            "createdBy": user.get("_id") or user.get("id"),
+            "createdAt": datetime.utcnow()
+        }
+
+        result = mongo.db.live_classes.insert_one(live)
+
+        return jsonify({
+            "success": True,
+            "id": str(result.inserted_id)
+        })
+
+    except Exception as e:
+
+        print("CREATE LIVE ERROR:", e)
+
         return jsonify({
             "success": False,
-            "message": "Unauthorized"
-        }), 403
-
-    data = request.get_json()
-
-    live = {
-        "title": data.get("title", ""),
-        "description": data.get("description", ""),
-        "batchId": data.get("batchId", ""),
-        "batchName": data.get("batchName", ""),
-        "facultyId": data.get("facultyId", ""),
-        "facultyName": data.get("facultyName", ""),
-        "platform": data.get("platform", ""),
-        "meetingLink": data.get("meetingLink", ""),
-        "scheduledDate": data.get("scheduledDate", ""),
-        "scheduledTime": data.get("scheduledTime", ""),
-        "status": "scheduled",
-        "recordingLink": "",
-        "createdBy": current_user.get("id"),
-        "createdAt": datetime.utcnow()
-    }
-
-    result = mongo.db.live_classes.insert_one(live)
-
-    return jsonify({
-        "success": True,
-        "id": str(result.inserted_id)
-    })
-
+            "error": str(e),
+            "type": type(e).__name__
+        }), 500
 
 # ==========================================================
 # GET ALL LIVE CLASSES
@@ -120,27 +171,44 @@ def get_all_classes():
 @jwt_required()
 def join_live(class_id):
 
-    current_user = get_jwt_identity()
+    try:
 
-    attendance_exists = mongo.db.live_attendance.find_one({
-        "classId": class_id,
-        "userId": current_user.get("id")
-    })
+        user = get_current_user()
 
-    if not attendance_exists:
+        if not user:
+            return jsonify({
+                "success": False,
+                "message": "User not found"
+            }), 404
 
-        mongo.db.live_attendance.insert_one({
+        user_id = user.get("_id") or user.get("id")
+
+        attendance_exists = mongo.db.live_attendance.find_one({
             "classId": class_id,
-            "userId": current_user.get("id"),
-            "name": current_user.get("name", ""),
-            "role": current_user.get("role", ""),
-            "joinedAt": datetime.utcnow()
+            "userId": user_id
         })
 
-    return jsonify({
-        "success": True
-    })
+        if not attendance_exists:
 
+            mongo.db.live_attendance.insert_one({
+                "classId": class_id,
+                "userId": user_id,
+                "name": user.get("name", ""),
+                "role": user.get("role", ""),
+                "joinedAt": datetime.utcnow()
+            })
+
+        return jsonify({
+            "success": True
+        })
+
+    except Exception as e:
+
+        return jsonify({
+            "success": False,
+            "error": str(e),
+            "type": type(e).__name__
+        }), 500
 
 # ==========================================================
 # GET ATTENDANCE
@@ -150,9 +218,15 @@ def join_live(class_id):
 @jwt_required()
 def get_attendance(class_id):
 
-    current_user = get_jwt_identity()
+    user = get_current_user()
 
-    role = current_user.get("role", "")
+    if not user:
+        return jsonify({
+            "success": False,
+            "message": "User not found"
+        }), 404
+
+    role = user.get("role", "")
 
     if role not in ["admin", "faculty", "management"]:
         return jsonify({
@@ -185,9 +259,16 @@ def get_attendance(class_id):
 @jwt_required()
 def delete_live(class_id):
 
-    current_user = get_jwt_identity()
+    user = get_current_user()
 
-    role = current_user.get("role", "")
+    if not user:
+        return jsonify({
+            "success": False,
+            "message": "User not found"
+        }), 404
+
+    role = user.get("role", "")
+    
 
     if role not in ["admin", "faculty", "management"]:
         return jsonify({

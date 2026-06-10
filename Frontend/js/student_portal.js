@@ -379,6 +379,8 @@ async function loadMaterials() {
 
         const data = await res.json();
 
+        console.log("Materials:", data);
+
         if (!data.success || !data.materials.length) {
 
             container.innerHTML = `
@@ -398,6 +400,10 @@ async function loadMaterials() {
 
         data.materials.forEach(m => {
 
+            const fileUrl = m.file_id
+                ? `${window.BASE_URL}/materials/file/${m.file_id}`
+                : "";
+
             grid.innerHTML += `
 
             <div class="info-card material-card">
@@ -407,7 +413,7 @@ async function loadMaterials() {
                 </div>
 
                 <h4>
-                    ${m.title}
+                    ${m.title || "Untitled"}
                 </h4>
 
                 <p>
@@ -432,18 +438,18 @@ async function loadMaterials() {
                     }
 
                     ${
-                        m.file
+                        m.file_id
                         ?
                         `
                         <button class="btn-secondary"
-                            onclick="window.open('${m.file}','_blank')">
+                            onclick="window.open('${fileUrl}','_blank')">
 
                             👁 View
 
                         </button>
 
                         <button class="btn-success"
-                            onclick="downloadFile('${m.file}')">
+                            onclick="downloadFile('${fileUrl}')">
 
                             ⬇ Download
 
@@ -463,6 +469,12 @@ async function loadMaterials() {
     } catch(err){
 
         console.error(err);
+
+        container.innerHTML = `
+            <div class="error-card">
+                Error loading materials
+            </div>
+        `;
     }
 }
 

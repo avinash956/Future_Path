@@ -61,21 +61,51 @@ async function createLive() {
     }
 
     const payload = {
-        title: document.getElementById("title")?.value || "",
-        description: document.getElementById("description")?.value || "",
+        title: document.getElementById("title")?.value?.trim() || "",
+        description: document.getElementById("description")?.value?.trim() || "",
 
         batchId: batchSelect.value,
-        batchName: batchSelect.options[batchSelect.selectedIndex].text,
+        batchName: batchSelect.options[batchSelect.selectedIndex]?.text || "",
 
         facultyId: facultySelect.value,
-        facultyName: facultySelect.options[facultySelect.selectedIndex].text,
+        facultyName: facultySelect.options[facultySelect.selectedIndex]?.text || "",
 
         platform: document.getElementById("platform")?.value || "",
-        meetingLink: document.getElementById("meetingLink")?.value || "",
+        meetingLink: document.getElementById("meetingLink")?.value?.trim() || "",
 
         scheduledDate: document.getElementById("scheduledDate")?.value || "",
         scheduledTime: document.getElementById("scheduledTime")?.value || ""
     };
+
+    console.log("📤 LIVE CLASS PAYLOAD:");
+    console.log(payload);
+
+    // Basic Validation
+
+    if (!payload.title) {
+        alert("Enter Class Title");
+        return;
+    }
+
+    if (!payload.platform) {
+        alert("Select Platform");
+        return;
+    }
+
+    if (!payload.meetingLink) {
+        alert("Enter Meeting Link");
+        return;
+    }
+
+    if (!payload.scheduledDate) {
+        alert("Select Date");
+        return;
+    }
+
+    if (!payload.scheduledTime) {
+        alert("Select Time");
+        return;
+    }
 
     try {
 
@@ -88,11 +118,22 @@ async function createLive() {
             body: JSON.stringify(payload)
         });
 
-        const result = await res.json();
+        const responseText = await res.text();
 
-        if (result.success) {
+        console.log("📥 Response Status:", res.status);
+        console.log("📥 Raw Response:", responseText);
 
-            alert("Live Class Created");
+        let result = {};
+
+        try {
+            result = JSON.parse(responseText);
+        } catch (e) {
+            console.error("❌ Invalid JSON Response");
+        }
+
+        if (res.ok && result.success) {
+
+            alert("✅ Live Class Created Successfully");
 
             document.getElementById("title").value = "";
             document.getElementById("description").value = "";
@@ -102,18 +143,23 @@ async function createLive() {
 
         } else {
 
-            alert(result.message || "Failed to create class");
+            console.error("❌ Server Error:", result);
 
+            alert(
+                result.message ||
+                `Server Error (${res.status})`
+            );
         }
 
     } catch (err) {
 
-        console.error("Create Live Error:", err);
-        alert("Server Error");
+        console.error("❌ Create Live Error:", err);
 
+        alert(
+            "Failed to connect to server.\nCheck backend logs."
+        );
     }
 }
-
 /* =====================================================
    LOAD LIVE CLASSES
 ===================================================== */
