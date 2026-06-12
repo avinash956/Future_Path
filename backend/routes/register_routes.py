@@ -221,8 +221,7 @@ def register():
 
             "success": True,
 
-            "message":
-                "Registration submitted successfully",
+            "message":"Registration submitted successfully",
 
             "id":
                 str(result.inserted_id)

@@ -393,7 +393,7 @@ def login():
             "message": str(e)
         }), 500
 # =========================================
-# CHANGE PASSWORD (FIXED)
+# CHANGE PASSWORD (ALL ROLES FIXED)
 # =========================================
 @auth_bp.route("/change-password", methods=["PUT", "POST"])
 @jwt_required()
@@ -414,24 +414,76 @@ def change_password():
 
         identity = get_jwt_identity()
 
-        # ✅ FIXED: identity is ALWAYS string now
         if not identity:
             return jsonify({"message": "Invalid token"}), 401
 
+        # ========================================
+        # FIND USER IN ALL COLLECTIONS (CONCEPT 1)
+        # ========================================
+        user = None
+        collection = None
+
+        collections = [
+            ("users", mongo.db.users),
+            ("students", mongo.db.students),
+            ("faculty", mongo.db.faculty),
+            ("management", mongo.db.management)
+        ]
+
         try:
-            user = mongo.db.users.find_one({"_id": ObjectId(identity)})
+            user_id = ObjectId(identity)
         except:
             return jsonify({"message": "Invalid user ID in token"}), 401
+
+        for name, col in collections:
+
+            user = col.find_one({"_id": user_id})
+
+            if user:
+                collection = col
+                break
 
         if not user:
             return jsonify({"message": "User not found"}), 404
 
-        if not bcrypt.check_password_hash(user["password"], old_password):
-            return jsonify({"message": "Old password incorrect"}), 401
+        # ========================================
+        # PASSWORD VERIFICATION (CONCEPT 2)
+        # ========================================
+        stored_password = str(user.get("password", ""))
+        password_ok = False
 
+        try:
+            # bcrypt hashed password
+            if (
+                stored_password.startswith("$2a$")
+                or stored_password.startswith("$2b$")
+                or stored_password.startswith("$2y$")
+            ):
+                password_ok = bcrypt.check_password_hash(
+                    stored_password,
+                    old_password
+                )
+
+            # plain password fallback
+            else:
+                password_ok = (stored_password == old_password)
+
+        except Exception as err:
+            print("Password Check Error:", err)
+            password_ok = False
+
+        if not password_ok:
+            return jsonify({
+                "success": False,
+                "message": "Old password is incorrect"
+            }), 401
+
+        # ========================================
+        # UPDATE PASSWORD
+        # ========================================
         hashed_password = bcrypt.generate_password_hash(new_password).decode("utf-8")
 
-        result = mongo.db.users.update_one(
+        result = collection.update_one(
             {"_id": user["_id"]},
             {"$set": {"password": hashed_password}}
         )
@@ -439,10 +491,16 @@ def change_password():
         if result.matched_count == 0:
             return jsonify({"message": "Update failed"}), 404
 
-        return jsonify({"message": "Password updated successfully"}), 200
+        return jsonify({
+            "success": True,
+            "message": "Password updated successfully"
+        }), 200
 
     except Exception as e:
-        return jsonify({"message": f"Backend Error: {str(e)}"}), 500
+        return jsonify({
+            "success": False,
+            "message": f"Backend Error: {str(e)}"
+        }), 500
 
 
 # =========================================
@@ -667,9 +725,7 @@ def verify_otp():
 # ========================================
 #   Reset Password Execution
 # ========================================
-# ========================================
-#   Reset Password Execution
-# ========================================
+
 @auth_bp.route("/reset-password", methods=["POST"])
 def reset_password():
     try:

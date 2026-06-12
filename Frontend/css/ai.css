@@ -435,25 +435,24 @@ body::before{
 }
 
 .msg.bot {
-
     background: rgba(255,255,255,.96);
-
     color: #1e293b;
-
-    line-height: 1.9;
-
-    font-size: 15px;
-
-    padding: 18px;
-
+    white-space: pre-wrap;
+    
+    /* Reduced from 1.9 to 1.4 for clean classroom-note line spacing */
+    line-height: 1.0; 
+    
+    font-size: 12px;
+    padding: 10px;
     border-radius: 18px;
-
     max-width: 90%;
-
-    box-shadow:
-        0 10px 25px rgba(0,0,0,.08);
-
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
     word-break: break-word;
+}
+
+/* Prevents extra blank layout spaces from inflating the structure */
+.msg.bot p {
+    margin: 0 0 4px 0;
 }
 
 /* Main Heading */

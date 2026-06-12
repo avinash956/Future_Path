@@ -175,7 +175,58 @@ document.addEventListener("DOMContentLoaded", function () {
       
     });
   }
+// ======================================
+// PASSWORD TOGGLE FUNCTIONS
+// ======================================
 
+function toggleCurrentPassword() {
+
+    const input =
+        document.getElementById(
+            "currentPassword"
+        );
+
+    input.type =
+        input.type === "password"
+            ? "text"
+            : "password";
+}
+
+function toggleNewPassword() {
+
+    const input =
+        document.getElementById(
+            "newPassword"
+        );
+
+    input.type =
+        input.type === "password"
+            ? "text"
+            : "password";
+}
+
+function toggleConfirmPassword() {
+
+    const input =
+        document.getElementById(
+            "confirmPassword"
+        );
+
+    input.type =
+        input.type === "password"
+            ? "text"
+            : "password";
+}
+
+// Make available to HTML onclick
+window.toggleCurrentPassword =
+    toggleCurrentPassword;
+
+window.toggleNewPassword =
+    toggleNewPassword;
+
+window.toggleConfirmPassword =
+    toggleConfirmPassword;
  // =====================================
 // ADVANCED CHANGE PASSWORD HANDLER
 // =====================================

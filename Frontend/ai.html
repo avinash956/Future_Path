@@ -292,70 +292,38 @@ Contact:
 
 </footer>
 
-<!-- ================= SCRIPTS ================= -->
-<!-- ================= SCRIPTS ================= -->
-
-<script src="js/auth.js"></script>
-
-<!-- MARKDOWN -->
+<!-- ================= MARKDOWN ================= -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-<script src="js/api.js"></script>
+<!-- ================= KATEX ================= -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+<!-- ================= JSPDF ================= -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- ================= APP FILES ================= -->
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
 <script src="js/sidebar.js"></script>
 
-<!-- KATEX -->
-<script defer
-src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js">
-</script>
-
-<script defer
-src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js">
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<!-- Place this inside your HTML <head> or right before your closing </body> tag -->
-<script src="https://cloudflare.com"></script>
-
+<!-- ================= KATEX SAFE INIT ================= -->
 <script>
-
-document.addEventListener(
-"DOMContentLoaded",
-() => {
-
-    if (
-        typeof renderMathInElement !==
-        "undefined"
-    ) {
-
-        renderMathInElement(
-            document.body,
-            {
-
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        if (typeof renderMathInElement === "function") {
+            renderMathInElement(document.body, {
                 delimiters: [
-
-                    {
-                        left: "$$",
-                        right: "$$",
-                        display: true
-                    },
-
-                    {
-                        left: "$",
-                        right: "$",
-                        display: false
-                    }
-
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
                 ],
-
                 throwOnError: false
-
-            }
-        );
-
-    }
-
+            });
+        }
+    }, 300);
 });
-
 </script>
 </body>
 </html>

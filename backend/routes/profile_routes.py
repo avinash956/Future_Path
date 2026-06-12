@@ -228,8 +228,7 @@ def update_profile():
 
         return jsonify({
             "success": True,
-            "message":
-            "Profile Updated Successfully"
+            "message": "Profile Updated Successfully"
         }), 200
 
     except Exception as e:

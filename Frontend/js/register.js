@@ -160,6 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     registerMessage.style.color =
                         "#16a34a";
+                    registerMessage.innerHTML ="✅ Registration successful. Await admin approval.";
 
                     registerForm.reset();
 

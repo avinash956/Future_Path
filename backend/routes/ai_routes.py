@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify, current_app
-import os
 from google import genai
+from google.genai import types  # Import types for correct configuration
+from pydantic import BaseModel, Field
+from typing import List, Optional
 from config import Config
 from extensions import mongo
 import jwt
@@ -10,20 +12,28 @@ import traceback
 ai_bp = Blueprint("ai", __name__)
 
 # =====================================================
-# GEMINI CLIENT
+# GEMINI CLIENT & SCHEMA DEFINITIONS
 # =====================================================
 
+_client = None
+
 def get_client():
-    """
-    Create fresh Gemini client.
-    Useful if API key changes and server restarts.
-    """
+    global _client
+    if _client:
+        return _client
     if not Config.GEMINI_API_KEY:
         return None
+    _client = genai.Client(api_key=Config.GEMINI_API_KEY)
+    return _client
 
-    return genai.Client(
-        api_key=Config.GEMINI_API_KEY
-    )
+# Schema to force Gemini to separate sections and limit array items to single sentences
+class StudyNotesSchema(BaseModel):
+    topic_name: str = Field(description="The clean name of the educational topic.")
+    definitions: List[str] = Field(description="Exactly two separate, single-sentence definition points.")
+    key_points: List[str] = Field(description="Exactly four separate, single-sentence key points.")
+    formula: Optional[List[str]] = Field(default=None, description="Exactly one mathematical formula written in LaTeX format (e.g., \\oint \\vec{B} \\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}}). Leave empty or pass null if not applicable.")
+    example: Optional[List[str]] = Field(default=None, description="Exactly one single-sentence practical example.")
+    final_summary: List[str] = Field(description="Exactly one single-sentence concluding summary.")
 
 
 # =====================================================
@@ -31,23 +41,12 @@ def get_client():
 # =====================================================
 
 print("\n========== GEMINI INITIALIZATION ==========")
-
 if Config.GEMINI_API_KEY:
-
-    preview = (
-        Config.GEMINI_API_KEY[:8]
-        + "..."
-        + Config.GEMINI_API_KEY[-4:]
-    )
-
     print("✅ GEMINI KEY LOADED")
-    print("KEY PREVIEW:", preview)
+    print("KEY PREVIEW:", Config.GEMINI_API_KEY[:8] + "..." + Config.GEMINI_API_KEY[-4:])
     print("KEY LENGTH:", len(Config.GEMINI_API_KEY))
-
 else:
-
     print("❌ GEMINI KEY MISSING")
-
 print("==========================================\n")
 
 
@@ -57,360 +56,176 @@ print("==========================================\n")
 
 @ai_bp.route("/test", methods=["GET"])
 def test_ai():
-
     try:
-
         client = get_client()
-
         if not client:
-            return jsonify({
-                "success": False,
-                "message": "Gemini key missing"
-            }), 500
+            return jsonify({"success": False, "message": "Gemini key missing"}), 500
 
         response = client.models.generate_content(
             model="gemini-2.5-flash",
             contents="Say Hello"
         )
-
-        return jsonify({
-            "success": True,
-            "reply": response.text
-        })
-
+        return jsonify({"success": True, "reply": response.text})
     except Exception as e:
-
-        return jsonify({
-            "success": False,
-            "error": str(e)
-        }), 500
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
 # =====================================================
-# AI CHAT
+# AI CHAT ROUTE
 # =====================================================
 
 @ai_bp.route("/chat", methods=["POST"])
 def ai_chat():
-
-    request_start = time.time()
+    start_time = time.time()
 
     try:
-
-        print("\n========== NEW AI REQUEST ==========")
-        print("TIME:", time.strftime("%Y-%m-%d %H:%M:%S"))
-        print("REMOTE IP:", request.remote_addr)
-
-        # =================================================
-        # JSON
-        # =================================================
-
         data = request.get_json(silent=True)
-
         if not data:
+            return jsonify({"success": False, "message": "Invalid JSON body"}), 422
 
-            return jsonify({
-                "success": False,
-                "message": "Invalid JSON body"
-            }), 422
-
-        message = str(
-            data.get("message", "")
-        ).strip()
-
+        message = str(data.get("message", "")).strip()
         if not message:
-
-            return jsonify({
-                "success": False,
-                "message": "Message is required"
-            }), 422
-
-        # =================================================
-        # GEMINI
-        # =================================================
+            return jsonify({"success": False, "message": "Message is required"}), 422
 
         client = get_client()
-
         if not client:
+            return jsonify({"success": False, "message": "AI service unavailable"}), 500
 
-            return jsonify({
-                "success": False,
-                "message": "Gemini API key missing"
-            }), 500
+        # High-enforcement engineering instructions for structured outputs
+        system_instruction = (
+                    "You are Future Path EduTech AI Assistant.\n"
+                    "You generate structured educational notes.\n\n"
 
-        prompt = f"""
-You are Future Path EduTech AI Assistant, an expert teacher for school, college, engineering, diploma, competitive exams, programming, mathematics, science, and technology.
+                    "STRICT RULES:\n"
+                    "1. Output must be clean structured notes.\n"
+                    "2. No markdown (#, *, ```).\n"
+                    "3. Each point = ONE sentence only.\n"
+                    "4. Max 6–7 key points only.\n"
+                    "5. NO paragraph writing allowed.\n\n"
 
-RESPONSE FORMAT RULES:
+                    "FORMULA RULE (IMPORTANT):\n"
+                    "- Always write formulas ONLY inside $$ $$\n"
+                    "- Never use \\[ \\] or plain text formulas\n\n"
 
-GENERAL:
-- Give clean, professional, student-friendly answers.
-- Do NOT use Markdown symbols such as:
-  #, ##, ###, *, **, _, -, ``` .
-- Use plain text only.
-- Avoid unnecessary decorations.
-- Keep language clear and educational.
-
-STRUCTURE:
-
-For theory questions use:
-
-TOPIC
-
-Overview:
-Brief introduction.
-
-Key Points:
-1. Point one
-2. Point two
-3. Point three
-
-Detailed Explanation:
-Explain concepts in simple language using paragraphs and numbered points.
-
-Example:
-Give a practical example whenever possible.
-
-Summary:
-Provide a short conclusion.
-
---------------------------------------------------
-
-For science and engineering questions use:
-
-TOPIC
-
-Definition:
-...
-
-Working Principle:
-1. ...
-2. ...
-3. ...
-
-Components (if applicable):
-1. ...
-2. ...
-3. ...
-
-Advantages:
-1. ...
-2. ...
-3. ...
-
-Disadvantages:
-1. ...
-2. ...
-3. ...
-
-Applications:
-1. ...
-2. ...
-3. ...
-
-Conclusion:
-...
-
---------------------------------------------------
-
-For mathematics questions:
-
-TOPIC
-
-Given:
-...
-
-Formula:
-Use LaTeX format enclosed in $$ $$.
-
-Example:
-$$x = \\frac{{-b \\pm \\sqrt{{b^2-4ac}}}}{{2a}}$$
-
-Solution:
-Step 1:
-...
-
-Step 2:
-...
-
-Step 3:
-...
-
-Final Answer:
-...
-
---------------------------------------------------
-
-For programming questions:
-
-Problem:
-...
-
-Approach:
-...
-
-Algorithm:
-1. ...
-2. ...
-3. ...
-
-Code:
-Provide clean code.
-
-Explanation:
-Explain the code line by line.
-
-Output:
-...
-
---------------------------------------------------
-
-For comparison questions:
-
-COMPARISON TABLE
-
-Feature | Item A | Item B
-
-Then provide:
-1. Similarities
-2. Differences
-3. Recommended Usage
-
---------------------------------------------------
-
-IMPORTANT:
-
-- Always use headings.
-- Always use numbered points.
-- Always use examples where appropriate.
-- Keep answers visually organized.
-- Avoid long unstructured paragraphs.
-- Avoid Markdown bullets (*).
-- Avoid Markdown headings (#).
-- Avoid Markdown code fences unless code is requested.
-- Make responses look like professional study notes.
-
-User Question:
-{message}
-"""
+                    "OUTPUT FORMAT:\n"
+                    "Topic\n"
+                    "Definition:\n"
+                    "Key Points:\n"
+                    "Formula:\n"
+                    "Example:\n"
+                    "Summary:\n"
+                )
         try:
+            # Explicitly configure GenerateContentConfig using google.genai types
+            config = types.GenerateContentConfig(
+                system_instruction=system_instruction,
+                response_mime_type="application/json",
+                response_schema=StudyNotesSchema,
+                temperature=0.1 # Lower temperature means stricter structural alignment
+            )
 
             response = client.models.generate_content(
                 model="gemini-2.5-flash",
-                contents=prompt
+                contents=f"User Question: {message}",
+                config=config
             )
 
-            reply = response.text.strip()
+            # Parse Gemini's validated structural response
+            notes_data = StudyNotesSchema.model_validate_json(response.text)
+
+            # Build the exact flat layout string programmatically
+            # This completely bypasses AI layout mistakes and guarantees absolute consistency
+            reply_lines = []
+            
+            reply_lines.append(notes_data.topic_name.upper())
+            reply_lines.append("")  # Empty line separator
+            
+            reply_lines.append("Definition:")
+            for idx, item in enumerate(notes_data.definitions, 1):
+                reply_lines.append(f"{idx}. {item}")
+            reply_lines.append("")
+
+            reply_lines.append("Key Points:")
+            for idx, item in enumerate(notes_data.key_points, 1):
+                reply_lines.append(f"{idx}. {item}")
+            reply_lines.append("")
+
+            # Protect against empty arrays or null responses
+            if notes_data.formula and len(notes_data.formula) > 0:
+                reply_lines.append("Formula:")
+                for idx, item in enumerate(notes_data.formula, 1):
+                    reply_lines.append(f"{idx}. {item}")
+                reply_lines.append("")
+
+            if notes_data.example and len(notes_data.example) > 0:
+                reply_lines.append("Example:")
+                for idx, item in enumerate(notes_data.example, 1):
+                    reply_lines.append(f"{idx}. {item}")
+                reply_lines.append("")
+
+            reply_lines.append("Final Summary:")
+            for idx, item in enumerate(notes_data.final_summary, 1):
+                reply_lines.append(f"{idx}. {item}")
+
+            reply = "\n".join(reply_lines).strip()
 
         except Exception as gemini_error:
+            err = str(gemini_error)
+            print("🔥 GEMINI ERROR:", err)
+            print(traceback.format_exc())
 
-            error_text = str(gemini_error)
-
-            print("\n🔥 GEMINI API ERROR")
-            print(error_text)
-
-            # -----------------------------------------
-            # API KEY DISABLED
-            # -----------------------------------------
-
-            if "reported as leaked" in error_text:
-
-                return jsonify({
-                    "success": False,
-                    "message":
-                    "AI service unavailable. API key disabled."
-                }), 403
-
-            # -----------------------------------------
-            # MODEL ERROR
-            # -----------------------------------------
-
-            if "NOT_FOUND" in error_text:
-
-                return jsonify({
-                    "success": False,
-                    "message":
-                    "AI model unavailable."
-                }), 503
-
-            # -----------------------------------------
-            # QUOTA EXCEEDED
-            # -----------------------------------------
-
-            if (
-                "RESOURCE_EXHAUSTED"
-                in error_text
-            ):
-
-                return jsonify({
-                    "success": False,
-                    "message":
-                    "Daily AI quota exceeded. Try again later."
-                }), 429
-
-            # -----------------------------------------
-            # FALLBACK
-            # -----------------------------------------
-
-            return jsonify({
-                "success": False,
-                "message":
-                "AI service temporarily unavailable."
-            }), 503
+            if "RESOURCE_EXHAUSTED" in err:
+                return jsonify({"success": False, "message": "AI quota exceeded"}), 429
+            if "NOT_FOUND" in err:
+                return jsonify({"success": False, "message": "AI model not found"}), 503
+            return jsonify({"success": False, "message": "AI service temporarily unavailable"}), 503
 
         # =================================================
-        # USER LOGGING & DB AUDIT
+        # USER AUTH (FIXED BUG)
         # =================================================
+        username = "anonymous"
+        role = "guest"
 
         try:
-            user_profile = {
-                "username": "anonymous",
-                "role": "guest"
-            }
+            auth = request.headers.get("Authorization")
+            if auth and auth.startswith("Bearer "):
+                token_parts = auth.split(" ")
+                if len(token_parts) > 1:
+                    token = token_parts[1]
+                    if token and token != "guest":
+                        secret = current_app.config.get("JWT_SECRET_KEY")
+                        if secret:
+                            decoded = jwt.decode(token, secret, algorithms=["HS256"])
+                            username = decoded.get("username", "anonymous")
+                            role = decoded.get("role", "guest")
+        except Exception:
+            pass
 
-            auth_header = request.headers.get("Authorization")
-
-            if auth_header and auth_header.startswith("Bearer "):
-                token = auth_header.split(" ")[1]
-
-                if token != "guest":
-                    try:
-                        decoded = jwt.decode(
-                            token,
-                            current_app.config["JWT_SECRET_KEY"],
-                            algorithms=["HS256"]
-                        )
-                        user_profile = decoded
-                    except Exception:
-                        pass
-
-            # Complete MongoDB interaction safely
+        # =================================================
+        # DB LOGGING (SAFE NON-BLOCKING)
+        # =================================================
+        try:
             mongo.db.ai_logs.insert_one({
-                "username": user_profile.get("username", "anonymous"),
-                "role": user_profile.get("role", "guest"),
+                "username": username,
+                "role": role,
                 "user_message": message,
                 "ai_reply": reply,
                 "timestamp": time.time(),
-                "duration_ms": round((time.time() - request_start) * 1000)
+                "duration_ms": round((time.time() - start_time) * 1000)
             })
-
         except Exception as db_err:
-            print("⚠ MongoDB Logging Failed:", str(db_err))
-            # Pass silently so that DB downtime does not break user chat execution
+            print("⚠ MongoDB logging failed:", db_err)
 
         # =================================================
-        # DISPATCH RESPONSE
+        # RESPONSE
         # =================================================
-        print(f"✅ REQUEST SUCCESSFUL [{round((time.time() - request_start) * 1000)}ms]")
+        print(f"✅ AI SUCCESS [{round((time.time() - start_time) * 1000)}ms]")
         return jsonify({
             "success": True,
             "reply": reply
         })
 
-    except Exception as general_error:
-        print("\n🔥 CRITICAL CONTROLLER CRASH")
+    except Exception as e:
+        print("🔥 CRITICAL ERROR:")
         print(traceback.format_exc())
-        return jsonify({
-            "success": False,
-            "message": "An unexpected internal server error occurred."
-        }), 500
+        return jsonify({"success": False, "message": "Internal server error"}), 500
