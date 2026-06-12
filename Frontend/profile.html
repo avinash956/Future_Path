@@ -9,7 +9,7 @@
 content="width=device-width, initial-scale=1.0">
 
 <title>
-Complete Profile
+My Profile
 </title>
 
 <link rel="stylesheet" href="css/style.css">
@@ -25,7 +25,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <!-- ================= PRELOADER ================= -->
 <div id="preloader">
-  <div class="loader"></div>
+    <div class="loader"></div>
 </div>
 
 <!-- ================= HEADER ================= -->
@@ -126,7 +126,6 @@ Login
 <aside class="sidebar"
 id="sidebar">
 
-<!-- TOGGLE -->
 <div class="sidebar-toggle"
 onclick="toggleSidebar()">
 
@@ -136,25 +135,29 @@ id="toggleIcon"></i>
 </div>
 
 <h3>
-
 Profile Controls
-
 </h3>
 
-<!-- SEARCH -->
-<input type="text" id="menuSearch" class="menu-search" placeholder="Search Menu...">
+<input
+type="text"
+id="menuSearch"
+class="menu-search"
+placeholder="Search Menu...">
 
-<!-- COMPLETE PROFILE -->
-<button class="side-btn active" data-title="Complete Profile">
+<button
+class="side-btn active"
+data-title="My Profile">
 
-<i class="fa-solid fa-user" ></i>
+<i class="fa-solid fa-user"></i>
 
-Complete Profile
+My Profile
 
 </button>
 
-<!-- RETURN HOME -->
-<button class="side-btn" data-title="Return Home" onclick="window.location.href='index.html'">
+<button
+class="side-btn"
+data-title="Return Home"
+onclick="window.location.href='index.html'">
 
 <i class="fa-solid fa-house"></i>
 
@@ -162,8 +165,10 @@ Return Home
 
 </button>
 
-<!-- BACK -->
-<button class="side-btn" data-title="Go Back" onclick="goBack()">
+<button
+class="side-btn"
+data-title="Go Back"
+onclick="goBack()">
 
 <i class="fa-solid fa-arrow-left"></i>
 
@@ -174,31 +179,40 @@ Go Back
 </aside>
 
 <!-- ================= WORK AREA ================= -->
-<main class="work-area" style = "background: linear-gradient(135deg, #2563eb, #2d2e2d);">
+<main class="work-area"
+style="background: linear-gradient(135deg, #2563eb, #2d2e2d);">
 
-<section class="dashboard-section" style="background: linear-gradient(135deg, #3139dc, #0c0c0c);">
+<section
+class="dashboard-section"
+style="background: linear-gradient(135deg, #3139dc, #0c0c0c);">
 
 <div class="section-title">
 
 <h2 style="color: rgb(59, 7, 244);">
-Complete Your Profile
+My Profile
 </h2>
 
-<p style="color: rgb(13, 13, 13); font-size: 16px;">
-Registration requires Admin Approval
+<p style="color: rgb(13, 13, 13); font-size:16px;">
+Update your profile information
 </p>
 
 </div>
 
 <!-- ================= PROFILE FORM ================= -->
-<form class="profile-form advanced-profile-form" id="registerForm" enctype="multipart/form-data" style="background: linear-gradient(135deg, #6eb5d4, #0badde);">
 
-<!-- ================= IMAGE PREVIEW ================= -->
+<form
+class="profile-form advanced-profile-form"
+id="registerForm"
+enctype="multipart/form-data"
+style="background: linear-gradient(135deg, #6eb5d4, #0badde);">
+
+<!-- IMAGE -->
 <div class="profile-upload">
 
 <label for="profilePic">
 
-<div class="upload-circle"
+<div
+class="upload-circle"
 id="imagePreview">
 
 <i class="fa-solid fa-camera"></i>
@@ -207,32 +221,31 @@ id="imagePreview">
 
 </label>
 
-<!-- FILE INPUT -->
 <input
 type="file"
 id="profilePic"
 accept="image/*"
 hidden>
 
-<!-- CUSTOM BUTTON -->
 <button
 type="button"
 class="upload-btn"
 onclick="document.getElementById('profilePic').click()">
 
-<i class="fa-solid fa-upload" style="color: black;"></i>
+<i class="fa-solid fa-upload"
+style="color:black;"></i>
 
 Choose Image
 
 </button>
 
-<p style="color: black; margin-top: 10px;">
-Upload Profile Photo
+<p style="color:black; margin-top:10px;">
+Update Profile Photo
 </p>
 
 </div>
 
-<!-- ================= FULL NAME ================= -->
+<!-- NAME -->
 <div class="input-group">
 
 <i class="fa-solid fa-user"></i>
@@ -245,7 +258,7 @@ required>
 
 </div>
 
-<!-- ================= MOBILE ================= -->
+<!-- MOBILE -->
 <div class="input-group">
 
 <i class="fa-solid fa-phone"></i>
@@ -258,7 +271,7 @@ required>
 
 </div>
 
-<!-- ================= EMAIL ================= -->
+<!-- EMAIL -->
 <div class="input-group">
 
 <i class="fa-solid fa-envelope"></i>
@@ -271,24 +284,25 @@ required>
 
 </div>
 
-<!-- ================= SUBMIT ================= -->
+<!-- UPDATE BUTTON -->
 <button
 type="submit"
 class="login-submit-btn">
 
 <i class="fa-solid fa-floppy-disk"></i>
 
-Submit Registration
+Update Profile
 
 </button>
 
-<!-- ================= RESPONSE ================= -->
+<!-- RESPONSE -->
 <p id="responseMessage"></p>
 
 </form>
 
-<!-- ================= RETURN HOME ================= -->
-<div style="text-align:center; margin-top:25px;">
+<!-- RETURN HOME -->
+<div
+style="text-align:center; margin-top:25px;">
 
 <a href="index.html">
 
@@ -336,6 +350,19 @@ Contact:
 </p>
 
 </footer>
+
+<!-- ================= LOGIN CHECK ================= -->
+<script>
+
+if(!localStorage.getItem("token")){
+
+alert("Please login first");
+
+window.location.href = "login.html";
+
+}
+
+</script>
 
 <!-- ================= JAVASCRIPT ================= -->
 <script>
@@ -399,52 +426,10 @@ menu.classList.remove(
 
 });
 
-/* =========================
-IMAGE PREVIEW
-========================= */
-
-document
-.getElementById(
-'profilePic'
-)
-.addEventListener(
-'change',
-function(event){
-
-const file =
-event.target.files[0];
-
-if(file){
-
-const reader =
-new FileReader();
-
-reader.onload =
-function(e){
-
-document
-.getElementById(
-'imagePreview'
-)
-.innerHTML = `
-
-<img
-src="${e.target.result}"
-class="preview-image">
-
-`;
-
-};
-
-reader.readAsDataURL(file);
-
-}
-
-});
-
 </script>
 
 <!-- ================= SCRIPTS ================= -->
+
 <script src="js/sidebar.js"></script>
 
 <script src="js/profile.js"></script>

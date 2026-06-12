@@ -27,6 +27,7 @@ from routes.live_streaming_routes import live_bp
 from routes.faculty_portal_routes import faculty_portal_bp
 from routes.student_portal_routes import student_portal_bp
 from routes.register_routes import register_bp
+from routes.profile_routes import profile_bp
 # ======================
 # APP FACTORY
 # ======================
@@ -132,7 +133,7 @@ def create_app():
     app.register_blueprint(faculty_portal_bp, url_prefix="/api/faculty_portal")
     app.register_blueprint(student_portal_bp, url_prefix="/api/student_portal")
     app.register_blueprint(register_bp)
-
+    app.register_blueprint(profile_bp)
     
     # ✅ LIVE STREAM FIXED
     app.register_blueprint(live_bp, url_prefix="/api/live")
