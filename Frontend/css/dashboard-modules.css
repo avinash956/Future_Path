@@ -1101,3 +1101,339 @@ MOBILE
 
     color:#f8fafc;
 }
+
+/* ================================
+   DASHBOARD SECTION
+================================ */
+.dashboard-section {
+
+    margin-top: 30px;
+    padding: 25px;
+
+    border-radius: 24px;
+
+    backdrop-filter: blur(20px);
+
+    background: rgba(255,255,255,0.08);
+
+    border: 1px solid rgba(255,255,255,0.12);
+
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+/* ================================
+   HEADER
+================================ */
+.section-header {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.section-header h3 {
+    color: white;
+    font-size: 24px;
+    margin: 0;
+}
+
+/* ================================
+   EXPORT BUTTON
+================================ */
+.download-btn {
+
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    border: none;
+
+    color: white;
+    padding: 12px 18px;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-weight: 700;
+
+    transition: .3s;
+
+    box-shadow: 0 8px 20px rgba(0,114,255,.4);
+}
+
+.download-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,114,255,.6);
+}
+
+/* ================================
+   TABLE
+================================ */
+.admin-table {
+
+    width: 100%;
+    border-collapse: collapse;
+
+    min-width: 1100px;
+    border-radius: 18px;
+
+    overflow: hidden;
+}
+
+.admin-table thead {
+    background: linear-gradient(135deg, #a746e7, #042265);
+}
+
+.admin-table th {
+    color: white;
+    padding: 16px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.admin-table td {
+    padding: 15px;
+    text-align: center;
+    color: black;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.admin-table tbody tr:hover {
+    background: rgba(255,255,255,.08);
+}
+
+/* ================================
+   PHOTO
+================================ */
+.registration-photo {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255,255,255,.2);
+}
+
+/* ================================
+   STATUS
+================================ */
+.status-pending {
+    background: #f59e0b;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+.status-approved {
+    background: #10b981;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+.status-rejected {
+    background: #ef4444;
+    padding: 6px 12px;
+    border-radius: 999px;
+    color: white;
+    font-weight: 700;
+}
+
+/* ================================
+   BATCH SELECT
+================================ */
+.batch-select {
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+}
+
+/* ================================
+   BUTTONS
+================================ */
+.approve-btn {
+    background: #10b981;
+    border: none;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.reject-btn {
+    background: #ef4444;
+    border: none;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+/* =========================================
+   GLOBAL RESPONSIVE CONTAINER
+========================================= */
+
+.dashboard-section {
+    margin-top: 30px;
+    padding: 25px;
+    border-radius: 24px;
+    backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    overflow: hidden;
+}
+
+/* =========================================
+   HEADER RESPONSIVE
+========================================= */
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.section-header h3 {
+    color: white;
+    font-size: 22px;
+    margin: 0;
+}
+
+/* =========================================
+   TABLE WRAPPER (CRITICAL)
+========================================= */
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* =========================================
+   TABLE BASE
+========================================= */
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px; /* desktop base */
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+/* HEADER */
+.admin-table thead {
+    background: linear-gradient(135deg, #a746e7, #042265);
+}
+
+.admin-table th {
+    color: white;
+    padding: 14px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* CELLS */
+.admin-table td {
+    padding: 14px;
+    text-align: center;
+    color: #000;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+/* ROW HOVER */
+.admin-table tbody tr:hover {
+    background: rgba(255,255,255,.08);
+}
+
+/* =========================================
+   PHOTO
+========================================= */
+
+.registration-photo {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.download-btn,
+.approve-btn,
+.reject-btn {
+    white-space: nowrap;
+}
+
+/* =========================================
+   MOBILE VIEW (CARD STYLE)
+========================================= */
+
+@media (max-width: 768px) {
+
+    .dashboard-section {
+        padding: 15px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .section-header h3 {
+        font-size: 18px;
+    }
+
+    /* Convert table to card layout */
+    .admin-table {
+        min-width: 100%;
+    }
+
+    .admin-table thead {
+        display: none;
+    }
+
+    .admin-table,
+    .admin-table tbody,
+    .admin-table tr,
+    .admin-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .admin-table tr {
+        margin-bottom: 15px;
+        background: rgba(255,255,255,0.06);
+        border-radius: 12px;
+        padding: 10px;
+    }
+
+    .admin-table td {
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+        border: none;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .admin-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 12px;
+        width: 45%;
+        text-align: left;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .registration-photo {
+        width: 45px;
+        height: 45px;
+    }
+}

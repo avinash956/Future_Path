@@ -1,3 +1,31 @@
+<style>
+    .form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* Fix specifically for date input */
+.form-group input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    height: 40px; /* match other inputs */
+}
+
+/* Optional: align calendar icon */
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.7;
+}
+</style>
+
 <!-- =========================
 STUDENT SECTION
 ========================= -->
@@ -15,32 +43,62 @@ ADD STUDENT FORM
 
     <div class="form-grid">
 
-        <input type="text" id="studentName" placeholder="Full Name" required>
+        <div class="form-group">
+            <label for="studentName">Full Name</label>
+            <input type="text" id="studentName" required>
+        </div>
 
-        <select id="studentBatch" required>
-            <option value="">Select Batch</option>
-        </select>
+        <div class="form-group">
+            <label for="studentBatch">Batch</label>
+            <select id="studentBatch" required>
+                <option value="">Select Batch</option>
+            </select>
+        </div>
 
-        <input type="text" id="studentRoll" placeholder="Roll Number" required>
+        <div class="form-group">
+            <label for="studentRoll">Roll Number</label>
+            <input type="text" id="studentRoll" required>
+        </div>
 
-        <input type="email" id="studentEmail" placeholder="Email Address" required>
+        <div class="form-group">
+            <label for="studentEmail">Email Address</label>
+            <input type="email" id="studentEmail" required>
+        </div>
 
-        <input type="text" id="studentPhone" placeholder="Phone Number" required>
+        <div class="form-group">
+            <label for="studentPhone">Phone Number</label>
+            <input type="text" id="studentPhone" required>
+        </div>
 
-        <input type="text" id="studentYear" placeholder="Year / Semester" required>
+        <div class="form-group">
+            <label for="studentYear">Year / Semester</label>
+            <input type="text" id="studentYear" required>
+        </div>
 
-        <input type="date" id="studentDOB">
+        <div class="form-group">
+            <label for="studentDOB">Date of Birth</label>
+            <input type="date" id="studentDOB" required>
+        </div>
 
-        <select id="studentStatus">
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-        </select>
+        <div class="form-group">
+            <label for="studentStatus">Status</label>
+            <select id="studentStatus">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+        </div>
 
-        <input type="file" id="studentImage" accept="image/*">
+        <div class="form-group">
+            <label for="studentImage">Student Image</label>
+            <input type="file" id="studentImage" accept="image/*">
+        </div>
 
     </div>
 
-    <textarea id="studentAddress" placeholder="Address" rows="4"></textarea>
+    <div class="form-group">
+        <label for="studentAddress">Address</label>
+        <textarea id="studentAddress" rows="4"></textarea>
+    </div>
 
     <button type="submit" class="action-btn">
         <i class="fa-solid fa-plus"></i>
@@ -48,7 +106,6 @@ ADD STUDENT FORM
     </button>
 
 </form>
-
 <!-- =========================
 SEARCH + FILTER BAR (PRO UPGRADE)
 ========================= -->

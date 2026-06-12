@@ -1,4 +1,10 @@
 // ======================================
+// HOME DASHBOARD CACHE
+// ======================================
+
+let homeDashboardHTML = "";
+
+// ======================================
 // DASHBOARD SECURITY + SYSTEM CONTROL
 // ======================================
 
@@ -165,11 +171,20 @@ function uploadPhoto() {
 // ======================================
 
 function initializeDashboard() {
-  protect('admin');
-  loadSection('home');
+
+    protect("admin");
+
+    const container =
+        document.getElementById("dynamicContent");
+
+    if (container) {
+        homeDashboardHTML = container.innerHTML;
+    }
+
+    loadSection("home");
 }
 // ======================================
-//   Load Dashboard Home page by default
+//   Load Dashboard Home page
 // ======================================
 async function loadDashboard() {
 
@@ -179,53 +194,67 @@ async function loadDashboard() {
             `${window.BASE_URL}/dashboard/admin-overview`,
             {
                 headers: {
-                    Authorization:
-                    `Bearer ${localStorage.getItem("token")}`
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             }
         );
 
         const data = await res.json();
 
-        console.log(data);
+        console.log("📊 Dashboard Data:", data);
 
         if (!data.success) {
+            console.warn("Dashboard API failed");
             return;
         }
 
-        document.getElementById(
-            "adminWelcome"
-        ).innerText =
-        `Welcome ${data.adminName} 👋`;
+        // ======================================
+        // SAFE DOM HELPER
+        // ======================================
+        const setText = (id, value) => {
+            const el = document.getElementById(id);
+            if (el) el.innerText = value;
+        };
 
-        document.getElementById("totalStudents").innerText = data.stats.students || 0;
+        // ======================================
+        // MAIN STATS (SAFE UPDATES)
+        // ======================================
+        setText("adminWelcome", `Welcome ${data.adminName || "Admin"} 👋`);
 
-        document.getElementById("totalFaculty").innerText = data.stats.faculty || 0;
+        setText("totalStudents", data.stats?.students || 0);
+        setText("totalFaculty", data.stats?.faculty || 0);
+        setText("totalManagement", data.stats?.management || 0);
+        setText("totalBatches", data.stats?.batches || 0);
 
-        document.getElementById("totalManagement").innerText = data.stats.management || 0;
-
-        document.getElementById("totalBatches").innerText = data.stats.batches || 0;
-
-        document.getElementById("totalRevenue").innerText =`₹${Number(data.stats.revenue || 0).toLocaleString()}`;
-
-        console.log("Thought:", data.thought);
-        console.log("Element:", document.getElementById("thoughtText"));
-     const thoughtEl =
-document.getElementById("thoughtText");
-
-if (thoughtEl) {
-    thoughtEl.innerText =
-        data.thought ||
-        "Stay focused and never stop learning.";
-}
-
-    } catch (err) {
-
-        console.error(
-            "Dashboard Load Error:",
-            err
+        setText(
+            "totalRevenue",
+            `₹${Number(data.stats?.revenue || 0).toLocaleString()}`
         );
 
+        setText(
+            "pendingRegistrations",
+            data.stats?.pending_registrations || 0
+        );
+
+        // ======================================
+        // THOUGHT OF THE DAY (SAFE)
+        // ======================================
+        const thoughtEl = document.getElementById("thoughtText");
+
+        if (thoughtEl) {
+            thoughtEl.innerText =
+                data.thought || "Stay focused and never stop learning.";
+        }
+
+        // ======================================
+        // REGISTRATION DASHBOARD INIT
+        // ======================================
+        if (typeof initializeRegistrationDashboard === "function") {
+            initializeRegistrationDashboard();
+        }
+
+    } catch (err) {
+        console.error("❌ Dashboard Load Error:", err);
     }
 }
 // ======================================
@@ -269,10 +298,16 @@ document.addEventListener("click", function (e) {
 async function loadSection(section) {
 
   console.log("📂 Requested Section:", section);
+  
+// ================Home section=========================
   if (section === "home") {
-
     console.log("🏠 Loading Home Dashboard");
+    document.querySelectorAll(".side-btn")
+      .forEach(btn => btn.classList.remove("active"));
 
+    document
+      .querySelector('.side-btn[onclick*="home"]')
+      ?.classList.add("active");
     if (typeof loadDashboard === "function") {
         loadDashboard();
     }
@@ -546,6 +581,389 @@ function navigateTo(page) {
   window.location.href = page;
 }
 
+// ======================================
+// REGISTRATION MANAGEMENT (FIXED)
+// ======================================
+
+let registrationData = [];
+let batchData = [];
+
+// ======================================
+// LOAD REGISTRATIONS
+// ======================================
+
+async function loadRegistrations() {
+
+    try {
+
+        const res = await fetch(
+            `${window.BASE_URL}/dashboard/registration-requests`,
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        if (!data?.success) return;
+
+        registrationData = data.registrations || [];
+
+        renderRegistrationTable();
+
+    } catch (err) {
+        console.error("Registration Load Error", err);
+    }
+}
+
+// ======================================
+// LOAD BATCHES (FIXED)
+// ======================================
+
+async function loadBatchList() {
+
+    try {
+
+        const res = await fetch(
+            `${window.BASE_URL}/dashboard/batches`,
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        // ✅ FIX: extract correct array safely
+        batchData = data?.batches || data || [];
+
+    } catch (err) {
+        console.error("Batch Load Error", err);
+        batchData = [];
+    }
+}
+
+// ======================================
+// IMAGE HELPER (FIXED)
+// ======================================
+
+function getImageUrl(photo) {
+
+    if (!photo) return "images/default-user.png";
+
+    const cleanPath = String(photo)
+        .replace(/\\/g, "/")
+        .replace(/^\/+/, "");
+
+    return `http://127.0.0.1:5000/${cleanPath}`;
+}
+
+// ======================================
+// RENDER TABLE (FIXED SAFE VERSION)
+// ======================================
+
+function renderRegistrationTable() {
+
+    const tbody = document.getElementById("registrationTableBody");
+    if (!tbody) return;
+
+    if (!registrationData.length) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8">No Registrations Found</td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = registrationData.map(reg => {
+
+        // ✅ SAFE batch options
+        const batchOptions = (batchData || []).map(batch => `
+            <option value="${batch._id}">
+                ${batch.code || batch.name || "Batch"}
+            </option>
+        `).join("");
+
+        const photoUrl = getImageUrl(reg.photo);
+
+        return `
+        <tr>
+
+            <td>
+                <img
+                    src="${photoUrl}"
+                    width="60"
+                    height="60"
+                    loading="lazy"
+                    alt="${reg.name || 'Student'}"
+                    style="
+                        border-radius:50%;
+                        object-fit:cover;
+                        border:2px solid #a746e7;
+                        background:#f5f5f5;
+                    "
+                    onerror="this.src='images/default-user.png'"
+                >
+            </td>
+
+            <td>${reg.name || "-"}</td>
+            <td>${reg.mobile || "-"}</td>
+            <td>${reg.email || "-"}</td>
+            <td>${reg.course || "-"}</td>
+            <td>${reg.status || "Pending"}</td>
+
+            <td>
+                <select id="batch_${reg._id}">
+                    <option value="">Select Batch</option>
+                    ${batchOptions}
+                </select>
+            </td>
+
+            <td>
+                <button onclick="approveRegistration('${reg._id}')">
+                    Approve
+                </button>
+
+                <button onclick="rejectRegistration('${reg._id}')">
+                    Reject
+                </button>
+
+                <button onclick="deleteRegistration('${reg._id}')" style="background:red;color:white;margin-left:5px;">
+                    Delete
+                </button>
+            </td>
+
+        </tr>
+        `;
+    }).join("");
+
+    console.log(`✅ Table loaded: ${registrationData.length}`);
+}
+
+// ======================================
+// APPROVE (UNCHANGED BUT SAFE)
+// ======================================
+
+async function approveRegistration(id) {
+
+    const batchId = document.getElementById(`batch_${id}`)?.value;
+
+    if (!batchId) {
+        alert("Please Select Batch");
+        return;
+    }
+
+    try {
+
+        const res = await fetch(
+            `${window.BASE_URL}/dashboard/approve-registration/${id}`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                },
+                body: JSON.stringify({ batch_id: batchId })
+            }
+        );
+
+        const data = await res.json();
+
+        alert(data.message);
+
+        loadRegistrations();
+        loadDashboard();
+
+    } catch (err) {
+        console.error("Approve Error", err);
+    }
+}
+
+// ======================================
+// REJECT
+// ======================================
+
+async function rejectRegistration(id) {
+
+    try {
+
+        const res = await fetch(
+            `${window.BASE_URL}/dashboard/reject-registration/${id}`,
+            {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        alert(data.message);
+
+        loadRegistrations();
+        loadDashboard();
+
+    } catch (err) {
+        console.error("Reject Error", err);
+    }
+}
+
+// ======================================
+// DELETE
+// ======================================
+
+async function deleteRegistration(id) {
+
+    if (!confirm("Are you sure you want to delete this registration?")) return;
+
+    try {
+
+        const res = await fetch(
+            `${window.BASE_URL}/dashboard/delete-registration/${id}`,
+            {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        alert(data.message);
+
+        loadRegistrations();
+        loadDashboard();
+
+    } catch (err) {
+        console.error("Delete Error:", err);
+    }
+}
+// ======================================
+// EXCEL EXPORT WITH PHOTOS (FIXED)
+// ======================================
+
+async function downloadRegistrationExcel() {
+
+    if (!registrationData.length) {
+        alert("No Data Found");
+        return;
+    }
+
+    try {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Registrations");
+
+        worksheet.columns = [
+            { header: "Photo", key: "photo", width: 15 },
+            { header: "Name", key: "name", width: 25 },
+            { header: "Mobile", key: "mobile", width: 20 },
+            { header: "Email", key: "email", width: 35 },
+            { header: "Course", key: "course", width: 20 },
+            { header: "Status", key: "status", width: 15 }
+        ];
+
+        for (const reg of registrationData) {
+
+            const addedRow = worksheet.addRow({
+                photo: "",
+                name: reg.name || "",
+                mobile: reg.mobile || "",
+                email: reg.email || "",
+                course: reg.course || "",
+                status: reg.status || ""
+            });
+
+            const rowNumber = addedRow.number;
+
+            // row styling
+            addedRow.height = 60;
+            addedRow.alignment = { vertical: "middle", horizontal: "left" };
+
+            // =========================
+            // PHOTO HANDLING (FIXED)
+            // =========================
+            if (reg.photo) {
+                try {
+
+                    const cleanPath = String(reg.photo)
+                        .replace(/\\/g, "/")
+                        .replace(/^\/+/, "");
+
+                    const imageUrl = `http://127.0.0.1:5000/${cleanPath}`;
+
+                    console.log("📸 Fetching:", imageUrl);
+
+                    const response = await fetch(imageUrl);
+
+                    if (!response.ok) {
+                        throw new Error(`Image Not Found (${response.status})`);
+                    }
+
+                    // IMPORTANT FIX: correct binary handling
+                    const arrayBuffer = await response.arrayBuffer();
+                    const buffer = new Uint8Array(arrayBuffer);
+
+                    const contentType = response.headers.get("content-type") || "";
+
+                    let extension = "jpeg";
+                    if (contentType.includes("png")) extension = "png";
+                    else if (contentType.includes("gif")) extension = "gif";
+                    else if (contentType.includes("jpg") || contentType.includes("jpeg")) extension = "jpeg";
+
+                    const imageId = workbook.addImage({
+                        buffer,
+                        extension
+                    });
+
+                    // IMPORTANT FIX: use `ext` instead of br (stable rendering)
+                    worksheet.addImage(imageId, {
+                        tl: { col: 0, row: rowNumber - 1 },
+                        ext: { width: 60, height: 60 }
+                    });
+
+                } catch (err) {
+                    console.error("❌ Failed Photo:", reg.name, err);
+                }
+            }
+        }
+
+        // ======================
+        // EXPORT FILE
+        // ======================
+        const excelBuffer = await workbook.xlsx.writeBuffer();
+
+        saveAs(
+            new Blob([excelBuffer], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            }),
+            "register_students.xlsx"
+        );
+
+        console.log("✅ Excel Generated Successfully");
+
+    } catch (err) {
+        console.error("Excel Export Error:", err);
+        alert("Failed to generate Excel");
+    }
+}
+// ======================================
+// LOAD ON DASHBOARD
+// ======================================
+
+async function initializeRegistrationDashboard() {
+
+    await loadBatchList();
+
+    await loadRegistrations();
+
+}
+
 // ============Global Scope Functions (for sections to call)===========
 window.initializeDashboard = initializeDashboard;
 window.onload = initializeDashboard;;
@@ -554,4 +972,3 @@ window.toggleMenu = toggleMenu;
 window.logout = logout;
 window.navigateTo = navigateTo;
 window.loadSection = loadSection;
-

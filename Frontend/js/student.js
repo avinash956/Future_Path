@@ -152,7 +152,7 @@ async function loadStudent() {
                     <div class="student-card">
 
                         <div class="student-image-wrapper">
-                            <img src="${item.image}" class="student-image">
+                            <img src="${item.image || item.photo || 'default.png'}" class="student-image">
                         </div>
 
                         <div class="student-info">
@@ -160,8 +160,8 @@ async function loadStudent() {
                             <h3>${item.name}</h3>
                             <p><b>Roll:</b> ${item.roll}</p>
                             <p><b>Email:</b> ${item.email}</p>
-                            <p><b>Phone:</b> ${item.phone}</p>
-                            <p><b>Batch:</b> ${item.batch}</p>
+                            <p><b>Phone:</b> ${item.phone || item.mobile || ""}</p>
+                            <p><b>Batch:</b> ${item.batch || item.batch_name || ""}</p>
 
                             <div class="student-actions">
                             ${window.USER_ROLE === "admin" ? `
@@ -284,7 +284,7 @@ function openEditStudent(id) {
     document.getElementById("studentName").value = student.name || "";
     document.getElementById("studentRoll").value = student.roll || "";
     document.getElementById("studentEmail").value = student.email || "";
-    document.getElementById("studentPhone").value = student.phone || "";
+    document.getElementById("studentPhone").value = student.phone ||student.mobile || "";
     document.getElementById("studentYear").value = student.year || "";
     document.getElementById("studentDOB").value = student.dob || "";
     document.getElementById("studentStatus").value = student.status || "";
@@ -292,11 +292,40 @@ function openEditStudent(id) {
 
     // 🔥 FIX: batch set safely after DOM update
     setTimeout(() => {
-        if (batchSelect) {
-            batchSelect.value = student.batch || "";
-        }
-    }, 100);
+    if (!batchSelect) return;
 
+    const valueToMatch =
+        student.batch_code ||
+        student.batch_id ||
+        student.batch ||
+        "";
+
+    // Try exact match first
+    let found = false;
+
+    for (let option of batchSelect.options) {
+        if (option.value === valueToMatch) {
+            batchSelect.value = valueToMatch;
+            found = true;
+            break;
+        }
+    }
+
+    // Fallback: try matching by text (for old bad data)
+    if (!found) {
+        for (let option of batchSelect.options) {
+            if (option.text.includes(student.batch)) {
+                batchSelect.value = option.value;
+                break;
+            }
+        }
+    }
+
+}, 100);
+    const img = document.getElementById("studentImage");
+    if (img?.files.length) {
+        formData.append("image", img.files[0]);
+    }
     document.getElementById("studentForm").dataset.editId = id;
 
     console.log("✏️ Editing student:", student);
@@ -401,6 +430,7 @@ function createStudentCardHTML(student) {
             <div style="font-size: 12px; line-height: 1.5;">
                 <div><b>Name:</b> ${student.name || ""}</div>
                 <div><b>Roll:</b> ${student.roll || ""}</div>
+                <div><b>Batch:</b> ${student.batch || ""}</div>
                 <div><b>Phone:</b> ${student.phone || ""}</div>
                 <div><b>Address:</b> ${student.address || ""}</div>
             </div>

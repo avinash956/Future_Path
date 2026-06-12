@@ -3,450 +3,346 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Register</title>
+    <title>Register</title>
 
-<!-- MAIN CSS -->
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/index.css">
-<link rel="stylesheet" href="css/register.css">
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/register.css">
 
-<!-- FONT AWESOME -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 
 <body>
 
-<!-- ================= HEADER ================= -->
+    <!-- ================= HEADER ================= -->
 
-<header>
+    <header>
 
-<nav class="navbar">
+        <nav class="navbar">
 
-<!-- LOGO -->
+            <!-- LOGO -->
 
-<div class="logo-container">
+            <div class="logo-container">
 
-<img src="Logo.png"
-class="logo">
+                <img src="Logo.png" class="logo">
 
-<div class="logo-text">
+                <div class="logo-text">
 
-<h2>
-Future Path EduTech Institute
-</h2>
+                    <h2>
+                        Future Path EduTech Institute
+                    </h2>
 
-<p>
-<i>
-Shaping Future With Smart Learning.....
-</i>
-</p>
+                    <p>
+                        <i>
+                            Shaping Future With Smart Learning.....
+                        </i>
+                    </p>
 
-</div>
+                </div>
 
-</div>
+            </div>
 
-<!-- RIGHT NAV -->
+            <!-- RIGHT NAV -->
 
-<div class="nav-right">
+            <div class="nav-right">
 
-<!-- LIVE CLOCK -->
+                <!-- LIVE CLOCK -->
 
-<div class="live-clock"
-id="liveClock">
+                <div class="live-clock" id="liveClock">
+                    00:00:00
+                </div>
 
-00:00:00
+                <!-- BACK BUTTON -->
 
-</div>
+                <a href="login.html" class="back-btn">
 
-<!-- BACK BUTTON -->
+                    <i class="fa-solid fa-arrow-left"></i>
 
-<a href="login.html"
-class="back-btn">
+                    Back
 
-<i class="fa-solid fa-arrow-left"></i>
+                </a>
 
-Back
+            </div>
 
-</a>
+        </nav>
 
-</div>
+    </header>
 
-</nav>
+    <!-- ================= REGISTER SECTION ================= -->
 
-</header>
+    <section class="register-page">
 
-<!-- ================= REGISTER SECTION ================= -->
+        <div class="register-container">
 
-<section class="register-page">
+            <div class="register-card">
 
-<div class="register-container">
+                <div class="register-top">
 
-<div class="register-card">
+                    <i class="fa-solid fa-user-plus register-icon"></i>
 
-<div class="register-top">
+                    <h2>
+                        Student Registration
+                    </h2>
 
-<i class="fa-solid fa-user-plus register-icon"></i>
+                    <p>
+                        Register for secure access to the portal
+                    </p>
 
-<h2>
-Create Account
-</h2>
+                </div>
 
-<p>
-Register for secure access to the portal
-</p>
+                <form id="registerForm" enctype="multipart/form-data">
 
-</div>
+                    <!-- FULL NAME -->
 
-<form id="registerForm">
+                    <div class="input-box">
 
-<!-- FULL NAME -->
+                        <i class="fa-solid fa-user"></i>
 
-<div class="input-box">
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter Full Name"
+                            required>
 
-<i class="fa-solid fa-user"></i>
+                    </div>
 
-<input
-type="text"
-id="name"
-placeholder="Enter Full Name"
-required>
+                    <!-- MOBILE -->
 
-</div>
+                    <div class="input-box">
 
-<!-- MOBILE -->
+                        <i class="fa-solid fa-phone"></i>
 
-<div class="input-box">
+                        <input
+                            type="text"
+                            id="mobile"
+                            placeholder="Enter Mobile Number"
+                            required>
 
-<i class="fa-solid fa-phone"></i>
+                    </div>
 
-<input
-type="text"
-id="mobile"
-placeholder="Enter Mobile Number"
-required>
+                    <!-- EMAIL -->
 
-</div>
+                    <div class="input-box">
 
-<!-- EMAIL -->
+                        <i class="fa-solid fa-envelope"></i>
 
-<div class="input-box">
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter Email ID"
+                            required>
 
-<i class="fa-solid fa-envelope"></i>
+                    </div>
 
-<input
-type="email"
-id="email"
-placeholder="Enter Email ID"
-required>
+                    <!-- ROLE -->
 
-</div>
+                    <div class="input-box">
 
-<!-- ROLE -->
+                        <i class="fa-solid fa-user-shield"></i>
 
-<div class="input-box">
+                        <select id="role" required>
 
-<i class="fa-solid fa-user-shield"></i>
+                            <option value="">
+                                Select Role
+                            </option>
 
-<select id="role" required>
+                            <option value="student">
+                                Student
+                            </option>
 
-<option value="">Select Role</option>
+                        </select>
 
-<option value="student">Student</option>
+                    </div>
 
-<!-- <option value="faculty">Faculty</option>
+                    <!-- COURSE REQUIRED -->
 
-<option value="management">Management</option>
+                    <div class="input-box">
 
-<option value="admin">Admin</option> -->
+                        <i class="fa-solid fa-graduation-cap"></i>
 
-</select>
+                        <input
+                            type="text"
+                            id="course"
+                            placeholder="Enter Required Course"
+                            required>
 
-</div>
+                    </div>
 
-<!-- PASSWORD -->
+                    <!-- PHOTO UPLOAD -->
 
-<div class="input-box password-box">
+                    <div class="input-box file-upload">
 
-<i class="fa-solid fa-lock"></i>
+                        <i class="fa-solid fa-image"></i>
 
-<input
-type="password"id="password"placeholder="Create Password"required>
+                        <input
+                            type="file"
+                            id="photo"
+                            accept="image/*"
+                            required>
 
-<span class="toggle-password" onclick="togglePassword()">
+                    </div>
 
-<i class="fa-solid fa-eye"></i>
+                    <!-- REGISTER BUTTON -->
 
-</span>
+                    <button
+                        type="submit"
+                        class="register-btn">
 
-</div>
+                        <i class="fa-solid fa-user-plus"></i>
 
-<!-- CONFIRM PASSWORD -->
+                        Register Now
 
-<div class="input-box password-box">
+                    </button>
 
-<i class="fa-solid fa-lock"></i>
+                    <!-- LOGIN LINK -->
 
-<input
-type="password"
-id="confirmPassword"
-placeholder="Confirm Password"
-required>
+                    <div class="login-link">
 
-<span class="toggle-password"
-onclick="toggleConfirmPassword()">
+                        Already Registered ?
 
-<i class="fa-solid fa-eye"></i>
+                        <a href="login.html">
 
-</span>
+                            Login Here
 
-</div>
+                        </a>
 
-<!-- REGISTER BUTTON -->
+                    </div>
 
-<button type="submit"
-class="register-btn">
+                    <!-- RESPONSE -->
 
-<i class="fa-solid fa-user-plus"></i>
+                    <p id="registerMessage"></p>
 
-Register Now
+                </form>
 
-</button>
+            </div>
 
-<!-- LOGIN LINK -->
+        </div>
 
-<div class="login-link">
+    </section>
 
-Already Registered ?
+    <!-- ================= FOOTER ================= -->
 
-<a href="login.html">
+    <footer>
 
-Login Here
+        <h3>
+            Future Path EduTech Institute
+        </h3>
 
-</a>
+        <p>
+            Academic • Competitive • Technical Education
+        </p>
 
-</div>
+        <p>
+            Email:
+            avinash.nha@gmail.com
+        </p>
 
-<!-- RESPONSE -->
+        <p>
+            © 2026 All Rights Reserved
+        </p>
 
-<p id="registerMessage"></p>
+    </footer>
 
-</form>
+    <!-- ================= SCRIPT ================= -->
 
-</div>
+    <script>
 
-</div>
+        /* ================= REGISTER ================= */
 
-</section>
+        document.getElementById(
+            "registerForm"
+        ).addEventListener(
+            "submit",
+            async function (e) {
 
-<!-- ================= FOOTER ================= -->
+                e.preventDefault();
 
-<footer>
+                const formData = new FormData();
 
-<h3>
-Future Path EduTech Institute
-</h3>
+                formData.append(
+                    "name",
+                    document.getElementById("name").value
+                );
 
-<p>
-Academic • Competitive • Technical Education
-</p>
+                formData.append(
+                    "mobile",
+                    document.getElementById("mobile").value
+                );
 
-<p>
-Email:
-avinash.nha@gmail.com
-</p>
+                formData.append(
+                    "email",
+                    document.getElementById("email").value
+                );
 
-<p>
-© 2026 All Rights Reserved
-</p>
+                formData.append(
+                    "role",
+                    document.getElementById("role").value
+                );
 
-</footer>
+                formData.append(
+                    "course",
+                    document.getElementById("course").value
+                );
 
-<!-- ================= SCRIPT ================= -->
+                const photoFile =
+                    document.getElementById("photo").files[0];
 
-<script>
+                if (photoFile) {
 
-/* ================= PASSWORD TOGGLE ================= */
+                    formData.append(
+                        "photo",
+                        photoFile
+                    );
 
-function togglePassword(){
+                }
 
-const passwordInput =
-document.getElementById(
-"password"
-);
+                try {
 
-const eyeIcon =
-document.querySelectorAll(
-".toggle-password i"
-)[0];
+                    const response = await fetch(
+                        "http://localhost:5000/api/register",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
 
-if(passwordInput.type==="password"){
+                    const data =
+                        await response.json();
 
-passwordInput.type="text";
+                    document.getElementById(
+                        "registerMessage"
+                    ).innerHTML =
+                        data.message;
 
-eyeIcon.classList.remove(
-"fa-eye"
-);
+                }
+                catch (error) {
 
-eyeIcon.classList.add(
-"fa-eye-slash"
-);
+                    document.getElementById(
+                        "registerMessage"
+                    ).innerHTML =
+                        "Registration Failed. Please try again.";
 
-}
-else{
+                    console.error(error);
 
-passwordInput.type="password";
+                }
 
-eyeIcon.classList.remove(
-"fa-eye-slash"
-);
+            });
 
-eyeIcon.classList.add(
-"fa-eye"
-);
+    </script>
 
-}
-
-}
-
-/* ================= CONFIRM PASSWORD ================= */
-
-function toggleConfirmPassword(){
-
-const passwordInput =
-document.getElementById(
-"confirmPassword"
-);
-
-const eyeIcon =
-document.querySelectorAll(
-".toggle-password i"
-)[1];
-
-if(passwordInput.type==="password"){
-
-passwordInput.type="text";
-
-eyeIcon.classList.remove(
-"fa-eye"
-);
-
-eyeIcon.classList.add(
-"fa-eye-slash"
-);
-
-}
-else{
-
-passwordInput.type="password";
-
-eyeIcon.classList.remove(
-"fa-eye-slash"
-);
-
-eyeIcon.classList.add(
-"fa-eye"
-);
-
-}
-
-}
-
-/* ================= REGISTER ================= */
-
-document.getElementById(
-"registerForm"
-).addEventListener(
-"submit",
-async function(e){
-
-e.preventDefault();
-
-const password =
-document.getElementById(
-"password"
-).value;
-
-const confirmPassword =
-document.getElementById(
-"confirmPassword"
-).value;
-
-if(password!==confirmPassword){
-
-document.getElementById(
-"registerMessage"
-).innerHTML =
-"Passwords do not match";
-
-return;
-
-}
-
-const userData = {
-
-name:
-document.getElementById(
-"name"
-).value,
-
-mobile:
-document.getElementById(
-"mobile"
-).value,
-
-email:
-document.getElementById(
-"email"
-).value,
-
-role:
-document.getElementById(
-"role"
-).value,
-
-password:
-password
-
-};
-
-const response =
-await fetch(
-"http://localhost:5000/api/register",
-{
-
-method:"POST",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify(userData)
-
-}
-
-);
-
-const data =
-await response.json();
-
-document.getElementById(
-"registerMessage"
-).innerHTML =
-data.message;
-
-});
-
-</script>
-<script src="js/sidebar.js"></script>
-<script src="js/api.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/register.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/register.js"></script>
 
 </body>
+
 </html>

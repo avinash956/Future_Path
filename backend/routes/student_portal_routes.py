@@ -226,7 +226,7 @@ def get_student_materials():
 
         batch_id = str(batch["_id"])
 
-        materials = mongo.db.materials.find({
+        materials = mongo.db.study_materials.find({
             "$or": [
                 {"batch": batch_id},
                 {"batchId": batch_id},

@@ -21,24 +21,13 @@ BASE_DIR = os.getcwd()
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-
 # =========================================
-# SERVE UPLOADED IMAGES (FIXED)
+# SERVE UPLOADED IMAGES
 # =========================================
 @student_bp.route('/uploads/<filename>')
 def uploaded_file(filename):
-
-    response = send_from_directory(
-        UPLOAD_FOLDER,
-        filename
-    )
-
-    # REMOVE THIS LINE
-    # response.headers["Access-Control-Allow-Origin"] = "*"
-
-    response.headers["Cache-Control"] = \
-        "no-cache, no-store, must-revalidate"
-
+    response = send_from_directory(UPLOAD_FOLDER, filename)
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     return response
 
 
@@ -52,11 +41,10 @@ def clean_roll(roll):
 
 
 # =========================================
-# ADD STUDENT
+# ADD STUDENT (AUTO ROLL FIXED)
 # =========================================
 @student_bp.route("/add-student", methods=["POST"])
 def add_student():
-
     try:
         name = request.form.get("name")
         roll = clean_roll(request.form.get("roll"))
@@ -71,13 +59,30 @@ def add_student():
 
         print("➕ ADD STUDENT:", roll)
 
-        if not name or not roll:
-            return jsonify({"success": False, "message": "Name and Roll required"}), 400
+        if not name:
+            return jsonify({"success": False, "message": "Name required"}), 400
 
-        existing = mongo.db.students.find_one({"roll": roll})
-        if existing:
+        # AUTO ROLL GENERATION IF EMPTY
+        if not roll:
+            last_student = mongo.db.students.find_one(
+                {"batch": batch},
+                sort=[("_id", -1)]
+            )
+
+            last_roll = 0
+            if last_student and last_student.get("roll"):
+                try:
+                    last_roll = int(last_student["roll"].split("-")[-1])
+                except:
+                    last_roll = 0
+
+            roll = f"{batch}-{int(time.time()) % 100}-{last_roll + 1:02d}"
+
+        # Duplicate check
+        if mongo.db.students.find_one({"roll": roll}):
             return jsonify({"success": False, "message": "Roll already exists"}), 409
 
+        # IMAGE UPLOAD
         image = request.files.get("image")
         filename = ""
 
@@ -86,6 +91,7 @@ def add_student():
             filename = f"{int(time.time())}_{roll}{ext}"
             image.save(os.path.join(UPLOAD_FOLDER, filename))
 
+        # PASSWORD
         password = generate_password(name, phone)
 
         data = {
@@ -93,7 +99,7 @@ def add_student():
             "roll": roll,
             "email": email,
             "phone": phone,
-            "batch": batch,   # KEEP STRING (IMPORTANT FIX FOR YOUR CURRENT SYSTEM)
+            "batch": batch,
             "year": year,
             "dob": dob,
             "status": status,
@@ -106,8 +112,7 @@ def add_student():
 
         mongo.db.students.insert_one(data)
 
-        print("✅ STUDENT ADDED:", roll)
-
+        # SEND PASSWORD EMAIL
         try:
             if email:
                 send_email(email, password)
@@ -116,6 +121,8 @@ def add_student():
                 send_sms(phone, password)
                 send_whatsapp(phone, password)
                 generate_otp(phone)
+
+            print("📧 Notification sent successfully:", email)
 
         except Exception as e:
             print("⚠️ Notification error:", e)
@@ -128,22 +135,18 @@ def add_student():
         })
 
     except Exception as e:
-        print("❌ ADD ERROR:", e)
         return jsonify({"success": False, "message": str(e)}), 500
 
 
 # =========================================
-# GET ALL STUDENTS (FIXED IMAGE URL)
+# GET STUDENT LIST
 # =========================================
 @student_bp.route("/get-student", methods=["GET"])
 def get_student():
-
     data = list(mongo.db.students.find())
 
     for i in data:
         i["_id"] = str(i["_id"])
-
-        # FIXED IMAGE URL
         i["image"] = (
             f"{request.host_url}api/student/uploads/{i['image']}"
             if i.get("image") else ""
@@ -153,18 +156,17 @@ def get_student():
 
 
 # =========================================
-# GET FILTERED STUDENTS (FIXED)
+# FILTER STUDENTS
 # =========================================
 @student_bp.route("/get-students", methods=["GET"])
 def get_students():
-
     batch = request.args.get("batch")
     search = request.args.get("search")
 
     query = {}
 
     if batch:
-        query["batch"] = batch   # FIXED (no ObjectId usage)
+        query["batch"] = batch
 
     if search:
         query["$or"] = [
@@ -178,7 +180,6 @@ def get_students():
 
     for i in data:
         i["_id"] = str(i["_id"])
-
         i["image"] = (
             f"{request.host_url}api/student/uploads/{i['image']}"
             if i.get("image") else ""
@@ -196,27 +197,29 @@ def get_students():
 # =========================================
 @student_bp.route("/delete-student/<id>", methods=["DELETE"])
 def delete_student(id):
-
     try:
         mongo.db.students.delete_one({"_id": ObjectId(id)})
         return jsonify({"success": True})
-
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 
 
 # =========================================
-# UPDATE STUDENT
+# UPDATE STUDENT (FIXED PASSWORD LOGIC)
 # =========================================
 @student_bp.route("/update-student/<id>", methods=["PUT"])
 def update_student(id):
-
     try:
+        student = mongo.db.students.find_one({"_id": ObjectId(id)})
+
+        if not student:
+            return jsonify({"success": False, "message": "Student not found"}), 404
+
         data = request.form.to_dict()
         update_data = {}
 
         allowed_fields = [
-            "name", "roll", "email", "phone",
+            "name", "email", "phone",
             "year", "dob", "status", "address", "batch"
         ]
 
@@ -224,6 +227,13 @@ def update_student(id):
             if field in data:
                 update_data[field] = data[field]
 
+        # ROLL SAFE LOGIC
+        existing_roll = student.get("roll", "")
+        new_roll = clean_roll(data.get("roll", ""))
+
+        update_data["roll"] = new_roll if new_roll else existing_roll
+
+        # IMAGE UPDATE
         image = request.files.get("image")
 
         if image:
@@ -232,6 +242,25 @@ def update_student(id):
             image.save(os.path.join(UPLOAD_FOLDER, filename))
             update_data["image"] = filename
 
+        # PASSWORD CHECK (FIXED LOGIC)
+        if not student.get("password"):
+            name = update_data.get("name") or student.get("name")
+            phone = update_data.get("phone") or student.get("phone")
+
+            new_password = generate_password(name, phone)
+            update_data["password"] = new_password
+
+            email = update_data.get("email") or student.get("email")
+
+            try:
+                if email:
+                    send_email(email, new_password)
+                    print("📧 Password email sent:", email)
+
+            except Exception as e:
+                print("❌ Email error:", e)
+
+        # UPDATE DB
         mongo.db.students.update_one(
             {"_id": ObjectId(id)},
             {"$set": update_data}
@@ -244,7 +273,7 @@ def update_student(id):
 
 
 # =========================================
-# PORTAL DASHBOARD
+# STUDENT PORTAL
 # =========================================
 @student_bp.route("/portal/dashboard/<student_id>", methods=["GET"])
 def student_portal(student_id):

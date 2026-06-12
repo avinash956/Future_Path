@@ -4,6 +4,7 @@ from extensions import mongo
 from middleware.auth_middleware import token_required
 from bson.objectid import ObjectId
 import random
+import os
 
 dashboard_bp = Blueprint("dashboard", __name__)
 
@@ -43,6 +44,9 @@ def dashboard_stats():
         total_batches = mongo.db.batches.count_documents({
             "isDeleted": False
         })
+        pending_registrations = mongo.db.register_student.count_documents({
+            "status": "pending"
+        })
 
         active_students = mongo.db.students.count_documents({
             "status": "active"
@@ -60,7 +64,8 @@ def dashboard_stats():
             "users": total_users,
             "batches": total_batches,
             "active_students": active_students,
-            "active_faculty": active_faculty
+            "active_faculty": active_faculty,
+            "pending_registrations": pending_registrations
         })
 
     except Exception as e:
@@ -115,6 +120,9 @@ def admin_overview():
 
         total_batches = mongo.db.batches.count_documents({
             "isDeleted": False
+        })
+        pending_registrations = mongo.db.register_student.count_documents({
+            "status": "pending"
         })
 
         # =========================================
@@ -222,8 +230,8 @@ def admin_overview():
                 "batches": total_batches,
 
                 "revenue": total_collection,
-                "pending": pending_collection
-
+                "pending": pending_collection,
+                "pending_registrations": pending_registrations
             },
 
             "recentStudents": recent_students,
@@ -439,3 +447,356 @@ def clear_ai_history():
         return jsonify({
             "message": str(e)
         }), 500
+    
+# =====================================================
+# REGISTRATION REQUESTS
+# =====================================================
+
+@dashboard_bp.route(
+    "/registration-requests",
+    methods=["GET"]
+)
+@jwt_required()
+def registration_requests():
+
+    try:
+
+        registrations = []
+
+        data = mongo.db.register_student.find().sort(
+            "_id",
+            -1
+        )
+
+        for r in data:
+
+            registrations.append({
+
+                "_id": str(r["_id"]),
+
+                "name": r.get("name", ""),
+
+                "mobile": r.get("mobile", ""),
+
+                "email": r.get("email", ""),
+
+                "course": r.get("course", ""),
+
+                "photo": r.get("photo", ""),
+
+                "status": r.get(
+                    "status",
+                    "pending"
+                )
+
+            })
+
+        return jsonify({
+
+            "success": True,
+
+            "registrations":
+                registrations
+
+        })
+
+    except Exception as e:
+
+        return jsonify({
+
+            "success": False,
+
+            "message": str(e)
+
+        }), 500
+
+
+# =====================================================
+# REGISTRATION COUNT
+# =====================================================
+
+@dashboard_bp.route(
+    "/registration-count",
+    methods=["GET"]
+)
+@jwt_required()
+def registration_count():
+
+    try:
+
+        pending = mongo.db.register_student.count_documents({
+            "status": "pending"
+        })
+
+        approved = mongo.db.register_student.count_documents({
+            "status": "approved"
+        })
+
+        rejected = mongo.db.register_student.count_documents({
+            "status": "rejected"
+        })
+
+        return jsonify({
+
+            "success": True,
+
+            "pending": pending,
+
+            "approved": approved,
+
+            "rejected": rejected
+
+        })
+
+    except Exception as e:
+
+        return jsonify({
+
+            "success": False,
+
+            "message": str(e)
+
+        }), 500
+
+
+# =====================================================
+# GET ALL REGISTERED STUDENTS
+# =====================================================
+
+@dashboard_bp.route(
+    "/registrations",
+    methods=["GET"]
+)
+@jwt_required()
+def get_registrations():
+
+    try:
+
+        registrations = []
+
+        for reg in mongo.db.register_student.find().sort("_id", -1):
+
+            reg["_id"] = str(reg["_id"])
+
+            registrations.append(reg)
+
+        return jsonify({
+
+            "success": True,
+
+            "registrations": registrations
+
+        })
+
+    except Exception as e:
+
+        return jsonify({
+
+            "success": False,
+
+            "message": str(e)
+
+        }), 500
+
+# =====================================================
+# APPROVE REGISTRATION
+# =====================================================
+
+@dashboard_bp.route(
+    "/approve-registration/<id>",
+    methods=["POST"]
+)
+@jwt_required()
+def approve_registration(id):
+
+    try:
+
+        data = request.json
+
+        batch_id = data.get("batch_id")
+
+        if not batch_id:
+
+            return jsonify({
+
+                "success": False,
+                "message": "Batch is required"
+
+            }), 400
+
+        registration = mongo.db.register_student.find_one({
+
+            "_id": ObjectId(id)
+
+        })
+
+        if not registration:
+
+            return jsonify({
+
+                "success": False,
+                "message": "Registration not found"
+
+            }), 404
+
+        # Prevent duplicate approval
+
+        if registration.get("status") == "approved":
+
+            return jsonify({
+
+                "success": False,
+                "message": "Already approved"
+
+            }), 400
+
+        batch = mongo.db.batches.find_one({"_id": ObjectId(batch_id)})
+
+        batch_name = ""
+        batch_code = ""
+
+        if batch:
+            batch_name = batch.get("name", "")   # "XI"
+            batch_code = batch.get("code", "")   # "XI-26-01"
+
+        photo = registration.get("photo", "")
+
+# CLEAN IMAGE PATH (remove uploads/ prefix if exists)
+        if photo:
+            photo = os.path.basename(photo)
+
+        student_data = {
+            "name": registration.get("name"),
+            "phone": registration.get("mobile"),
+            "email": registration.get("email"),
+            "course": registration.get("course"),
+
+            # FIXED IMAGE FIELD
+            "image": photo,
+
+            "batch_id": batch_id,
+            "batch_code": batch_code,
+            "batch": batch_name,
+            "status": "active",
+
+            "roll": "",        # optional (or generate later)
+            "address": ""      # optional
+        }
+        inserted_student = mongo.db.students.insert_one(
+            student_data
+        )
+
+        mongo.db.register_student.update_one(
+
+            {
+                "_id": ObjectId(id)
+            },
+
+            {
+                "$set": {
+
+                    "status":"approved",
+
+                    "batch_id":batch_id,
+                    "batch_code": batch_code,
+                    "batch":batch_name,
+
+                    "student_id":str(inserted_student.inserted_id)
+
+                }
+            }
+        )
+
+        return jsonify({
+
+            "success": True,
+
+            "message":
+                "Student Approved Successfully"
+
+        })
+
+    except Exception as e:
+
+        return jsonify({
+
+            "success": False,
+
+            "message": str(e)
+
+        }), 500
+
+# =====================================================
+# REJECT REGISTRATION
+# =====================================================
+
+@dashboard_bp.route(
+    "/reject-registration/<id>",
+    methods=["POST"]
+)
+@jwt_required()
+def reject_registration(id):
+
+    try:
+
+        result = mongo.db.register_student.update_one(
+
+            {
+                "_id": ObjectId(id)
+            },
+
+            {
+                "$set": {
+                    "status": "rejected"
+                }
+            }
+        )
+
+        if result.matched_count == 0:
+
+            return jsonify({
+
+                "success": False,
+                "message": "Registration not found"
+
+            }), 404
+
+        return jsonify({
+
+            "success": True,
+
+            "message":
+                "Registration Rejected"
+
+        })
+
+    except Exception as e:
+
+        return jsonify({
+
+            "success": False,
+
+            "message": str(e)
+
+        }), 500
+# =====================================================
+# Delete REGISTRATION
+# ===================================================== 
+@dashboard_bp.route('/delete-registration/<id>', methods=['DELETE'])
+@jwt_required()
+def delete_registration(id):
+
+    result = mongo.db.register_student.delete_one({
+        "_id": ObjectId(id)
+    })
+
+    if result.deleted_count == 0:
+        return jsonify({
+            "success": False,
+            "message": "Registration not found"
+        }), 404
+
+    return jsonify({
+        "success": True,
+        "message": "Registration deleted successfully"
+    })

@@ -98,7 +98,10 @@
 
       <!-- SEARCH -->
       <input type="text" id="menuSearch" class="menu-search" placeholder="Search Menu...">
-
+      <!-- HOME BUTTON -->
+       <button class="side-btn" onclick="loadSection('home')">
+            Home
+      </button>
       <!-- MANAGEMENT -->
       <button class="side-btn" data-title="Management" onclick="loadSection('management')">
         <i class="fa-solid fa-user-tie"></i>
@@ -156,7 +159,6 @@
     <main class="work-area" style="background:linear-gradient(135deg,#042265,#a746e7);">
 
       <div id="dynamicContent">
-        <div id="dynamicContent">
 
     <div class="admin-dashboard">
 
@@ -222,8 +224,70 @@
             </div>
 
         </div>
+        <div class="stat-card registration-card">
+          <div class="stat-icon">📝</div>
+          <h2 id="pendingRegistrations">0</h2>
+          <p>New Registrations</p>
+      </div>
+      <!-- =====================================
+            NEW STUDENT REGISTRATIONS
+        ===================================== -->
 
-        
+        <div class="dashboard-section">
+
+            <div class="section-header">
+
+                <h3>
+                    📝 New Student Registrations
+                </h3>
+
+                <button
+                    class="download-btn"
+                    onclick="downloadRegistrationExcel()">
+
+                    <i class="fa-solid fa-file-excel"></i>
+                    Export Excel
+
+                </button>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="admin-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Photo</th>
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Course</th>
+                            <th>Status</th>
+                            <th>Assign Batch</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="registrationTableBody">
+
+                        <tr>
+                            <td colspan="8">
+                                Loading registrations...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
         <!-- THOUGHT OF THE DAY -->
 
         <div class="thought-card">
@@ -234,7 +298,7 @@
 
             <p id="thoughtText">
 
-                Loading...
+                Loading...<div class="stats-grid"></div>
 
             </p>
 
@@ -271,6 +335,8 @@
 
 <!-- Chart.js (charts/graphs) -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver/dist/FileSaver.min.js"></script>
 
 <!-- ================= CORE APP FILES ================= -->
 <script src="./js/api.js"></script>
