@@ -522,21 +522,58 @@ def forgot_password():
         email = str(data.get("email", "")).strip().lower()
 
         if not email:
-            return jsonify({"success": False, "message": "Email required"}), 400
+            return jsonify({
+                "success": False,
+                "message": "Email required"
+            }), 400
 
-        user = mongo.db.users.find_one({"email": {"$regex": f"^{email}$", "$options": "i"}})
+        # ========================================
+        # FIND USER IN ALL COLLECTIONS
+        # ========================================
+        user = None
+        collection_name = None
+
+        collections = [
+            ("users", mongo.db.users),
+            ("students", mongo.db.students),
+            ("faculty", mongo.db.faculty),
+            ("management", mongo.db.management)
+        ]
+
+        for name, collection in collections:
+
+            user = collection.find_one({
+                "email": {
+                    "$regex": f"^{email}$",
+                    "$options": "i"
+                }
+            })
+
+            if user:
+                collection_name = name
+                break
 
         if not user:
-            return jsonify({"success": False, "message": "User not found"}), 404
+            return jsonify({
+                "success": False,
+                "message": "User not found"
+            }), 404
 
+        # ========================================
+        # GENERATE OTP
+        # ========================================
         otp = str(random.randint(100000, 999999))
 
+        # ========================================
+        # SAVE RESET REQUEST
+        # ========================================
         mongo.db.password_resets.update_one(
             {"email": email},
             {
                 "$set": {
                     "email": email,
                     "otp": otp,
+                    "collection": collection_name,
                     "verified": False,
                     "expires_at": datetime.utcnow() + timedelta(minutes=10)
                 }
@@ -552,6 +589,7 @@ def forgot_password():
                 subject="Future Path Security - Password Reset Verification Code",
                 recipients=[email]
             )
+
             msg.body = f"""Hello,
 
 You requested a password reset for your Future Path account.
@@ -562,15 +600,24 @@ This authentication token code is valid for exactly 10 minutes. If you did not m
 
 Best regards,
 Future Path Administrative System Management Team"""
-            
-            # Send the message directly out to the inbox
+
             mail.send(msg)
-            print(f"📧 EMAIL DISPATCH SUCCESS: Token delivered safely to {email}")
-            
+
+            print(
+                f"📧 EMAIL DISPATCH SUCCESS: "
+                f"Token delivered safely to {email}"
+            )
+
         except Exception as mail_err:
-            print(f"❌ EMAIL SENDING CRASHED: {str(mail_err)}")
-            # Keep terminal log backup so you can keep developing even if the network fails
-            print(f"🔐 [FALLBACK DEBUG OTP] -> {otp}")
+
+            print(
+                f"❌ EMAIL SENDING CRASHED: "
+                f"{str(mail_err)}"
+            )
+
+            print(
+                f"🔐 [FALLBACK DEBUG OTP] -> {otp}"
+            )
 
         return jsonify({
             "success": True,
@@ -578,7 +625,10 @@ Future Path Administrative System Management Team"""
         }), 200
 
     except Exception as e:
-        return jsonify({"success": False, "message": str(e)}), 500
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 500
 # ========================================
 #   Verify OTP Checkpoint
 # ========================================
@@ -617,34 +667,123 @@ def verify_otp():
 # ========================================
 #   Reset Password Execution
 # ========================================
+# ========================================
+#   Reset Password Execution
+# ========================================
 @auth_bp.route("/reset-password", methods=["POST"])
 def reset_password():
     try:
+
         data = request.get_json() or {}
-        email = str(data.get("email", "")).strip().lower()
-        new_password = data.get("newPassword")
 
-        if not email or not new_password:
-            return jsonify({"success": False, "message": "Missing required field inputs"}), 400
+        email = str(
+            data.get("email", "")
+        ).strip().lower()
 
-        record = mongo.db.password_resets.find_one({"email": email})
-
-        if not record or not record.get("verified"):
-            return jsonify({"success": False, "message": "Unauthorized entry: OTP verification skipped"}), 401
-
-        # Secure cryptographic password encryption formatting
-        hashed_password = bcrypt.generate_password_hash(new_password).decode("utf-8")
-
-        # Overwrite legacy field payload value cleanly across the core users cluster collection
-        mongo.db.users.update_one(
-            {"email": {"$regex": f"^{email}$", "$options": "i"}},
-            {"$set": {"password": hashed_password}}
+        new_password = data.get(
+            "newPassword"
         )
 
-        # Drop authentication lifecycle record token cache to maintain operational single-use integrity
-        mongo.db.password_resets.delete_one({"email": email})
+        if not email or not new_password:
+            return jsonify({
+                "success": False,
+                "message": "Missing required field inputs"
+            }), 400
 
-        return jsonify({"success": True, "message": "Password updated successfully"}), 200
+        # ========================================
+        # GET OTP RECORD
+        # ========================================
+        record = mongo.db.password_resets.find_one({
+            "email": email
+        })
+
+        if record is None:
+            return jsonify({
+                "success": False,
+                "message": "Password reset request not found"
+            }), 404
+
+        if not record.get("verified", False):
+            return jsonify({
+                "success": False,
+                "message": "OTP verification required"
+            }), 401
+
+        # ========================================
+        # GET COLLECTION NAME
+        # ========================================
+        collection_name = record.get("collection")
+
+        if collection_name == "users":
+            collection = mongo.db.users
+
+        elif collection_name == "students":
+            collection = mongo.db.students
+
+        elif collection_name == "faculty":
+            collection = mongo.db.faculty
+
+        elif collection_name == "management":
+            collection = mongo.db.management
+
+        else:
+            return jsonify({
+                "success": False,
+                "message": "Invalid collection stored"
+            }), 500
+
+        # ========================================
+        # HASH PASSWORD
+        # ========================================
+        hashed_password = bcrypt.generate_password_hash(
+            new_password
+        ).decode("utf-8")
+
+        # ========================================
+        # UPDATE PASSWORD
+        # ========================================
+        result = collection.update_one(
+            {
+                "email": {
+                    "$regex": f"^{email}$",
+                    "$options": "i"
+                }
+            },
+            {
+                "$set": {
+                    "password": hashed_password
+                }
+            }
+        )
+
+        print("Collection:", collection_name)
+        print("Email:", email)
+        print("Matched:", result.matched_count)
+        print("Modified:", result.modified_count)
+
+        if result.matched_count == 0:
+            return jsonify({
+                "success": False,
+                "message": "User not found in collection"
+            }), 404
+
+        # ========================================
+        # DELETE OTP RECORD
+        # ========================================
+        mongo.db.password_resets.delete_one({
+            "email": email
+        })
+
+        return jsonify({
+            "success": True,
+            "message": "Password updated successfully"
+        }), 200
 
     except Exception as e:
-        return jsonify({"success": False, "message": str(e)}), 500
+
+        print("RESET PASSWORD ERROR:", str(e))
+
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 500
