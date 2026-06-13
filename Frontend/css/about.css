@@ -232,167 +232,416 @@
 /* =========================================
    CARD COPY & METADATA
 ========================================= */
+
 .card-content {
-    padding: 35px;
+    padding: 45px;
     text-align: center;
 }
 
+/* =========================================
+   BADGES
+========================================= */
+
 .badge {
     display: inline-block;
-    padding: 6px 18px;
+    padding: 8px 22px;
     border-radius: 100px;
-    font-size: 11px;
+    font-size: 13px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     font-weight: 800;
 }
 
 .blue-badge {
-    background: rgba(59, 130, 246, 0.12);
-    border: 1px solid rgba(59, 130, 246, 0.2);
+    background: rgba(59,130,246,.12);
+    border: 1px solid rgba(59,130,246,.25);
     color: #60a5fa;
+    box-shadow: 0 0 20px rgba(59,130,246,.15);
 }
 
 .purple-badge {
-    background: rgba(168, 85, 247, 0.12);
-    border: 1px solid rgba(168, 85, 247, 0.2);
+    background: rgba(168,85,247,.12);
+    border: 1px solid rgba(168,85,247,.25);
     color: #c084fc;
+    box-shadow: 0 0 20px rgba(168,85,247,.15);
 }
 
-.card-content h3 {
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    margin: 16px 0 8px;
-    color: #60a5fa; 
-    background: linear-gradient(135deg, #ffffff 30%, #cbd5e1 100%);
-    -webkit-background-clip: text;
-    background-clip: text; 
-    -webkit-text-fill-color: transparent;
+/* =========================================
+   NAME ANIMATIONS
+========================================= */
+
+@keyframes glossyBlue {
+
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 300% 50%;
+    }
 }
+
+@keyframes glossyPurple {
+
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 300% 50%;
+    }
+}
+
+/* =========================================
+   FOUNDER NAME
+========================================= */
+
+#founderSection .card-content h3 {
+
+    font-size: 56px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    margin: 18px 0;
+
+    line-height: 1.1;
+
+    background:
+        linear-gradient(
+            135deg,
+            #60a5fa 0%,
+            #ffffff 25%,
+            #93c5fd 50%,
+            #ffffff 75%,
+            #60a5fa 100%
+        );
+
+    background-size: 300% 300%;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    animation: glossyBlue 6s linear infinite;
+
+    text-shadow:
+        0 0 25px rgba(96,165,250,.35);
+}
+
+/* =========================================
+   CO-FOUNDER NAME
+========================================= */
+
+#coFounderSection .card-content h3 {
+
+    font-size: 56px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    margin: 18px 0;
+
+    line-height: 1.1;
+
+    background:
+        linear-gradient(
+            135deg,
+            #c084fc 0%,
+            #ffffff 25%,
+            #e9d5ff 50%,
+            #ffffff 75%,
+            #c084fc 100%
+        );
+
+    background-size: 300% 300%;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    animation: glossyPurple 6s linear infinite;
+
+    text-shadow:
+        0 0 25px rgba(192,132,252,.35);
+}
+
+/* =========================================
+   SUBTITLE
+========================================= */
 
 .subtitle {
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    margin-bottom: 18px;
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+    letter-spacing: .5px;
+
+    margin-bottom: 25px;
 }
 
 #founderSection .subtitle {
-    background: linear-gradient(to right, #38bdf8, #60a5fa);
+
+    background:
+        linear-gradient(
+            to right,
+            #38bdf8,
+            #60a5fa
+        );
+
     -webkit-background-clip: text;
-    background-clip: text; 
+    background-clip: text;
+
     -webkit-text-fill-color: transparent;
 }
 
 #coFounderSection .subtitle {
-    background: linear-gradient(to right, #f472b6, #c084fc);
+
+    background:
+        linear-gradient(
+            to right,
+            #f472b6,
+            #c084fc
+        );
+
     -webkit-background-clip: text;
-    background-clip: text; 
+    background-clip: text;
+
     -webkit-text-fill-color: transparent;
 }
 
+/* =========================================
+   BIOGRAPHY
+========================================= */
+
 .card-content p:last-of-type {
-    color: #94a3b8;
-    line-height: 1.6;
-    font-size: 15px;
+
+    color: #cbd5e1;
+
+    line-height: 2;
+
+    font-size: 18px;
+
+    text-align: justify;
+
+    font-weight: 400;
 }
 
 /* =========================================
    VISION, MISSION & GENERAL ABOUT CARDS
 ========================================= */
+
 .about-container {
+
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    max-width: 1050px;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(320px, 1fr));
+
+    gap: 35px;
+
+    max-width: 1200px;
+
     margin: auto;
 }
 
 .about-card {
-    background: linear-gradient(145deg, rgba(22, 32, 54, 0.4), rgba(13, 20, 38, 0.6));
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 24px;
-    padding: 40px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(22,32,54,.60),
+            rgba(13,20,38,.85)
+        );
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    border-radius: 28px;
+
+    padding: 45px;
+
     text-align: center;
-    transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+
+    backdrop-filter: blur(20px);
+
+    transition:
+        transform .4s ease,
+        border-color .4s ease,
+        box-shadow .4s ease;
 }
 
 .about-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(96, 165, 250, 0.25);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+
+    transform:
+        translateY(-8px);
+
+    border-color:
+        rgba(96,165,250,.30);
+
+    box-shadow:
+        0 25px 50px rgba(0,0,0,.45);
 }
 
 .about-card i {
-    font-size: 36px;
-    margin-bottom: 20px;
-    background: linear-gradient(135deg, #60a5fa, #c084fc);
+
+    font-size: 48px;
+
+    margin-bottom: 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #60a5fa,
+            #c084fc
+        );
+
     -webkit-background-clip: text;
     background-clip: text;
+
     -webkit-text-fill-color: transparent;
 }
 
 .about-card h3 {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 12px;
+
+    font-size: 30px;
+
+    font-weight: 800;
+
+    margin-bottom: 18px;
+
     color: #ffffff;
 }
 
 .about-card p {
-    color: #94a3b8;
-    line-height: 1.7;
-    font-size: 15px;
+
+    color: #d1d5db;
+
+    line-height: 1.9;
+
+    font-size: 18px;
 }
 
 /* =========================================
    CONTACT COMPONENT
 ========================================= */
+
 .contact-list {
+
     list-style: none;
+
     padding: 0;
-    margin: 20px 0 0 0;
+
+    margin: 25px 0 0;
+
     display: flex;
+
     flex-direction: column;
-    gap: 16px;
+
+    gap: 18px;
+
     align-items: center;
 }
 
 .contact-list li {
+
     display: flex;
+
     align-items: center;
-    gap: 12px;
-    color: #cbd5e1;
-    font-size: 16px;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 10px 20px;
+
+    gap: 15px;
+
+    color: #f1f5f9;
+
+    font-size: 19px;
+
+    background:
+        rgba(255,255,255,.04);
+
+    padding: 15px 30px;
+
     border-radius: 50px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    transition: .3s ease;
+}
+
+.contact-list li:hover {
+
+    transform: translateX(6px);
+
+    background:
+        rgba(59,130,246,.08);
 }
 
 .contact-list li i {
-    font-size: 16px;
+
+    font-size: 22px;
+
+    color: #60a5fa;
+
     margin-bottom: 0;
 }
 
 /* =========================================
-   RESPONSIVE DESIGN ADAPTATIONS
+   RESPONSIVE DESIGN
 ========================================= */
+
 @media (max-width: 900px) {
+
     .hero-about h1 {
-        font-size: 36px;
+        font-size: 42px;
     }
+
     .work-area {
         padding: 30px 20px;
+    }
+
+    #founderSection .card-content h3,
+    #coFounderSection .card-content h3 {
+        font-size: 42px;
+    }
+
+    .subtitle {
+        font-size: 20px;
     }
 }
 
 @media (max-width: 600px) {
+
     .hero-about {
         padding: 40px 20px;
     }
+
     .card-content {
         padding: 25px;
+    }
+
+    #founderSection .card-content h3,
+    #coFounderSection .card-content h3 {
+        font-size: 34px;
+    }
+
+    .subtitle {
+        font-size: 18px;
+    }
+
+    .card-content p:last-of-type {
+        font-size: 16px;
+    }
+
+    .about-card h3 {
+        font-size: 24px;
+    }
+
+    .about-card p {
+        font-size: 16px;
     }
 }

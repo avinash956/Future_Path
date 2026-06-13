@@ -109,70 +109,114 @@
             </section>
 
             <!-- FOUNDER -->
-            <section id="founderSection" class="content-section">
-                <div class="management-grid">
-                    
-                    <!-- ✅ RECTIFIED: Wrapped image container and text card together outside -->
-                    <div class="profile-wrapper animate-up">
-                        
-                        <div class="card-image-container blue-gradient image-crop-container">
-                            <!-- Note: Your JavaScript removes display:none once an image loads -->
-                            <img id="founderImg" alt="Founder" class="profile-avatar-img draggable-avatar" style="display:none;">
-                            
-                            <div class="admin-upload-overlay upload-overlay">
-                                <button class="upload-sub-btn" onclick="document.getElementById('founderFile').click()">
-                                    <i class="fa-solid fa-camera"></i> Change
-                                </button>
-                            </div>
-                        </div>
+            <!-- FOUNDER -->
+<section id="founderSection" class="content-section">
+    <div class="management-grid">
 
-                        <div class="profile-card">
-                            <div class="card-content">
-                                <span class="badge blue-badge">Founder</span>
-                                <h3 id="founderName" class="editable">Avinash Tripathi</h3>
-                                <p class="subtitle editable">Founder & Visionary Director</p>
-                                <p class="editable">An education innovator dedicated to modern learning systems.</p>
-                                <input type="file" id="founderFile" style="display:none" accept="image/*" onchange="uploadProfileImage(event, 'founderImg')">
-                            </div>
-                        </div>
+        <div class="profile-wrapper animate-up">
 
-                    </div>
+            <div class="card-image-container blue-gradient image-crop-container">
+
+                <img id="founderImg"
+                     alt="Founder"
+                     class="profile-avatar-img draggable-avatar"
+                     style="display:none;">
+
+                <div class="admin-upload-overlay upload-overlay">
+                    <button class="upload-sub-btn"
+                            onclick="document.getElementById('founderFile').click()">
+                        <i class="fa-solid fa-camera"></i> Change
+                    </button>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <div class="card-content">
+
+                    <span class="badge blue-badge">Founder</span>
+
+                    <h3 id="founderName" class="editable">
+                        Avinash Tripathi
+                    </h3>
+
+                    <p class="subtitle editable">
+                        Founder & Visionary Director
+                    </p>
+
+                    <p id="founderBio" class="editable">
+                        An accomplished education professional and technology enthusiast with extensive experience in academic development, digital learning solutions, and institutional management.
+                        Possessing a strong background in educational innovation, curriculum planning, and student mentorship, the founder has played a significant role in creating a learning environment that emphasizes both academic excellence and practical skill development.
+                        Their expertise spans educational technology, leadership, strategic planning, and learner-centered program development.
+                    </p>
+
+                    <input type="file"
+                           id="founderFile"
+                           style="display:none"
+                           accept="image/*"
+                           onchange="uploadProfileImage(event, 'founderImg')">
 
                 </div>
-            </section>
+            </div>
 
+        </div>
+
+    </div>
+</section>
             <!-- CO-FOUNDER -->
-            <section id="coFounderSection" class="content-section">
-                <div class="management-grid">
-                    
-                    <!-- ✅ RECTIFIED: Wrapped image container and text card together outside -->
-                    <div class="profile-wrapper animate-up">
-                        
-                        <div class="card-image-container purple-gradient image-crop-container">
-                            <img id="cofounderImg" alt="Co-Founder" class="profile-avatar-img draggable-avatar" style="display:none;">
-                            
-                            <div class="admin-upload-overlay upload-overlay">
-                                <button class="upload-sub-btn" onclick="document.getElementById('cofounderFile').click()">
-                                    <i class="fa-solid fa-camera"></i> Change
-                                </button>
-                            </div>
-                        </div>
+            
+<section id="coFounderSection" class="content-section">
+    <div class="management-grid">
 
-                        <div class="profile-card">
-                            <div class="card-content">
-                                <span class="badge purple-badge">Co-Founder</span>
-                                <h3 id="cofounderName" class="editable">Kavita Tripathi</h3>
-                                <p class="subtitle editable">Co-Founder & Academic Strategist</p>
-                                <p class="editable">Dedicated to academic excellence and student growth.</p>
-                                <input type="file" id="cofounderFile" style="display:none" accept="image/*" onchange="uploadProfileImage(event, 'cofounderImg')">
-                            </div>
-                        </div>
+        <div class="profile-wrapper animate-up">
 
-                    </div>
+            <div class="card-image-container purple-gradient image-crop-container">
+
+                <img id="cofounderImg"
+                     alt="Co-Founder"
+                     class="profile-avatar-img draggable-avatar"
+                     style="display:none;">
+
+                <div class="admin-upload-overlay upload-overlay">
+                    <button class="upload-sub-btn"
+                            onclick="document.getElementById('cofounderFile').click()">
+                        <i class="fa-solid fa-camera"></i> Change
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="profile-card">
+                <div class="card-content">
+
+                    <span class="badge purple-badge">Co-Founder</span>
+
+                    <h3 id="cofounderName" class="editable">
+                        Kavita Tripathi
+                    </h3>
+
+                    <p class="subtitle editable">
+                        Co-Founder & Academic Strategist
+                    </p>
+
+                    <p id="cofounderBio" class="editable">
+                        A dedicated professional with expertise in academic administration, operational management, and student engagement.
+                        With a strong understanding of modern educational practices and organizational development, the co-founder contributes significantly to maintaining high standards of teaching, learning, and institutional growth.
+                        Their experience in coordinating educational initiatives, managing academic processes, and supporting student success helps ensure the delivery of quality education and a positive learning experience.
+                    </p>
+
+                    <input type="file"
+                           id="cofounderFile"
+                           style="display:none"
+                           accept="image/*"
+                           onchange="uploadProfileImage(event, 'cofounderImg')">
 
                 </div>
-            </section>
+            </div>
 
+        </div>
+
+    </div>
+</section>
             <!-- CONTACT -->
             <section id="contactSection" class="content-section">
                 <div class="about-container">

@@ -1,120 +1,327 @@
-from flask import Blueprint, request, jsonify, send_from_directory
+from flask import (
+    Blueprint,
+    request,
+    jsonify,
+    send_from_directory
+)
+
 from extensions import mongo
+
+from flask_jwt_extended import (
+    jwt_required,
+    get_jwt_identity
+)
+
 from werkzeug.utils import secure_filename
-from flask_jwt_extended import jwt_required, get_jwt_identity
+
 from bson.objectid import ObjectId
+
 import os
 
-about_bp = Blueprint("about", __name__)
+
+# =====================================================
+# BLUEPRINT
+# =====================================================
+
+about_bp = Blueprint(
+    "about",
+    __name__
+)
+
+
+# =====================================================
+# UPLOAD SETTINGS
+# =====================================================
 
 UPLOAD_FOLDER = "uploads/about"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# ======================================
-# GET CURRENT USER ROLE FROM DB
-# ======================================
+os.makedirs(
+    UPLOAD_FOLDER,
+    exist_ok=True
+)
+
+
+# =====================================================
+# ADMIN CHECK
+# =====================================================
+
 def is_admin_user(user_id):
-    user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
-    return user and user.get("role") == "admin"
 
+    try:
 
-# ======================================
-# SAFE GET ABOUT
-# ======================================
-@about_bp.route("/", methods=["GET"])
-def get_about():
-
-    doc = mongo.db.about.find_one()
-
-    if not doc:
-        return jsonify({
-            "vision": "",
-            "mission": "",
-            "description": "",
-            "founder_image": "",
-            "cofounder_image": "",
-            "founder_name": "Founder",
-            "cofounder_name": "Co-Founder"
+        user = mongo.db.users.find_one({
+            "_id": ObjectId(user_id)
         })
 
-    doc["_id"] = str(doc["_id"])
-    return jsonify(doc)
+        return (
+            user and
+            user.get("role") == "admin"
+        )
+
+    except Exception:
+        return False
 
 
-# ======================================
-# SAVE TEXT (ADMIN ONLY - JWT)
-# ======================================
-@about_bp.route("/save", methods=["POST"])
+# =====================================================
+# GET ABOUT DATA (PUBLIC)
+# =====================================================
+
+@about_bp.route(
+    "/",
+    methods=["GET"]
+)
+def get_about():
+
+    try:
+
+        doc = mongo.db.about.find_one()
+
+        if not doc:
+            doc = {}
+
+        return jsonify({
+
+            "vision":
+                doc.get(
+                    "vision",
+                    ""
+                ),
+
+            "mission":
+                doc.get(
+                    "mission",
+                    ""
+                ),
+
+            "description":
+                doc.get(
+                    "description",
+                    ""
+                ),
+
+            "founder_name":
+                doc.get(
+                    "founder_name",
+                    "Avinash Tripathi"
+                ),
+
+            "cofounder_name":
+                doc.get(
+                    "cofounder_name",
+                    "Kavita Tripathi"
+                ),
+
+            "founder_image":
+                doc.get(
+                    "founder_image",
+                    ""
+                ),
+
+            "cofounder_image":
+                doc.get(
+                    "cofounder_image",
+                    ""
+                )
+
+        })
+
+    except Exception as e:
+
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 500
+
+
+# =====================================================
+# SAVE ABOUT DATA (ADMIN ONLY)
+# =====================================================
+
+@about_bp.route(
+    "/save",
+    methods=["POST"]
+)
 @jwt_required()
 def save_about():
 
-    user_id = get_jwt_identity()
+    try:
 
-    if not is_admin_user(user_id):
-        return jsonify({"success": False, "message": "Admin only"}), 403
+        user_id = get_jwt_identity()
 
-    data = request.get_json() or {}
+        if not is_admin_user(user_id):
 
-    mongo.db.about.update_one(
-        {},
-        {"$set": {
-            "vision": data.get("vision", ""),
-            "mission": data.get("mission", ""),
-            "description": data.get("description", "")
-        }},
-        upsert=True
-    )
+            return jsonify({
+                "success": False,
+                "message": "Admin only"
+            }), 403
 
-    return jsonify({"success": True, "message": "Updated"})
+        data = request.get_json()
+
+        mongo.db.about.update_one(
+            {},
+            {
+                "$set": {
+
+                    "vision":
+                        data.get(
+                            "vision",
+                            ""
+                        ),
+
+                    "mission":
+                        data.get(
+                            "mission",
+                            ""
+                        ),
+
+                    "description":
+                        data.get(
+                            "description",
+                            ""
+                        ),
+
+                    "founder_name":
+                        data.get(
+                            "founder_name",
+                            "Avinash Tripathi"
+                        ),
+
+                    "cofounder_name":
+                        data.get(
+                            "cofounder_name",
+                            "Kavita Tripathi"
+                        )
+
+                }
+            },
+            upsert=True
+        )
+
+        return jsonify({
+            "success": True,
+            "message": "About information updated successfully"
+        })
+
+    except Exception as e:
+
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 500
 
 
-# ======================================
-# UPLOAD IMAGE (ADMIN ONLY - JWT)
-# ======================================
-@about_bp.route("/upload-image", methods=["POST"])
+# =====================================================
+# UPLOAD FOUNDER / COFOUNDER IMAGE
+# =====================================================
+
+@about_bp.route(
+    "/upload-image",
+    methods=["POST"]
+)
 @jwt_required()
 def upload_image():
 
-    user_id = get_jwt_identity()
+    try:
 
-    if not is_admin_user(user_id):
-        return jsonify({"success": False, "message": "Admin only"}), 403
+        user_id = get_jwt_identity()
 
-    image = request.files.get("image")
-    img_type = request.form.get("type")
+        if not is_admin_user(user_id):
 
-    if not image or not img_type:
-        return jsonify({"success": False, "message": "Invalid request"}), 400
+            return jsonify({
+                "success": False,
+                "message": "Admin only"
+            }), 403
 
-    filename = secure_filename(image.filename)
-    file_path = os.path.join(UPLOAD_FOLDER, filename)
-    image.save(file_path)
+        image = request.files.get(
+            "image"
+        )
 
-    field_map = {
-        "founderImg": "founder_image",
-        "cofounderImg": "cofounder_image"
-    }
+        img_type = request.form.get(
+            "type"
+        )
 
-    if img_type not in field_map:
-        return jsonify({"success": False, "message": "Invalid type"}), 400
+        if not image:
 
-    db_field = field_map[img_type]
+            return jsonify({
+                "success": False,
+                "message": "Image not found"
+            }), 400
 
-    mongo.db.about.update_one(
-        {},
-        {"$set": {db_field: file_path}},
-        upsert=True
-    )
+        if img_type not in [
+            "founderImg",
+            "cofounderImg"
+        ]:
 
-    return jsonify({
-        "success": True,
-        "image_url": file_path
-    })
+            return jsonify({
+                "success": False,
+                "message": "Invalid image type"
+            }), 400
+
+        filename = secure_filename(
+            image.filename
+        )
+
+        file_path = os.path.join(
+            UPLOAD_FOLDER,
+            filename
+        )
+
+        image.save(file_path)
+
+        field_map = {
+
+            "founderImg":
+                "founder_image",
+
+            "cofounderImg":
+                "cofounder_image"
+
+        }
+
+        db_field = field_map[
+            img_type
+        ]
+
+        mongo.db.about.update_one(
+            {},
+            {
+                "$set": {
+                    db_field: file_path
+                }
+            },
+            upsert=True
+        )
+
+        return jsonify({
+
+            "success": True,
+
+            "message":
+                "Image uploaded successfully",
+
+            "image_url":
+                file_path
+
+        })
+
+    except Exception as e:
+
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 500
 
 
-# ======================================
-# SERVE IMAGE FILES
-# ======================================
-@about_bp.route("/uploads/<path:filename>")
+# =====================================================
+# SERVE ABOUT IMAGES
+# =====================================================
+
+@about_bp.route(
+    "/uploads/<path:filename>"
+)
 def serve_file(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename)
+
+    return send_from_directory(
+        UPLOAD_FOLDER,
+        filename
+    )

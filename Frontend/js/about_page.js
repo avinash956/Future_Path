@@ -1,136 +1,390 @@
+// =====================================================
+// API CONFIG
+// =====================================================
+
 const API_BASE = "http://127.0.0.1:5000/api/about";
 
-/* =========================
-   GET JWT TOKEN
-========================= */
+
+// =====================================================
+// TOKEN HELPERS
+// =====================================================
+
 function getToken() {
     return localStorage.getItem("token");
 }
 
-/* =========================
-   HEADERS BUILDER
-========================= */
 function authHeaders() {
     return {
-        "Authorization": "Bearer " + getToken()
+        Authorization: `Bearer ${getToken()}`
     };
 }
 
-/* =========================
-   INIT
-========================= */
-document.addEventListener("DOMContentLoaded", () => {
-    loadAboutData();
-});
 
-/* =========================
-   LOAD DATA (PUBLIC)
-========================= */
+// =====================================================
+// PAGE LOAD
+// =====================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        loadAboutData();
+
+        checkAdminAccess();
+    }
+);
+
+
+// =====================================================
+// CHECK ADMIN
+// =====================================================
+
+function checkAdminAccess() {
+
+    const token = getToken();
+
+    if (!token) return;
+
+    const adminControls =
+        document.getElementById("adminControls");
+
+    if (adminControls) {
+        adminControls.style.display = "block";
+    }
+}
+
+
+// =====================================================
+// LOAD ABOUT DATA
+// =====================================================
+
 async function loadAboutData() {
 
     try {
 
-        const res = await fetch(`${API_BASE}/`);
-        const data = await res.json();
+        const response =
+            await fetch(`${API_BASE}/`);
 
-        console.log("API RESPONSE:", data);
+        const data =
+            await response.json();
 
-        // TEXT
-        document.getElementById("visionText").innerText = data.vision || "";
-        document.getElementById("missionText").innerText = data.mission || "";
-        document.getElementById("instituteDescription").innerText = data.description || "";
+        console.log(
+            "ABOUT DATA:",
+            data
+        );
 
-        // Founder
-        document.getElementById("founderName").innerText = data.founder_name || "Founder";
-        if (data.founder_image) {
-            const img = document.getElementById("founderImg");
-            img.src = `http://127.0.0.1:5000/${data.founder_image}`;
-            img.style.display = "block";
+        // =========================================
+        // MAIN CONTENT
+        // =========================================
+
+        const vision =
+            document.getElementById("visionText");
+
+        const mission =
+            document.getElementById("missionText");
+
+        const description =
+            document.getElementById(
+                "instituteDescription"
+            );
+
+        if (vision)
+            vision.innerText =
+                data.vision || "";
+
+        if (mission)
+            mission.innerText =
+                data.mission || "";
+
+        if (description)
+            description.innerText =
+                data.description || "";
+
+
+        // =========================================
+        // FOUNDER
+        // =========================================
+
+        const founderName =
+            document.getElementById(
+                "founderName"
+            );
+
+        if (founderName) {
+
+            founderName.innerText =
+                data.founder_name ||
+                "Avinash Tripathi";
         }
 
-        // CoFounder
-        document.getElementById("cofounderName").innerText = data.cofounder_name || "Co-Founder";
-        if (data.cofounder_image) {
-            const img = document.getElementById("cofounderImg");
-            img.src = `http://127.0.0.1:5000/${data.cofounder_image}`;
-            img.style.display = "block";
+        const founderImg =
+            document.getElementById(
+                "founderImg"
+            );
+
+        if (
+            founderImg &&
+            data.founder_image
+        ) {
+
+            founderImg.src =
+                `http://127.0.0.1:5000/${data.founder_image}`;
+
+            founderImg.style.display =
+                "block";
         }
 
-    } catch (err) {
-        console.error("Load Error:", err);
+
+        // =========================================
+        // CO-FOUNDER
+        // =========================================
+
+        const cofounderName =
+            document.getElementById(
+                "cofounderName"
+            );
+
+        if (cofounderName) {
+
+            cofounderName.innerText =
+                data.cofounder_name ||
+                "Kavita Tripathi";
+        }
+
+        const cofounderImg =
+            document.getElementById(
+                "cofounderImg"
+            );
+
+        if (
+            cofounderImg &&
+            data.cofounder_image
+        ) {
+
+            cofounderImg.src =
+                `http://127.0.0.1:5000/${data.cofounder_image}`;
+
+            cofounderImg.style.display =
+                "block";
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "LOAD ERROR:",
+            error
+        );
     }
 }
 
-/* =========================
-   SAVE TEXT (ADMIN ONLY)
-========================= */
+
+// =====================================================
+// SAVE DATA
+// =====================================================
+
 async function saveData() {
 
     try {
 
-        const res = await fetch(`${API_BASE}/save`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                ...authHeaders()
-            },
-            body: JSON.stringify({
-                vision: document.getElementById("visionText").innerText,
-                mission: document.getElementById("missionText").innerText,
-                description: document.getElementById("instituteDescription").innerText
-            })
-        });
+        const payload = {
 
-        const data = await res.json();
+            vision:
+                document.getElementById(
+                    "visionText"
+                )?.innerText || "",
 
-        alert(data.message || "Updated");
+            mission:
+                document.getElementById(
+                    "missionText"
+                )?.innerText || "",
 
-    } catch (err) {
-        console.error(err);
-        alert("Save Failed");
-    }
-}
+            description:
+                document.getElementById(
+                    "instituteDescription"
+                )?.innerText || "",
 
-/* =========================
-   IMAGE UPLOAD (ADMIN ONLY)
-========================= */
-async function uploadProfileImage(event, type) {
+            founder_name:
+                document.getElementById(
+                    "founderName"
+                )?.innerText || "Avinash Tripathi",
 
-    const file = event.target.files[0];
-    if (!file) return;
+            cofounder_name:
+                document.getElementById(
+                    "cofounderName"
+                )?.innerText || "Kavita Tripathi"
+        };
 
-    const formData = new FormData();
-    formData.append("image", file);
-    formData.append("type", type);
+        console.log(
+            "SAVE PAYLOAD:",
+            payload
+        );
 
-    try {
+        const response =
+            await fetch(
+                `${API_BASE}/save`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                        ...authHeaders()
+                    },
+                    body: JSON.stringify(
+                        payload
+                    )
+                }
+            );
 
-        const res = await fetch(`${API_BASE}/upload-image`, {
-            method: "POST",
-            headers: {
-                ...authHeaders()
-            },
-            body: formData
-        });
+        const data =
+            await response.json();
 
-        const data = await res.json();
+        if (!response.ok) {
 
-        console.log("UPLOAD RESPONSE:", data);
+            alert(
+                data.message ||
+                "Save Failed"
+            );
 
-        if (!data.success) {
-            alert(data.message || "Upload Failed");
             return;
         }
 
-        // FIX IMAGE UPDATE
-        const img = document.getElementById(type);
-        img.src = `http://127.0.0.1:5000/${data.image_url}`;
-        img.style.display = "block";
+        alert(
+            data.message ||
+            "Saved Successfully"
+        );
 
-        alert("Image Updated Successfully");
-
-    } catch (err) {
-        console.error(err);
-        alert("Upload Failed");
     }
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Unable to save data"
+        );
+    }
+}
+
+
+// =====================================================
+// UPLOAD IMAGE
+// =====================================================
+
+async function uploadProfileImage(
+    event,
+    imageId
+) {
+
+    const file =
+        event.target.files[0];
+
+    if (!file) return;
+
+    const formData =
+        new FormData();
+
+    formData.append(
+        "image",
+        file
+    );
+
+    formData.append(
+        "type",
+        imageId
+    );
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE}/upload-image`,
+                {
+                    method: "POST",
+                    headers: {
+                        ...authHeaders()
+                    },
+                    body: formData
+                }
+            );
+
+        const data =
+            await response.json();
+
+        console.log(
+            "UPLOAD RESPONSE:",
+            data
+        );
+
+        if (!data.success) {
+
+            alert(
+                data.message ||
+                "Upload Failed"
+            );
+
+            return;
+        }
+
+        const img =
+            document.getElementById(
+                imageId
+            );
+
+        if (img) {
+
+            img.src =
+                `http://127.0.0.1:5000/${data.image_url}`;
+
+            img.style.display =
+                "block";
+        }
+
+        alert(
+            "Image Uploaded Successfully"
+        );
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Image Upload Failed"
+        );
+    }
+}
+
+
+// =====================================================
+// OPTIONAL MENU TOGGLE
+// =====================================================
+
+function toggleMenu() {
+
+    const menu =
+        document.getElementById(
+            "dropdownMenu"
+        );
+
+    if (menu) {
+
+        menu.classList.toggle(
+            "active"
+        );
+    }
+}
+
+
+// =====================================================
+// OPTIONAL LOGOUT
+// =====================================================
+
+function logout() {
+
+    localStorage.removeItem(
+        "token"
+    );
+
+    window.location.href =
+        "login.html";
 }
