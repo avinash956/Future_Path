@@ -4,7 +4,7 @@ UPDATED + AUTO FACULTY ID GENERATION
 ========================================= */
 
 console.log("✅ faculty.js FILE LOADED");
-
+window.initializeFaculty = initializeFaculty;
 
 /* =========================================
 AUTO GENERATE FACULTY ID
@@ -143,19 +143,7 @@ INITIALIZE FACULTY MODULE
 
 function initializeFaculty() {
 
-    // =====================================
-    // PREVENT DOUBLE INITIALIZATION
-    // =====================================
-    if (window.facultyInitialized) {
-        console.log("⚠️ Faculty already initialized - skipping");
-        return;
-    }
-    window.facultyInitialized = true;
-
     console.log("🚀 Initializing Faculty Module");
-
-    // Always load faculty cards
-    loadFaculty();
 
     const form = document.getElementById("facultyForm");
 
@@ -170,7 +158,7 @@ function initializeFaculty() {
         console.warn("⚠️ facultyForm NOT FOUND");
     }
 
-
+    console.log("✅ facultyForm FOUND");
     // =========================================
     // AUTO GENERATE ID ON DEPARTMENT CHANGE
     // =========================================

@@ -21,8 +21,8 @@
    2. TYPOGRAPHY & HEADER ARCHITECTURE
    ========================================================== */
 .section-title {
-    margin-bottom: 25px;
-    color: #0a0a0a;
+    margin-bottom: 40px;
+    color: #ffffff;
 }
 
 .section-title h2 {
@@ -1384,9 +1384,6 @@ MOBILE
     .section-header {
         flex-direction: column;
         align-items: flex-start;
-    }
-
-    .section-header h3 {
         font-size: 18px;
     }
 

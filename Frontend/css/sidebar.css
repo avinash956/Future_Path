@@ -88,12 +88,20 @@
 
 .admin-layout {
   display: flex;
-  margin-top: 85px; /* Adjust this to match your EXACT header height (e.g., 85px or 90px) */
-  padding-top: 0 !important; /* Removes any accidental space below header */
-  min-height: calc(100vh - 85px); /* Matches the margin-top calculation */
-  position: relative;
-  align-items: stretch;
+
+  /* Layout structure */
+  height: 100vh;
+  overflow: hidden;
+
+  /* Space for fixed header (if you have one) */
+  padding-top: 85px;
+  box-sizing: border-box;
+
+  /* Background */
   background-color: #f4f6f9;
+
+  /* Safety */
+  position: relative;
 }
 header, .navbar {
   margin: 0 !important;
@@ -121,17 +129,26 @@ header, .navbar {
    ========================================================================== */
 
 .sidebar {
-  margin-top: 0px;
   width: 280px;
-  background-color: #1e2d40;
-  color: #ffffff;
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
-  position: relative;
+  height: 100vh;
+
+  margin-top: 0;
   padding: 30px 20px;
   box-sizing: border-box;
+
+  background-color: #1e2d40;
+  color: #ffffff;
+
   flex-shrink: 0;
+
+  position: relative;
+  z-index: 2;
+
   border-right: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 4px 0 15px rgba(0, 0, 0, 0.03);
+
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              padding 0.3s ease;
 }
 
 .sidebar h3 {
@@ -724,3 +741,28 @@ header, .navbar {
     color:#d1d5db;
   }
 }
+
+/* =========================
+   FIX SIDEBAR OVERLAP ISSUE
+========================= */
+
+
+#dynamicContent {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+  
+}
+
+.dashboard-home {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-home,
+.stats-grid,
+.stat-card {
+  pointer-events: auto;
+}
+

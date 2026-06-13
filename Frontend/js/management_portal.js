@@ -186,45 +186,190 @@ async function loadSection(section) {
     return;
   }
 
-  // ==========================
+  // ======================================
   // FACULTY / STUDENT / BATCH
-  // ==========================
-  if (["faculty", "student", "batch"].includes(section)) {
+  // ======================================
+
+  else if (['faculty', 'student', 'batch'].includes(section)) {
+
     try {
-      const res = await fetch(`sections/${section}.html`);
 
-      if (!res.ok) throw new Error("Missing section file");
+      console.log(`📂 Loading ${section} section...`);
 
-      const html = await res.text();
+      const response = await fetch(`sections/${section}.html`);
+
+      if (!response.ok) {
+        throw new Error(`Missing ${section}.html`);
+      }
+
+      const html = await response.text();
+
       container.innerHTML = html;
 
+      console.log(`✅ ${section}.html loaded into DOM`);
+
+        if (
+    section === "faculty" &&
+    typeof initializeFaculty === "function"
+) {
+    console.log("🔥 DASHBOARD.JS CALLING initializeFaculty");
+    initializeFaculty();
+}
+
+      if (section === 'student' && typeof initializeStudent === 'function') {
+        console.log("🎓 Initializing Student Module...");
+        initializeStudent();
+      }
+
+      if (section === 'batch' && typeof initializeBatch === 'function') {
+        console.log("🧩 Initializing Batch Module...");
+        initializeBatch();
+      }
+
     } catch (err) {
-      console.error(err);
-      container.innerHTML = `<p style="color:red;">Failed to load ${section}</p>`;
+
+      console.error("❌ Section Load Error:", err);
+
+      container.innerHTML = `
+        <div style="color:red;padding:20px;">
+          Failed to load section
+        </div>
+      `;
     }
-    return;
   }
 
-  // ==========================
-  // FEES SECTION
-  // ==========================
-  if (section === "fees") {
+  // ======================================
+  // FEES SECTION (FIXED PLACEMENT)
+  // ======================================
+
+else if (section === 'fees') {
+
     try {
-      const res = await fetch("sections/fees.html");
 
-      if (!res.ok) throw new Error("Missing fees.html");
+      console.log("📂 Loading fees section...");
 
-      const html = await res.text();
+      const response = await fetch('sections/fees.html');
+
+      if (!response.ok) {
+        throw new Error("Missing fees.html");
+      }
+
+      const html = await response.text();
+
       container.innerHTML = html;
 
+      console.log("✅ fees.html loaded into DOM");
+
+      if (typeof initializeFees === "function") {
+        console.log("💰 Initializing Fees Module...");
+        initializeFees();
+      }
+
     } catch (err) {
-      console.error(err);
-      container.innerHTML = `<p style="color:red;">Failed to load fees section</p>`;
+
+      console.error("❌ Fees Load Error:", err);
+
+      container.innerHTML = `
+        <div style="color:red;padding:20px;">
+          Failed to load Fees section
+        </div>
+      `;
     }
-    return;
   }
 
-  container.innerHTML = `<p>Section not found</p>`;
+
+// ======================================
+// MATERIALS SECTION
+// ======================================
+
+else if (section === 'materials') {
+
+    try {
+
+        console.log("📂 Loading materials section...");
+
+        const response = await fetch('sections/notes_video.html');
+
+        if (!response.ok) {
+            throw new Error("Missing notes_video.html");
+        }
+
+        const html = await response.text();
+
+        container.innerHTML = html;
+
+        console.log("✅ notes_video.html loaded");
+
+        if (typeof initializeNotesVideo === "function") {
+            console.log("📚 Initializing Notes & Video Module...");
+            initializeNotesVideo();
+        }
+
+    } catch (err) {
+
+        console.error("❌ Materials Load Error:", err);
+
+        container.innerHTML = `
+            <div style="color:red;padding:20px;">
+                Failed to load Materials section
+            </div>
+        `;
+    }
+}
+// ======================================
+// LIVE STREAM SECTION
+// ======================================
+
+else if (section === "live_stream") {
+
+    try {
+
+        console.log("📂 Loading live stream section...");
+
+        const response = await fetch("sections/live_streaming.html");
+
+        if (!response.ok) {
+            throw new Error("Missing live_streaming.html");
+        }
+
+        const html = await response.text();
+
+        container.innerHTML = html;
+
+        console.log("✅ live_streaming.html loaded");
+
+        setTimeout(() => {
+
+            if (typeof window.initializeLiveStream === "function") {
+
+                console.log("🎥 Initializing Live Stream Module...");
+
+                window.initializeLiveStream();
+
+            } else {
+
+                console.error("❌ initializeLiveStream function not found");
+
+                container.innerHTML = `
+                    <div style="padding:20px;color:red;">
+                        Live Streaming JS not loaded.
+                    </div>
+                `;
+            }
+
+        }, 100);
+
+    } catch (err) {
+
+        console.error("❌ Live Stream Load Error:", err);
+
+        container.innerHTML = `
+            <div style="padding:20px;color:red;">
+                Failed to load Live Streaming section
+            </div>
+        `;
+    }
+  }
 }
 
 // ==========================
