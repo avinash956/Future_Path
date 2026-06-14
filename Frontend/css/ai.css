@@ -442,7 +442,7 @@ body::before{
     /* Reduced from 1.9 to 1.4 for clean classroom-note line spacing */
     line-height: 1.0; 
     
-    font-size: 12px;
+    font-size: 15px;
     padding: 10px;
     border-radius: 18px;
     max-width: 90%;

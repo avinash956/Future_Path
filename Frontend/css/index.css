@@ -1856,7 +1856,7 @@ grid-template-columns:1fr;
    TABLET
 ===================================================== */
 
-@media (max-width:992px){
+/* @media (max-width:992px){
 
     .achievement-grid{
 
@@ -1868,14 +1868,14 @@ grid-template-columns:1fr;
 
     }
 
-}
+} */
 
 
 /* =====================================================
    MOBILE
 ===================================================== */
 
-@media (max-width:768px){
+/* @media (max-width:768px){
 
     .achievements-section{
 
@@ -1918,14 +1918,14 @@ grid-template-columns:1fr;
 
     }
 
-}
+} */
 
 
 /* =====================================================
    SMALL MOBILE
 ===================================================== */
 
-@media (max-width:480px){
+/* @media (max-width:480px){
 
     .achievement-title h2{
 
@@ -1939,4 +1939,4 @@ grid-template-columns:1fr;
 
     }
 
-}
+} */

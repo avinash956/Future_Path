@@ -33,6 +33,18 @@ document.addEventListener("click", function(e){
 // =====================================
 
 document.addEventListener("DOMContentLoaded", function () {
+//   const mobileToggle =
+//     document.querySelector(".menu-toggle");
+
+// if (mobileToggle && sidebar) {
+
+//     mobileToggle.addEventListener("click", function () {
+
+//         // MOBILE OPEN/CLOSE SIDEBAR
+//         sidebar.classList.toggle("active");
+
+//     });
+// }
 
   // =====================================
   // ELEMENTS
