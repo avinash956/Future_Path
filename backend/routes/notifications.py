@@ -38,7 +38,7 @@ def send_email(to_email, password):
 
         msg["Subject"] = "Login Credentials"
 
-        msg["From"] = "avinash.nha@gmail.com"
+        msg["From"] = "admin.futurepath@gmail.com"
 
         msg["To"] = to_email
 
@@ -50,8 +50,8 @@ def send_email(to_email, password):
         server.starttls()
 
         server.login(
-            "avinash.nha@gmail.com",
-            "gzja gkzp qlfj sbbi"
+            "admin.futurepath@gmail.com",
+            "nndu rtdf fohx fzca"
         )
 
         server.send_message(msg)
@@ -210,7 +210,7 @@ def send_email_otp(email, otp):
 
         msg["Subject"] = "OTP Verification"
 
-        msg["From"] = "avinash.nha@gmail.com"
+        msg["From"] = "admin.futurepath@gmail.com"
 
         msg["To"] = email
 
@@ -222,8 +222,8 @@ def send_email_otp(email, otp):
         server.starttls()
 
         server.login(
-            "avinash.nha@gmail.com",
-            "gzja gkzp qlfj sbbi"
+            "admin.futurepath@gmail.com",
+            "nndu rtdf fohx fzca"
         )
 
         server.send_message(msg)
