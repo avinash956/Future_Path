@@ -67,57 +67,200 @@ async function fetchStudent() {
     }
 }
 
-/* =========================================
-2. QR GENERATION
-========================================= */
+/* =========================================================
+   LARGE DESKTOP PAYMENT QR
+   ========================================================= */
+
 function generateQR() {
 
     console.log("🚀 Generate QR clicked");
 
+
+    /* =====================================================
+       GET AMOUNT
+       ===================================================== */
+
+    const amountElement =
+        document.getElementById("feesAmount");
+
     const amount =
-        Number(document.getElementById('feesAmount')?.value || 0);
+        Number(amountElement?.value || 0);
+
+
+    /* =====================================================
+       GET PAYMENT MODE
+       ===================================================== */
+
+    const modeElement =
+        document.getElementById("paymentMode");
 
     const mode =
-        document.getElementById('paymentMode')?.value;
+        modeElement?.value || "";
+
+
+    /* =====================================================
+       GET QR CONTAINER
+       ===================================================== */
 
     const qrContainer =
-        document.getElementById('qrcode');
+        document.getElementById("qrcode");
+
+
+    /* =====================================================
+       VALIDATE STUDENT
+       ===================================================== */
 
     if (!currentStudent) {
+
         alert("Select student first");
+
         return;
     }
 
-    if (!amount) {
-        alert("Enter amount");
+
+    /* =====================================================
+       VALIDATE AMOUNT
+       ===================================================== */
+
+    if (!amount || amount <= 0) {
+
+        alert("Enter a valid amount");
+
         return;
     }
+
+
+    /* =====================================================
+       VALIDATE PAYMENT MODE
+       ===================================================== */
 
     if (!mode || mode.toUpperCase() !== "UPI") {
+
         alert("Select UPI mode to generate QR");
+
         return;
     }
+
+
+    /* =====================================================
+       CHECK QR LIBRARY
+       ===================================================== */
 
     if (typeof QRCode === "undefined") {
+
         alert("QRCode library not loaded");
-        console.error("QRCode is undefined");
+
+        console.error(
+            "❌ QRCode library is not loaded"
+        );
+
         return;
     }
 
-    const upiUrl =
-        `upi://pay?pa=tripathi.avinash2909@ybl&pn=FuturePath&am=${amount}&cu=INR`;
 
-    console.log("UPI URL:", upiUrl);
+    /* =====================================================
+       CHECK QR CONTAINER
+       ===================================================== */
+
+    if (!qrContainer) {
+
+        alert("QR container not found");
+
+        console.error(
+            "❌ #qrcode not found"
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       UPI PAYMENT URL
+       ===================================================== */
+
+    const upiUrl =
+        `upi://pay?pa=tripathi.avinash2909@ybl&pn=FuturePath&am=${amount.toFixed(2)}&cu=INR`;
+
+
+    console.log(
+        "💳 UPI Payment URL:",
+        upiUrl
+    );
+
+
+    /* =====================================================
+       REMOVE PREVIOUS QR
+       ===================================================== */
 
     qrContainer.innerHTML = "";
 
-  new QRCode(qrContainer, {
-    text: upiUrl,
-    width: 80,
-    height: 80
-});;
 
-    console.log("✅ QR generated");
+    /* =====================================================
+       GENERATE LARGE QR
+       ===================================================== */
+
+    try {
+
+        new QRCode(qrContainer, {
+
+            text: upiUrl,
+
+            width: 700,
+
+            height: 700,
+
+            correctLevel:
+                QRCode.CorrectLevel.H
+
+        });
+
+
+        console.log(
+            "✅ Large 700 × 700 QR generated"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ QR generation error:",
+            error
+        );
+
+        alert(
+            "Unable to generate QR code."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       OPTIONAL: SHOW QR
+       ===================================================== */
+
+    qrContainer.classList.add("show-qr");
+
+
+    /* =====================================================
+       LOG PAYMENT INFORMATION
+       ===================================================== */
+
+    console.log(
+        "Amount:",
+        amount
+    );
+
+    console.log(
+        "Payment Mode:",
+        mode
+    );
+
+    console.log(
+        "QR Size:",
+        "700 × 700"
+    );
 }
 /* =========================================
       Done PAYMENT

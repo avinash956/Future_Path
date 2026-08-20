@@ -103,7 +103,7 @@ INPUTS (FIXED READABILITY)
   border: 1px solid rgba(255, 255, 255, 0.15);
   background: #96b7f0;
   color: #ffffff;
-  font-size: 16px;
+  font-size: 14px;
   outline: none;
 }
 
@@ -157,32 +157,122 @@ BUTTONS (ONLY FEES DASHBOARD)
   font-weight: 600;
 }
 
-/* ======================================
-QR BOX
-====================================== */
+/* ==========================================
+   LARGE DESKTOP PAYMENT QR
+   ========================================== */
 
 #feesSection #qrcode {
-    width: 180px;
-    height: 180px;
-    padding: 5px;
-    margin: 10px auto;
+
+    /* QR and BOX are exactly the same size */
+    width: 700px;
+    height: 700px;
+
+    margin: 20px auto;
+    padding: 0;
+
     background: #ffffff;
+
+    border: 2px solid #d0d0d0;
     border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.2);
 
     display: flex;
     justify-content: center;
     align-items: center;
 
+    box-sizing: border-box;
+
     overflow: hidden;
 }
 
-#feesSection #qrcode img,
+
+/* ==========================================
+   QR IMAGE
+   ========================================== */
+
+#feesSection #qrcode img {
+
+    width: 700px !important;
+    height: 700px !important;
+
+    max-width: none !important;
+    max-height: none !important;
+
+    min-width: 700px !important;
+    min-height: 700px !important;
+
+    display: block;
+
+    margin: 0 !important;
+}
+
+
+/* ==========================================
+   QR CANVAS
+   ========================================== */
+
 #feesSection #qrcode canvas {
-    width: 180px !important;
-    height: 180px !important;
-    max-width: 200px !important;
-    max-height: 200px !important;
+
+    width: 700px !important;
+    height: 700px !important;
+
+    max-width: none !important;
+    max-height: none !important;
+
+    min-width: 700px !important;
+    min-height: 700px !important;
+
+    display: block;
+
+    margin: 0 !important;
+}
+
+
+/* ==========================================
+   DESKTOP
+   ========================================== */
+
+@media (min-width: 1200px) {
+
+    #feesSection #qrcode {
+        width: 700px;
+        height: 700px;
+    }
+
+    #feesSection #qrcode img,
+    #feesSection #qrcode canvas {
+        width: 700px !important;
+        height: 700px !important;
+    }
+}
+
+
+/* ==========================================
+   LAPTOP / SMALLER SCREEN
+   ========================================== */
+
+@media (max-width: 1199px) {
+
+    #feesSection #qrcode {
+
+        width: 80vw;
+        height: 80vw;
+
+        max-width: 700px;
+        max-height: 700px;
+    }
+
+    #feesSection #qrcode img,
+    #feesSection #qrcode canvas {
+
+        width: 80vw !important;
+        height: 80vw !important;
+
+        min-width: 0 !important;
+        min-height: 0 !important;
+
+        max-width: 700px !important;
+        max-height: 700px !important;
+    }
 }
 /* ======================================
 TABLE

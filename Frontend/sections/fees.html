@@ -17,7 +17,7 @@
         <div class="form-row">
             <input type="text" id="studentRoll" placeholder="Enter Roll Number">
 
-            <button onclick="fetchStudent()" id="searchBtn">
+            <button onclick="fetchStudent()" id="searchBtn" style="background-color: #03143a; color: white; border: 2px solid #eae0e0; width: 100px; padding: 10px; border-radius: 6px;">
                 Search
             </button>
         </div>
@@ -73,31 +73,49 @@
 
 <div class="fees-btn-row">
  <!-- ==========================================
-         QR SECTION
-=============================================== -->
-<div class="card" style>
-        <h3>Payment QR</h3>
+     PAYMENT QR SECTION
+=========================================== -->
 
-        <div id="qrcode">
-        </div>
-    
-        <div style="padding: 15px;">
-        <button type="button" onclick="generateQR()"style="padding: 15px;">Generate QR</button></div>
+<div class="card payment-qr-card">
+
+    <h3>Payment QR</h3>
+
+    <p class="qr-description" style="color: #f0da0e; font-size: 16px;">
+        Scan the QR code using your UPI payment app
+    </p>
+
+    <div id="qrcode"></div>
+
+    <div class="qr-button-container">
+        <button type="button" class="generate-qr-btn" onclick="generateQR()">
+            📱 Generate QR
+        </button>
+    </div>
+
 </div>
-   
- <div style="padding: 15px;">
-    <button type="button" class="primary-btn" onclick="completePayment()">
-        Done Payment
+
+
+
+<!-- ==========================================
+     PAYMENT COMPLETION
+=========================================== -->
+
+<div class="payment-complete-container">
+
+    <button
+        type="button"
+        class="primary-btn"
+        onclick="completePayment()">
+        ✓ Done Payment
     </button>
- </div>
-</div>
+
 </div>
 
 <!-- =========================================
 RECEIPT SECTION
 ========================================= -->
 <div class="card">
-    <h2>FEE RECEIPT</h2>
+    <h2 style="color: white;">FEE RECEIPT</h2>
 <div id="receiptArea" class="receipt-container" style="padding: 15px;">
 
     <table border="1" style="width:100%; border-collapse: collapse; text-align: center;">
